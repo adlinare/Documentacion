@@ -1,0 +1,30 @@
+\babel@toc {spanish}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Vista núcleo del modelo de dominio de Gipsi}}{28}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Vista operativa y de soporte del modelo de dominio}}{29}{figure.caption.7}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Arquitectura general del sistema Gipsi}}{31}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Flujo de autenticación en el backend}}{34}{figure.caption.15}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Pirámide de testing aplicada a Gipsi}}{47}{figure.caption.22}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces PF-A01 --- Login con credenciales correctas}}{55}{figure.caption.31}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces PF-A02 --- Login con contraseña incorrecta}}{55}{figure.caption.32}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces PF-A03 --- Rate limiting tras 11 intentos de login}}{56}{figure.caption.33}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces PF-A04 --- Refresh con token válido}}{56}{figure.caption.34}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces PF-A05 --- Refresh con token ya rotado}}{57}{figure.caption.35}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces PF-A06 --- Acceso al endpoint /me sin token}}{57}{figure.caption.36}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces PF-A07 --- Acceso a recurso de negocio con rol CUSTOMER}}{58}{figure.caption.37}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces PF-A08 --- Registro con email ya existente}}{58}{figure.caption.38}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Captura de pruebas del módulo de exploración}}{59}{figure.caption.39}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Captura de pruebas del módulo de disponibilidad}}{59}{figure.caption.40}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Captura de ejecución de pruebas unitarias}}{60}{figure.caption.41}%
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Captura de pruebas de rendimiento manual}}{60}{figure.caption.42}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

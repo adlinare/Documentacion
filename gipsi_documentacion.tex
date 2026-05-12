@@ -1,0 +1,3096 @@
+%=============================================================
+%  GIPSI — Documentación Técnica del Proyecto
+%  Compilar con: pdflatex → bibtex → pdflatex × 2
+%  Compatible con Overleaf (pdfLaTeX o XeLaTeX)
+%=============================================================
+\documentclass[12pt,a4paper,twoside]{report}
+
+%----------------------------------------------------------
+% PAQUETES
+%----------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Geometría y márgenes
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm, headheight=14.5pt]{geometry}
+
+% Cabeceras y pies de página
+\usepackage{fancyhdr}
+\usepackage{emptypage}
+
+% Tipografía y color
+\usepackage{xcolor}
+\definecolor{gipsiVerde}{HTML}{2E7D32}
+\definecolor{gipsiMenta}{HTML}{c0eed3}
+\definecolor{gipsiFondo}{HTML}{1d292f}
+\definecolor{gipsiSecundario}{HTML}{83a38e}
+\definecolor{codigofondo}{HTML}{F5F5F5}
+\definecolor{codigoborde}{HTML}{DDDDDD}
+\definecolor{accentblue}{HTML}{1565C0}
+
+% Imágenes y figuras
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Tablas
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+
+% Código fuente
+\usepackage{listings}
+\usepackage{lstautogobble}
+
+% Hipervínculos
+\usepackage[hidelinks, colorlinks=true, linkcolor=accentblue, urlcolor=gipsiVerde, citecolor=accentblue]{hyperref}
+
+% Matemáticas
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Diagramas con TikZ
+\usepackage{tikz}
+\usetikzlibrary{babel, shapes.geometric, arrows.meta, positioning, fit, backgrounds, decorations.pathreplacing}
+
+% Índice y TOC
+\usepackage{tocloft}
+\usepackage[nottoc]{tocbibind}
+
+% Enumeraciones avanzadas
+\usepackage{enumitem}
+
+% Cajas y recuadros
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, listings}
+
+% Notas al pie y referencias
+\usepackage{footnote}
+
+% Fechas
+\usepackage{datetime2}
+
+% Glosario (opcional, se puede comentar si no se usa makeglossaries)
+% \usepackage[acronym]{glossaries}
+
+% Otros
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{parskip}
+\setlength{\parskip}{0.5em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\TestTableSetup}{\small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.18}}
+\newcommand{\TestScreenshot}[3]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{#2}{%
+  \includegraphics[width=0.92\textwidth,keepaspectratio]{#2}%
+}{%
+  \fbox{\parbox[c][0.28\textheight][c]{0.86\textwidth}{\centering\textbf{Captura pendiente}\\[0.5em]\texttt{\detokenize{#2}}}}%
+}%
+\caption{#1}
+\label{#3}
+\end{figure}
+}
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+\newcommand{\RequirementTableStart}[3]{%
+\begin{longtable}{@{}L{0.12\textwidth}L{0.56\textwidth}L{0.24\textwidth}@{}}
+\caption{#1}\label{#2}\\
+\toprule
+ID & Descripci\'on & #3 \\
+\midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Continuaci\'on de la tabla anterior} \\
+\toprule
+ID & Descripci\'on & #3 \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\itshape Contin\'ua en la siguiente p\'agina} \\
+\endfoot
+\bottomrule
+\endlastfoot
+}
+\newcommand{\RequirementTableEnd}{\end{longtable}}
+
+%----------------------------------------------------------
+% CONFIGURACIÓN DE LISTINGS (código fuente)
+%----------------------------------------------------------
+\lstdefinestyle{javaStyle}{
+  language=Java,
+  backgroundcolor=\color{codigofondo},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{accentblue}\bfseries,
+  stringstyle=\color{gipsiVerde},
+  commentstyle=\color{gray}\itshape,
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  stepnumber=1,
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{codigoborde},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  showstringspaces=false,
+  captionpos=b,
+  autogobble=true
+}
+
+\lstdefinestyle{dartStyle}{
+  language=Java,   % Dart no existe nativamente; Java es suficientemente similar
+  backgroundcolor=\color{codigofondo},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{accentblue}\bfseries,
+  stringstyle=\color{gipsiVerde},
+  commentstyle=\color{gray}\itshape,
+  morestring=[b]',
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  stepnumber=1,
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{codigoborde},
+  breaklines=true,
+  tabsize=2,
+  showstringspaces=false,
+  captionpos=b,
+  autogobble=true,
+  morekeywords={var, final, const, async, await, yield, Widget, BuildContext,
+                StatelessWidget, StatefulWidget, State, Provider, override,
+                required, abstract, extends, implements, mixin, on,
+                dynamic, String, int, double, bool, List, Map, Set,
+                Future, Stream, Completer, void, null, true, false,
+                class, enum, typedef, import, export, library, part, show, hide}
+}
+
+\lstdefinestyle{sqlStyle}{
+  language=SQL,
+  backgroundcolor=\color{codigofondo},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{accentblue}\bfseries,
+  stringstyle=\color{gipsiVerde},
+  commentstyle=\color{gray}\itshape,
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  frame=single,
+  rulecolor=\color{codigoborde},
+  breaklines=true,
+  tabsize=2,
+  showstringspaces=false,
+  captionpos=b,
+  autogobble=true
+}
+
+\lstdefinestyle{yamlStyle}{
+  language=bash,
+  backgroundcolor=\color{codigofondo},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{accentblue},
+  stringstyle=\color{gipsiVerde},
+  commentstyle=\color{gray}\itshape,
+  frame=single,
+  rulecolor=\color{codigoborde},
+  breaklines=true,
+  tabsize=2,
+  showstringspaces=false,
+  captionpos=b,
+  autogobble=true
+}
+
+\lstset{
+  columns=fullflexible,
+  keepspaces=true,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {—}{{-}}1
+    {…}{{...}}3
+    {├}{{|}}1
+    {└}{{|}}1
+    {│}{{|}}1
+    {─}{{-}}1
+}
+
+%----------------------------------------------------------
+% CAJAS DE NOTA/ADVERTENCIA
+%----------------------------------------------------------
+\tcbset{
+  notaStyle/.style={
+    enhanced, breakable,
+    colback=gipsiMenta!20, colframe=gipsiVerde,
+    fonttitle=\bfseries, title={Nota},
+    left=6pt, right=6pt, top=4pt, bottom=4pt
+  },
+  advertenciaStyle/.style={
+    enhanced, breakable,
+    colback=yellow!10, colframe=orange!80!black,
+    fonttitle=\bfseries, title={Advertencia},
+    left=6pt, right=6pt
+  },
+  definicionStyle/.style={
+    enhanced, breakable,
+    colback=accentblue!5, colframe=accentblue,
+    fonttitle=\bfseries,
+    left=6pt, right=6pt
+  }
+}
+
+%----------------------------------------------------------
+% CABECERAS Y PIES
+%----------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textit{Gipsi — Documentación Técnica}}
+\fancyhead[RO]{\small\textit{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%----------------------------------------------------------
+% PORTADA
+%----------------------------------------------------------
+\newcommand{\portada}{%
+  \begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+
+    {\color{gipsiVerde}\rule{\linewidth}{2pt}}\\[0.5cm]
+
+    {\Huge\bfseries\color{gipsiFondo} GIPSI}\\[0.3cm]
+    {\Large\bfseries Plataforma de Gestión de Citas\\para Negocios de Estética y Bienestar}\\[0.3cm]
+
+    {\color{gipsiVerde}\rule{\linewidth}{2pt}}\\[1.5cm]
+
+    {\large\bfseries Documentación Técnica del Proyecto}\\[0.5cm]
+    {\normalsize Trabajo de Fin de Ciclo / Proyecto de Desarrollo de Software}\\[2cm]
+
+    \begin{tabular}{rl}
+      \textbf{Autores:}      & José Ramón López Guisado y Adrián Linares Utrera\\[0.4em]
+      \textbf{Repositorio Backend:}  & \texttt{github.com/Joserraa05/Gipsi-API} \\[0.3em]
+      \textbf{Repositorio Frontend:} & \texttt{github.com/Joserraa05/Gipsi-Frontend} \\[0.4em]
+      \textbf{Tecnologías:} & Spring Boot 3.4 · Flutter 3.24 · PostgreSQL \\[0.3em]
+      \textbf{Fecha:}       & \today \\
+    \end{tabular}
+
+    \vfill
+
+    {\color{gipsiVerde}\rule{\linewidth}{1pt}}\\[0.3cm]
+    {\footnotesize Documento generado para entorno LaTeX / Overleaf}
+  \end{titlepage}
+}
+
+%=============================================================
+%  INICIO DEL DOCUMENTO
+%=============================================================
+\begin{document}
+
+\portada
+
+%----------------------------------------------------------
+% RESUMEN / ABSTRACT
+%----------------------------------------------------------
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+
+\textbf{Gipsi} es una aplicación móvil multiplataforma orientada al sector de la estética,
+peluquería y bienestar personal. Su propósito principal es digitalizar y simplificar
+la gestión de citas entre clientes y negocios, permitiendo que los usuarios puedan
+consultar servicios, reservar horarios disponibles, recibir notificaciones y valorar
+su experiencia, mientras que los negocios pueden gestionar su disponibilidad,
+trabajadores, servicios y agenda desde una solución centralizada.
+
+El sistema se compone de dos grandes bloques tecnológicos. Por un lado, una
+API REST desarrollada con Spring Boot 3.4 sobre Java 21, encargada de exponer
+los servicios de negocio, gestionar la autenticación, aplicar las reglas de seguridad,
+persistir la información y coordinar la lógica principal de la aplicación. Por otro
+lado, un frontend móvil construido con Flutter 3.24 en Dart, organizado como
+monorepo mediante Melos, lo que permite dividir el proyecto en varios paquetes
+reutilizables y mantener una estructura modular, escalable y fácil de mantener.
+
+El backend implementa autenticación mediante JSON Web Tokens, utilizando
+access tokens de corta duración y refresh tokens de larga duración con rotación
+en cada uso. Este mecanismo permite mantener sesiones seguras sin obligar al
+usuario a iniciar sesión continuamente. Además, incorpora control de acceso basado
+en roles, diferenciando permisos y funcionalidades según el tipo de usuario:
+cliente, negocio o trabajador.
+
+La aplicación también incluye gestión de disponibilidad por franjas horarias,
+permitiendo calcular huecos libres en función de los horarios del negocio, la duración
+de los servicios y las reservas ya existentes. A esto se suma un sistema de valoraciones
+con agregados calculados dinámicamente, notificaciones push mediante Firebase Cloud
+Messaging y almacenamiento de imágenes mediante una capa de abstracción preparada
+para migrar en el futuro a servicios compatibles con S3, como Amazon S3 o soluciones
+equivalentes de almacenamiento de objetos.
+
+La base de datos relacional utilizada es PostgreSQL. Su estructura se gestiona mediante
+migraciones versionadas con Flyway, lo que permite controlar la evolución del esquema
+de forma ordenada, reproducible y segura entre distintos entornos. La documentación
+de la API se genera automáticamente con Springdoc OpenAPI, facilitando la consulta
+de endpoints, parámetros, respuestas y modelos de datos tanto para desarrolladores
+como para futuras integraciones externas.
+
+El frontend adopta una arquitectura en capas basada en el patrón Repository. Esta
+separación permite aislar la lógica de acceso a datos de la interfaz de usuario y facilita
+el mantenimiento, las pruebas y la evolución del código. Para la gestión de estado se
+utiliza Riverpod, una solución reactiva que permite conectar la interfaz con los datos
+de forma controlada y predecible. La navegación se gestiona con go\_router, que permite
+definir rutas de forma declarativa, y la comunicación HTTP se realiza mediante Dio,
+incluyendo interceptores para automatizar tareas como la inserción del token de acceso
+o el refresco automático de credenciales.
+
+El sistema de diseño propio, denominado \texttt{gipsi\_shared\_ui}, centraliza tokens de
+color, estilos tipográficos, espaciados y componentes reutilizables. Gracias a esta capa
+compartida, la aplicación mantiene una apariencia coherente entre pantallas y reduce
+la duplicación de código visual.
+
+Este documento recoge el análisis de requisitos, las decisiones de diseño arquitectónico,
+los detalles de implementación, las estrategias de prueba y las instrucciones de despliegue,
+con el objetivo de servir como referencia técnica completa del proyecto Gipsi.
+
+\vspace{1em}
+\noindent\textbf{Palabras clave:} aplicación móvil, Flutter, Spring Boot, REST API, JWT, PostgreSQL, gestión de citas, Riverpod, Melos, Firebase.
+\newpage
+
+%----------------------------------------------------------
+% ÍNDICE DE CONTENIDOS
+%----------------------------------------------------------
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+\cleardoublepage
+
+%=============================================================
+%  CAPÍTULO 1 — INTRODUCCIÓN Y CONTEXTO
+%=============================================================
+\chapter{Introducción y Contexto}
+
+\section{Motivación del Proyecto}
+
+El sector de la estética, la peluquería y el bienestar personal mueve en España miles de millones de euros anuales y cuenta con cientos de miles de pequeños negocios distribuidos por todo el territorio. A pesar de su relevancia económica, la mayor parte de estos establecimientos sigue gestionando sus citas de forma analógica (por teléfono, agenda física o, como mucho, mediante grupos de mensajería) con los problemas derivados que esto conlleva: dobles reservas, olvidos, dificultad para mostrar disponibilidad en tiempo real y ausencia de un canal digital propio para el cliente.
+
+La proliferación de teléfonos inteligentes ha transformado el comportamiento del consumidor: hoy el usuario espera poder reservar un servicio a cualquier hora, desde cualquier lugar y de forma instantánea, de la misma manera en que reserva un hotel o pide comida a domicilio. Esta brecha entre las expectativas del cliente digital y la realidad operativa del pequeño negocio de belleza es la motivación principal de Gipsi.
+
+Asimismo, el análisis del mercado actual muestra que muchas de las soluciones existentes presentan una relación calidad-precio poco equilibrada: ofrecen funcionalidades limitadas, interfaces poco cuidadas o una experiencia de usuario mejorable, mientras mantienen costes relativamente elevados para pequeños negocios. Apoyándose en la teoría de los océanos azules, Gipsi identifica una oportunidad para alejarse de la competencia directa basada únicamente en precio o presencia en el mercado, y propone cubrir un hueco poco explotado: una aplicación accesible económicamente, sencilla de adoptar por negocios pequeños y medianos, pero con un nivel de calidad técnica, visual y funcional superior al habitual en este segmento. De este modo, el proyecto busca crear un espacio de valor diferenciado, donde el cliente profesional no tenga que elegir entre una herramienta barata pero limitada o una plataforma completa pero difícil de asumir económicamente.
+
+\section{Descripción General del Sistema}
+
+Gipsi es una plataforma de gestión de citas dirigida al sector de la estética y el bienestar. Su propósito es doble:
+
+\begin{itemize}
+  \item Para el \textbf{cliente}: descubrir negocios cercanos por categoría (peluquería, nail art, spa, barbería, estética…), consultar servicios y precios, ver disponibilidad en tiempo real y gestionar sus reservas desde el móvil.
+  \item Para el \textbf{negocio}: disponer de una agenda digital que elimine la necesidad de gestionar citas por teléfono, recibir notificaciones push ante nuevas reservas y cancelaciones, y obtener visibilidad ante clientes potenciales en su área.
+\end{itemize}
+
+El sistema distingue tres tipos de actores: \textbf{clientes}, \textbf{negocios} (propietarios) y \textbf{trabajadores} (empleados de un negocio), cada uno con permisos y vistas diferenciadas.
+
+\section{Alcance de la Versión Actual}
+
+La versión documentada en este proyecto, denominada internamente \textit{v2}, recoge tanto las funcionalidades ya implementadas en el repositorio como aquellas que se encuentran en fase de integración y que estarán disponibles para la presentación del proyecto. El objetivo de esta versión es mostrar una experiencia funcional completa del producto, desde el descubrimiento de negocios hasta la reserva y gestión básica de citas.
+
+\begin{enumerate}
+  \item Registro y autenticación de usuarios con gestión de sesiones mediante tokens JWT, refresh tokens y refresco automático de credenciales.
+
+  \item Control de acceso basado en roles, diferenciando entre usuarios cliente, negocios y trabajadores, de forma que cada perfil acceda únicamente a las funcionalidades correspondientes.
+
+  \item Exploración de negocios con paginación, búsqueda por texto, filtro por categoría y ciudad.
+
+  \item Vista de detalle de negocio con portada colapsable, información de contacto, catálogo de servicios con precios y duraciones, trabajadores disponibles y sección de valoraciones.
+
+  \item Flujo completo de reserva dividido en varios pasos: selección de servicio, selección de trabajador, elección de fecha y hora disponible, revisión de los datos y confirmación final de la cita.
+
+  \item Cálculo de disponibilidad horaria por servicio y trabajador, teniendo en cuenta la duración del servicio, los horarios configurados y las reservas ya existentes.
+
+  \item Gestión de citas propias por parte del cliente, permitiendo consultar reservas futuras, revisar el histórico de citas y acceder al detalle de cada reserva.
+
+  \item Sistema de reviews sobre reservas confirmadas y finalizadas, evitando que se puedan valorar servicios no realizados.
+
+  \item Sistema de favoritos para que los usuarios puedan guardar negocios de interés y acceder posteriormente a ellos de forma rápida.
+
+  \item Notificaciones push mediante Firebase Cloud Messaging para informar al usuario sobre eventos relevantes, como confirmaciones, recordatorios o cambios relacionados con sus citas.
+
+  \item Gestión de imágenes de negocios y servicios mediante una capa de almacenamiento local abstraída, preparada para una futura migración a servicios compatibles con S3.
+
+  \item Rate limiting en los endpoints de autenticación, con el objetivo de proteger la API frente a abuso, ataques automatizados o intentos repetidos de acceso.
+
+  \item Panel de gestión para negocios, desde el que la empresa podrá administrar su información pública, servicios, trabajadores, horarios y citas recibidas.
+
+  \item Búsqueda avanzada con filtros adicionales, orientada a mejorar el descubrimiento de negocios según criterios como categoría, ubicación, disponibilidad o valoración.
+\end{enumerate}
+
+Como líneas de evolución futura, se plantea ampliar la vista de empresa con funcionalidades de gestión más avanzadas. Entre ellas destaca la incorporación de un sistema CRM que permita a los negocios organizar su relación con los clientes, consultar historiales de citas, segmentar usuarios y mejorar la comunicación comercial. Asimismo, se contempla la integración de un módulo de facturación que facilite la emisión y consulta de facturas, el control de servicios cobrados y la gestión económica básica del negocio desde la propia plataforma.
+
+Estas mejoras permitirían que Gipsi evolucionara desde una aplicación de reserva de citas hacia una solución integral de gestión para pequeños y medianos negocios del sector de la estética, la peluquería y el bienestar personal.
+
+\section{Objetivos del Proyecto}
+
+Los objetivos técnicos que guían el desarrollo son:
+
+\begin{tcolorbox}[definicionStyle, title={Objetivos Técnicos}]
+\begin{enumerate}[label=\textbf{OT\arabic*.}]
+  \item Diseñar e implementar una API REST segura, versionable y bien documentada.
+  \item Construir una aplicación móvil multiplataforma (Android e iOS) con una única base de código.
+  \item Garantizar la seguridad del sistema mediante JWT con rotación de refresh tokens siguiendo las recomendaciones OWASP.
+  \item Establecer una arquitectura escalable que permita la migración futura a infraestructura cloud (S3, servicios gestionados).
+  \item Organizar el frontend como monorepo con separación clara de responsabilidades entre packages.
+  \item Documentar la API de forma automática y ejecutable desde el propio servidor.
+\end{enumerate}
+\end{tcolorbox}
+
+\section{Estructura del Documento}
+
+El presente documento se organiza en los siguientes capítulos:
+
+\begin{description}
+  \item[Capítulo 2 — Análisis y Requisitos:] Especificación de requisitos funcionales y no funcionales, casos de uso y modelo de dominio.
+  \item[Capítulo 3 — Diseño:] Arquitectura del sistema, modelo de datos, diseño de la API y sistema de diseño visual.
+  \item[Capítulo 4 — Implementación:] Detalle técnico de los componentes clave del backend y el frontend.
+  \item[Capítulo 5 — Pruebas y Evaluación:] Estrategia de pruebas, pruebas funcionales y unitarias.
+  \item[Capítulo 6 — Despliegue:] Requisitos, configuración de entorno y proceso de puesta en producción.
+  \item[Capítulo 7 — Conclusiones y Mejoras:] Valoración del trabajo realizado y líneas de trabajo futuro.
+  \item[Bibliografía y Anexos:] Referencias técnicas y material complementario.
+\end{description}
+
+%=============================================================
+%  CAPÍTULO 2 — ANÁLISIS Y REQUISITOS
+%=============================================================
+\chapter{Análisis y Requisitos}
+
+\section{Identificación de Actores}
+
+El sistema identifica tres tipos de actores primarios y un actor secundario:
+
+\begin{table}[H]
+\centering
+\caption{Actores del sistema Gipsi}
+\label{tab:actores}
+\begin{tabularx}{\textwidth}{>{\bfseries}lX}
+\toprule
+Actor & Descripción \\
+\midrule
+Cliente (\texttt{CUSTOMER}) & Usuario final que descubre negocios, explora servicios y gestiona sus reservas. Es el actor más numeroso del sistema. \\[0.5em]
+Negocio (\texttt{BUSINESS}) & Propietario o gestor de un establecimiento. Define los servicios, horarios y asigna trabajadores. Recibe notificaciones de nuevas reservas. \\[0.5em]
+Trabajador (\texttt{WORKER}) & Empleado de un negocio que ejecuta los servicios. Tiene su propio horario y días libres, lo que afecta directamente a la disponibilidad calculada. \\[0.5em]
+Sistema (actor secundario) & Ejecuta tareas programadas: cancelación automática de reservas pendientes antiguas y envío de recordatorios diarios. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Requisitos Funcionales}
+
+Los requisitos funcionales se clasifican por módulo. En la notación utilizada, \textbf{RF} identifica requisito funcional, el primer número indica el módulo y el segundo el requisito dentro del módulo.
+
+\subsection{Módulo de Autenticación (RF-1)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Autenticación}{tab:rf-auth}{Prioridad}
+RF-1.1 & El sistema debe permitir el registro de nuevos usuarios (clientes) con nombre, email, nombre de usuario, teléfono y contraseña. & Alta \\
+RF-1.2 & El sistema debe autenticar usuarios mediante usuario/contraseña y devolver un \textit{access token} (30 min) y un \textit{refresh token} (30 días). & Alta \\
+RF-1.3 & El sistema debe permitir la renovación del \textit{access token} presentando un \textit{refresh token} válido. La rotación es obligatoria: se emite un nuevo par de tokens y el anterior queda invalidado. & Alta \\
+RF-1.4 & El sistema debe permitir el cierre de sesión explícito revocando el \textit{refresh token}. & Alta \\
+RF-1.5 & El sistema debe limitar a 10 peticiones por minuto y por dirección IP los intentos de login y registro para mitigar ataques de fuerza bruta. & Alta \\
+RF-1.6 & El endpoint \texttt{GET /me} debe devolver el perfil completo del usuario autenticado con los campos específicos de su rol. & Media \\
+RF-1.7 & El sistema debe permitir el registro de negocios con nombre, email, nombre de usuario, teléfono, contraseña, CIF, dirección, ciudad, descripción y modo autónomo. & Alta \\
+RF-1.8 & El sistema debe permitir el registro de trabajadores y su vinculación posterior a un negocio mediante invitación o código temporal. & Alta \\
+RF-1.9 & El CIF de cada negocio debe ser único en el sistema. & Alta \\
+RF-1.10 & El sistema debe validar el formato de correo electrónico en los procesos de registro y actualización de perfil. & Alta \\
+RF-1.11 & Los usuarios autenticados deben poder cambiar su contraseña y revocar todas sus sesiones activas. & Media \\
+\RequirementTableEnd
+
+\subsection{Módulo de Negocios (RF-2)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Negocios}{tab:rf-business}{Prioridad}
+RF-2.1 & El sistema debe permitir listar negocios con paginación, búsqueda por texto libre (\texttt{q}), filtro por ciudad y filtro por categoría. & Alta \\
+RF-2.2 & El sistema debe mostrar el detalle de un negocio, incluyendo sus servicios, agregados de valoraciones y datos de contacto. & Alta \\
+RF-2.3 & Un negocio debe poder subir y gestionar imágenes de perfil y portada. & Media \\
+RF-2.4 & El sistema debe soportar el concepto de negocio autónomo (un solo trabajador), lo que simplifica la selección de trabajador en la reserva. & Media \\
+RF-2.5 & Los agregados de rating (media y número de valoraciones) deben estar disponibles en la respuesta de negocio sin necesidad de consultas adicionales. & Media \\
+RF-2.6 & Un negocio autenticado debe poder consultar y editar su información pública, incluyendo nombre, email, teléfono, dirección, ciudad y descripción. & Alta \\
+RF-2.7 & El negocio debe poder configurar parámetros operativos como modo autónomo, autoaceptación de reservas, horizonte de disponibilidad, umbral de autocancelación de reservas pendientes y activación del fichaje. & Media \\
+RF-2.8 & El sistema debe exponer los listados públicos de trabajadores y servicios asociados a cada negocio. & Media \\
+RF-2.9 & El sistema debe reflejar si un negocio ha completado su configuración mínima cuando disponga de al menos un servicio y un horario operativo. & Media \\
+\RequirementTableEnd
+
+\subsection{Módulo de Servicios (RF-3)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Servicios}{tab:rf-services}{Prioridad}
+RF-3.1 & Cada servicio debe tener asociado un nombre, duración en minutos, precio y opcionalmente una imagen. & Alta \\
+RF-3.2 & El sistema debe calcular la disponibilidad de un servicio para una fecha dada, devolviendo una lista de slots horarios con indicación de disponibilidad y causa de indisponibilidad. & Alta \\
+RF-3.3 & La disponibilidad debe considerar el horario del negocio, las reservas existentes, los días libres del trabajador y si se permite trabajo en horas extra. & Alta \\
+RF-3.4 & Los servicios deben poder filtrarse por texto, ciudad y categoría. & Media \\
+RF-3.5 & Un negocio autenticado debe poder crear, editar y eliminar sus servicios. & Alta \\
+RF-3.6 & Un negocio debe poder activar o desactivar temporalmente un servicio sin eliminarlo. & Alta \\
+RF-3.7 & En negocios no autónomos, la empresa debe poder asignar y desasignar trabajadores a cada servicio. & Alta \\
+RF-3.8 & La duración de un servicio debe ser positiva y múltiplo de 15 minutos. & Alta \\
+RF-3.9 & Solo los servicios activos deben poder reservarse. & Alta \\
+\RequirementTableEnd
+
+\subsection{Módulo de Reservas (RF-4)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Reservas}{tab:rf-bookings}{Prioridad}
+RF-4.1 & Un cliente autenticado debe poder crear una reserva para un servicio en un slot de tiempo disponible. & Alta \\
+RF-4.2 & El sistema debe gestionar los estados de una reserva: \texttt{PENDING}, \texttt{CONFIRMED}, \texttt{CANCELED}, \texttt{COMPLETED}. & Alta \\
+RF-4.3 & El sistema debe cancelar automáticamente mediante un job programado las reservas en estado \texttt{PENDING} que superen un umbral de tiempo sin confirmación. & Media \\
+RF-4.4 & El sistema debe enviar recordatorios push el día anterior a una reserva confirmada. & Media \\
+RF-4.5 & Un cliente debe poder cancelar sus propias reservas dentro de un plazo definido. & Alta \\
+RF-4.6 & Solo los clientes autenticados deben poder crear reservas. & Alta \\
+RF-4.7 & La creación de una reserva debe validar que la fecha solicitada esté alineada a slots de 15 minutos y no supere el horizonte de disponibilidad del negocio. & Alta \\
+RF-4.8 & En negocios no autónomos, cada reserva debe asociarse a un trabajador perteneciente al negocio, disponible y habilitado para prestar el servicio seleccionado. & Alta \\
+RF-4.9 & El sistema debe permitir que trabajadores y negocios consulten las reservas que tienen asignadas o recibidas según su rol. & Alta \\
+RF-4.10 & El negocio o el trabajador asignado deben poder confirmar reservas pendientes. & Alta \\
+RF-4.11 & El cliente propietario, el negocio o el trabajador asignado deben poder cancelar una reserva, opcionalmente indicando el motivo de cancelación. & Alta \\
+RF-4.12 & El estado inicial de una reserva debe ser \texttt{CONFIRMED} cuando el negocio o el trabajador tengan autoaceptación habilitada y \texttt{PENDING} en caso contrario. & Media \\
+RF-4.13 & El sistema debe enviar notificaciones push en eventos de creación, confirmación, cancelación y recordatorio de reservas. & Media \\
+\RequirementTableEnd
+
+\subsection{Módulo de Valoraciones (RF-5)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Valoraciones}{tab:rf-reviews}{Prioridad}
+RF-5.1 & Un cliente solo puede dejar una valoración sobre una reserva en estado \texttt{CONFIRMED} cuya fecha de fin haya pasado. & Alta \\
+RF-5.2 & Solo puede existir una valoración por reserva (restricción \texttt{UNIQUE} en base de datos). & Alta \\
+RF-5.3 & El cliente propietario de la valoración puede editarla o eliminarla. Los negocios no pueden eliminar valoraciones. & Alta \\
+RF-5.4 & Las valoraciones deben poder consultarse públicamente paginadas por negocio o por servicio. & Alta \\
+RF-5.5 & Los agregados (media de rating, número de valoraciones) se calculan dinámicamente y se incluyen en las respuestas de negocio y servicio. & Media \\
+RF-5.6 & El sistema debe notificar al negocio cuando reciba una nueva valoración. & Media \\
+\RequirementTableEnd
+
+\subsection{Módulo de Equipo y Horarios (RF-6)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Equipo y Horarios}{tab:rf-team}{Prioridad}
+RF-6.1 & Un negocio debe poder generar y revocar invitaciones temporales para incorporar trabajadores a su equipo. & Alta \\
+RF-6.2 & Un trabajador debe poder aceptar o canjear una invitación válida para vincularse a un negocio. & Alta \\
+RF-6.3 & El negocio debe poder consultar su equipo, modificar ciertos ajustes del trabajador y desvincularlo sin eliminar su historial. & Media \\
+RF-6.4 & El negocio autónomo y los trabajadores deben poder definir y actualizar su horario semanal de trabajo. & Alta \\
+RF-6.5 & El negocio debe poder consultar y modificar el horario semanal de sus trabajadores. & Alta \\
+RF-6.6 & El negocio autónomo o el trabajador deben poder registrar periodos de indisponibilidad que bloqueen la reserva en ese rango. & Media \\
+RF-6.7 & Los trabajadores deben poder solicitar ausencias y el negocio debe poder aprobarlas, rechazarlas o registrar ausencias directas. & Media \\
+RF-6.8 & Antes de aprobar o registrar una ausencia, el sistema debe permitir consultar las reservas activas que entren en conflicto con ese periodo. & Media \\
+RF-6.9 & Si el fichaje está habilitado, el trabajador debe poder realizar entrada, salida y consultar su sesión abierta actual. & Baja \\
+\RequirementTableEnd
+
+\subsection{Módulo de Perfil y Favoritos (RF-7)}
+
+\RequirementTableStart{Requisitos funcionales --- Módulo de Perfil y Favoritos}{tab:rf-profile}{Prioridad}
+RF-7.1 & El cliente debe poder consultar y editar su perfil, incluyendo su imagen de avatar. & Media \\
+RF-7.2 & El cliente debe poder eliminar su cuenta, el sistema debe cancelar sus reservas futuras activas y anonimizar sus datos personales conservando la integridad del historial. & Media \\
+RF-7.3 & Los clientes deben poder marcar y desmarcar negocios como favoritos. & Media \\
+RF-7.4 & Los clientes deben poder marcar y desmarcar servicios como favoritos. & Media \\
+RF-7.5 & Los usuarios autenticados deben poder registrar y eliminar dispositivos para recibir notificaciones push. & Media \\
+\RequirementTableEnd
+
+\section{Requisitos No Funcionales}
+
+\RequirementTableStart{Requisitos no funcionales}{tab:rnf}{Categoría}
+RNF-1 & La API debe responder en menos de 500 ms bajo carga normal para endpoints de consulta sin agregaciones complejas. & Rendimiento \\
+RNF-2 & Todas las contraseñas deben almacenarse con hash bcrypt. Ninguna contraseña en texto plano puede persistir en la base de datos. & Seguridad \\
+RNF-3 & Los tokens JWT deben firmarse con un secreto de al menos 64 bytes en Base64. & Seguridad \\
+RNF-4 & La API debe documentarse automáticamente y ser ejecutable desde Swagger UI en \texttt{/swagger-ui.html}. & Mantenibilidad \\
+RNF-5 & El sistema de almacenamiento de imágenes debe estar abstraído detrás de una interfaz que permita migrar de almacenamiento local a S3 sin cambiar la API pública. & Escalabilidad \\
+RNF-6 & El frontend debe funcionar en dispositivos Android (API 21+) e iOS (13+) sin bifurcaciones de código específicas por plataforma en la lógica de negocio. & Portabilidad \\
+RNF-7 & La aplicación debe operar en modo oscuro por defecto. & Usabilidad \\
+RNF-8 & Las migraciones de base de datos deben versionarse mediante Flyway y ejecutarse automáticamente al arrancar. & Fiabilidad \\
+RNF-9 & El sistema de caché HTTP de imágenes debe configurar cabeceras de expiración de un año para reducir tráfico. & Rendimiento \\
+RNF-10 & El CORS debe ser configurable por variable de entorno para no exponer orígenes abiertos (\texttt{*}) en producción. & Seguridad \\
+RNF-11 & El sistema debe soportar al menos 1000 usuarios concurrentes en condiciones normales de uso sin degradación crítica del servicio. & Rendimiento \\
+RNF-12 & Los listados de negocios, servicios, reservas y valoraciones deben implementar paginación para evitar la carga masiva de registros en una única petición. & Rendimiento \\
+RNF-13 & Las operaciones de búsqueda y filtrado deben estar optimizadas mediante consultas eficientes e índices adecuados en base de datos. & Rendimiento \\
+RNF-14 & Las tareas no críticas, como el envío de notificaciones push o procesos programados, deben ejecutarse sin bloquear la respuesta principal de la API. & Rendimiento \\
+RNF-15 & La aplicación debe mostrar estados de carga, mensajes de error y estados vacíos cuando no existan datos disponibles. & Usabilidad \\
+RNF-16 & Los formularios de registro, inicio de sesión, reserva y valoración deben validar los datos introducidos y mostrar mensajes comprensibles para el usuario. & Usabilidad \\
+RNF-17 & Los flujos principales de la aplicación, como iniciar sesión, buscar negocios, reservar un servicio y publicar una valoración, deben poder completarse con el menor número posible de pasos. & Usabilidad \\
+RNF-18 & La interfaz debe adaptarse correctamente a diferentes tamaños de pantalla en dispositivos móviles. & Usabilidad \\
+RNF-19 & El servicio debe estar disponible al menos el 99\% del tiempo mensual, excluyendo mantenimientos planificados. & Disponibilidad \\
+RNF-20 & La API debe gestionar los errores internos de forma controlada, devolviendo respuestas JSON homogéneas y evitando exponer trazas técnicas al cliente. & Fiabilidad \\
+RNF-21 & La aplicación debe poder seguir funcionando parcialmente aunque servicios externos, como Firebase Cloud Messaging, no estén disponibles temporalmente. & Disponibilidad \\
+RNF-22 & El sistema debe registrar los errores relevantes para facilitar su diagnóstico y resolución durante el mantenimiento. & Observabilidad \\
+RNF-23 & Los endpoints protegidos deben validar el rol y permisos del usuario antes de permitir operaciones sensibles. & Seguridad \\
+RNF-24 & Los endpoints de autenticación deben aplicar limitación de peticiones para reducir ataques de fuerza bruta. & Seguridad \\
+RNF-25 & La comunicación entre cliente y servidor debe realizarse mediante HTTPS en entornos de producción. & Seguridad \\
+RNF-26 & Las claves, secretos, credenciales y configuraciones sensibles deben almacenarse mediante variables de entorno y no directamente en el código fuente. & Seguridad \\
+RNF-27 & Los refresh tokens deben almacenarse de forma segura y permitir la renovación de sesión sin requerir que el usuario vuelva a iniciar sesión continuamente. & Seguridad \\
+RNF-28 & Los datos recibidos por la API deben validarse antes de ser procesados o almacenados en la base de datos. & Seguridad \\
+RNF-29 & El sistema debe cumplir con el RGPD y la LOPD GDD en el tratamiento de datos personales de usuarios, negocios y trabajadores. & Privacidad \\
+RNF-30 & Solo deben solicitarse y almacenarse los datos personales estrictamente necesarios para el funcionamiento de la aplicación. & Privacidad \\
+RNF-31 & Los datos personales de los usuarios no deben mostrarse públicamente salvo que sean necesarios para una funcionalidad concreta. & Privacidad \\
+RNF-32 & Los tokens y datos de sesión del usuario deben almacenarse de forma segura en el dispositivo móvil. & Privacidad \\
+RNF-33 & La API debe mantener una estructura de respuestas JSON consistente para facilitar su consumo desde el frontend y futuras integraciones. & Compatibilidad \\
+RNF-34 & La URL base de la API debe poder configurarse según el entorno de ejecución: desarrollo local, emulador, red local o producción. & Portabilidad \\
+RNF-35 & El backend debe organizarse en capas diferenciadas, separando controladores, servicios, repositorios, entidades, DTOs y configuración. & Mantenibilidad \\
+RNF-36 & El frontend debe mantener una arquitectura modular, separando vistas, modelos, repositorios, servicios, navegación y estado de la aplicación. & Mantenibilidad \\
+RNF-37 & El código fuente debe estar versionado en GitHub y seguir una estructura clara que facilite la colaboración y revisión de cambios. & Mantenibilidad \\
+RNF-38 & La documentación técnica debe permitir comprender la instalación, configuración y ejecución del backend y del frontend. & Mantenibilidad \\
+RNF-39 & La base de datos debe mantener integridad referencial mediante claves primarias, claves foráneas y restricciones cuando sea necesario. & Fiabilidad \\
+RNF-40 & El sistema no debe permitir que un usuario valore una reserva que no le pertenece o que no haya finalizado correctamente. & Fiabilidad \\
+RNF-41 & El sistema de reservas debe respetar la disponibilidad real de servicios, trabajadores, horarios y bloqueos existentes. & Fiabilidad \\
+RNF-42 & Las operaciones críticas, como creación de reservas, cancelaciones y publicación de valoraciones, deben evitar estados inconsistentes en la base de datos. & Fiabilidad \\
+RNF-43 & El sistema debe poder crecer en número de usuarios, negocios, servicios, reservas, valoraciones e imágenes sin requerir una reestructuración completa. & Escalabilidad \\
+RNF-44 & La arquitectura debe permitir incorporar nuevas funcionalidades, como CRM, facturación, estadísticas o panel de empresa, sin afectar gravemente a los módulos existentes. & Escalabilidad \\
+RNF-45 & La API debe exponer endpoints REST claros y documentados para permitir su consumo desde la app móvil y posibles clientes futuros. & Interoperabilidad \\
+RNF-46 & El sistema debe permitir la integración con servicios externos, como Firebase Cloud Messaging, para el envío de notificaciones push. & Interoperabilidad \\
+RNF-47 & Los textos visibles para el usuario deben estructurarse de forma que puedan traducirse en futuras versiones sin reescribir la interfaz. & Internacionalización \\
+RNF-48 & La interfaz debe utilizar tamaños de texto, contrastes y elementos visuales adecuados para facilitar su uso en dispositivos móviles. & Accesibilidad \\
+RNF-49 & Los botones, formularios y elementos interactivos deben ser fácilmente identificables y utilizables mediante interacción táctil. & Accesibilidad \\
+RNF-50 & Los mensajes importantes no deben depender exclusivamente del color, sino que deben acompañarse de texto o iconografía clara. & Accesibilidad \\
+RNF-51 & Los datos como correos electrónicos, teléfonos, fechas, precios y duraciones deben validarse antes de ser persistidos. & Calidad de datos \\
+RNF-52 & El sistema debe evitar duplicidades indebidas en entidades críticas, como usuarios registrados, reservas o valoraciones asociadas a una misma reserva. & Calidad de datos \\
+RNF-53 & Las fechas y horas de reservas deben gestionarse de forma coherente para evitar conflictos de disponibilidad. & Calidad de datos \\
+RNF-54 & Los fallos de autenticación, conexión con base de datos, subida de imágenes o envío de notificaciones deben quedar registrados en logs técnicos. & Observabilidad \\
+RNF-55 & En futuras funcionalidades de facturación, pagos o CRM, el sistema deberá contemplar los requisitos legales específicos asociados a dichas operaciones. & Legalidad \\
+\RequirementTableEnd
+
+\section{Casos de Uso Principales}
+
+\subsection{CU-01: Registro de Cliente}
+
+\begin{tcolorbox}[definicionStyle, title={CU-01 — Registro de Cliente}]
+\textbf{Actor:} Usuario no registrado. \\
+\textbf{Precondición:} El usuario no tiene cuenta en el sistema. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El usuario abre la app y navega a la pantalla de registro.
+  \item Introduce nombre completo, email, nombre de usuario, teléfono y contraseña con confirmación.
+  \item El sistema valida que el email y el nombre de usuario no estén ya en uso.
+  \item El sistema crea la cuenta, genera un par de tokens y redirige al usuario al flujo principal de la app.
+\end{enumerate}
+\textbf{Flujo alternativo (datos duplicados):} Si el email o el nombre de usuario ya existen, se muestra un error específico indicando el campo en conflicto. \\
+\textbf{Postcondición:} El usuario dispone de cuenta activa y sesión iniciada.
+\end{tcolorbox}
+
+\subsection{CU-02: Exploración y Descubrimiento de Negocios}
+
+\begin{tcolorbox}[definicionStyle, title={CU-02 — Exploración de Negocios}]
+\textbf{Actor:} Cualquier usuario (autenticado o no). \\
+\textbf{Precondición:} La API está disponible. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El usuario accede a la pestaña «Explorar».
+  \item La app carga las categorías disponibles y la primera página de negocios.
+  \item El usuario puede seleccionar una categoría para filtrar, realizar una búsqueda por texto libre o combinar ambos filtros.
+  \item La app implementa paginación infinita: al llegar al final de la lista se cargan más resultados.
+  \item El usuario toca una tarjeta de negocio y accede al detalle.
+\end{enumerate}
+\textbf{Postcondición:} El usuario visualiza el detalle del negocio seleccionado.
+\end{tcolorbox}
+
+\subsection{CU-03: Consulta de Disponibilidad}
+
+\begin{tcolorbox}[definicionStyle, title={CU-03 — Consulta de Disponibilidad}]
+\textbf{Actor:} Cualquier usuario. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item Desde el detalle de un negocio, el usuario selecciona un servicio y pulsa «Reservar».
+  \item La app solicita al backend la disponibilidad del servicio para la fecha seleccionada (\texttt{GET /services/\{id\}/availability?date=YYYY-MM-DD}).
+  \item El backend devuelve una lista de slots horarios de 15 minutos indicando disponibilidad y, en caso de indisponibilidad, la causa (\texttt{BOOKED}, \texttt{OUT\_OF\_SCHEDULE}, \texttt{TIME\_OFF}, etc.).
+  \item El usuario selecciona un slot disponible y procede a confirmar la reserva (requiere autenticación).
+\end{enumerate}
+\textbf{Flujo alternativo (negocio con múltiples trabajadores):} Si no se especifica trabajador, el backend agrega la disponibilidad de todos los trabajadores habilitados para ese servicio y devuelve los IDs de los disponibles en cada slot.
+\end{tcolorbox}
+
+\subsection{CU-04: Dejar Valoración}
+
+\begin{tcolorbox}[definicionStyle, title={CU-04 — Dejar Valoración}]
+\textbf{Actor:} Cliente autenticado. \\
+\textbf{Precondición:} El cliente tiene al menos una reserva en estado \texttt{CONFIRMED} con fecha de fin pasada y sin valoración previa. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El cliente accede a «Mis citas» y selecciona una cita completada.
+  \item Introduce una puntuación de 1 a 5 estrellas y un comentario opcional.
+  \item El sistema valida que la reserva pertenece al cliente, está finalizada y no tiene valoración previa.
+  \item La valoración se persiste y los agregados del negocio y servicio se actualizan.
+\end{enumerate}
+\textbf{Flujo alternativo (valoración duplicada):} El sistema devuelve un error 409 Conflict indicando que la reserva ya tiene valoración.
+\end{tcolorbox}
+
+\subsection{CU-05: Crear Reserva}
+
+\begin{tcolorbox}[definicionStyle, title={CU-05 — Crear Reserva}]
+\textbf{Actor:} Cliente autenticado. \\
+\textbf{Precondición:} El servicio está activo, existe un slot disponible y el cliente ha iniciado sesión. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El cliente selecciona un servicio, fecha, hora y, si aplica, un trabajador concreto.
+  \item La app envía la petición de creación al backend mediante \texttt{POST /bookings}.
+  \item El backend valida que la hora esté alineada a slots de 15 minutos, que la fecha no supere el horizonte de reserva del negocio y que no existan solapes con otras citas.
+  \item El backend comprueba además el horario configurado, las ausencias registradas y que el trabajador pertenezca al negocio y esté habilitado para ese servicio.
+  \item Si todas las validaciones son correctas, la reserva se crea con estado \texttt{PENDING} o \texttt{CONFIRMED} según la política de autoaceptación del negocio o trabajador.
+\end{enumerate}
+\textbf{Flujo alternativo (slot inválido o conflicto):} Si la franja ya no está disponible, el trabajador no presta ese servicio o existe una ausencia, el sistema rechaza la operación indicando la causa. \\
+\textbf{Postcondición:} La reserva queda registrada y asociada al cliente, negocio, servicio y trabajador cuando corresponda.
+\end{tcolorbox}
+
+\subsection{CU-06: Gestionar Favoritos}
+
+\begin{tcolorbox}[definicionStyle, title={CU-06 — Añadir o Quitar Favoritos}]
+\textbf{Actor:} Cliente autenticado. \\
+\textbf{Precondición:} El cliente está autenticado y visualiza el detalle de un negocio o servicio existente. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El cliente pulsa el icono de favorito desde la ficha de un negocio o de un servicio.
+  \item La app envía la operación al backend mediante \texttt{PUT /customers/me/favorites/businesses/\{id\}} o \texttt{PUT /customers/me/favorites/services/\{id\}}.
+  \item El backend añade la referencia al conjunto de favoritos del cliente y devuelve el perfil actualizado.
+  \item La interfaz refleja el nuevo estado visual y el elemento pasa a estar disponible en las listas personalizadas de favoritos.
+\end{enumerate}
+\textbf{Flujo alternativo (eliminación):} Si el elemento ya estaba marcado, la app puede revertir la acción mediante \texttt{DELETE} sobre el mismo recurso. \\
+\textbf{Postcondición:} El cliente mantiene una colección persistente de negocios y servicios favoritos.
+\end{tcolorbox}
+
+\subsection{CU-07: Cancelar Reserva}
+
+\begin{tcolorbox}[definicionStyle, title={CU-07 — Cancelación de Reserva}]
+\textbf{Actor:} Cliente autenticado, trabajador asignado o negocio propietario. \\
+\textbf{Precondición:} La reserva existe y el actor actual tiene permisos para verla y modificarla. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El usuario accede al detalle de una reserva activa y selecciona la opción de cancelar.
+  \item Introduce opcionalmente un motivo y la app llama a \texttt{PUT /bookings/\{id\}/cancel}.
+  \item El backend verifica que el actor actual puede cancelar esa reserva y actualiza su estado a \texttt{CANCELED}.
+  \item El sistema registra el motivo, el actor que ejecutó la cancelación y publica el evento correspondiente para notificaciones.
+\end{enumerate}
+\textbf{Flujo alternativo (cancelación sin motivo):} Si no se informa una razón, la reserva se cancela igualmente y el campo \texttt{cancelReason} queda vacío. \\
+\textbf{Postcondición:} La reserva permanece en el histórico con trazabilidad de quién la canceló y con estado final \texttt{CANCELED}.
+\end{tcolorbox}
+
+\subsection{CU-08: Vincular Trabajador a un Negocio}
+
+\begin{tcolorbox}[definicionStyle, title={CU-08 — Invitación y Vinculación de Trabajador}]
+\textbf{Actor:} Empresa autenticada y trabajador autenticado. \\
+\textbf{Precondición:} La empresa tiene sesión activa y el trabajador no está vinculado ya a otro negocio. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item La empresa accede a la gestión de equipo y crea una invitación mediante \texttt{POST /invitations}.
+  \item El backend genera un código único de seis dígitos con caducidad y lo asocia al negocio emisor.
+  \item El trabajador introduce o consulta el código y la app valida la invitación con \texttt{GET /invitations/token/\{token\}}.
+  \item Si la invitación es válida, el trabajador la canjea con \texttt{POST /invitations/redeem/\{token\}}.
+  \item El backend vincula al trabajador con el negocio y marca la invitación como utilizada.
+\end{enumerate}
+\textbf{Flujo alternativo (token expirado o ya usado):} El sistema rechaza el canje e informa de que la invitación ya no es válida. \\
+\textbf{Postcondición:} El trabajador pasa a formar parte del equipo del negocio.
+\end{tcolorbox}
+
+\subsection{CU-09: Gestionar Ausencias del Equipo}
+
+\begin{tcolorbox}[definicionStyle, title={CU-09 — Solicitud y Gestión de Ausencias}]
+\textbf{Actor:} Trabajador autenticado y empresa autenticada. \\
+\textbf{Precondición:} El trabajador está vinculado a un negocio y existe un calendario operativo configurado. \\
+\textbf{Flujo principal:}
+\begin{enumerate}
+  \item El trabajador registra una solicitud de ausencia indicando tipo, rango de fechas y motivo mediante \texttt{POST /absences}.
+  \item La empresa consulta las ausencias pendientes desde \texttt{GET /absences/business} y revisa sus posibles conflictos.
+  \item La interfaz puede recuperar las citas afectadas con \texttt{GET /absences/\{id\}/conflicts} antes de tomar una decisión.
+  \item La empresa aprueba o rechaza la solicitud usando los endpoints \texttt{/approve} o \texttt{/reject}.
+\end{enumerate}
+\textbf{Flujo alternativo (creación directa por la empresa):} El negocio puede registrar una ausencia directamente para un trabajador mediante \texttt{POST /absences/direct}. \\
+\textbf{Postcondición:} La ausencia queda registrada con estado \texttt{PENDING}, \texttt{APPROVED} o \texttt{REJECTED}, según corresponda.
+\end{tcolorbox}
+
+\section{Modelo de Dominio Conceptual}
+
+Para mejorar la legibilidad, el modelo se presenta en dos vistas complementarias derivadas de las entidades JPA reales del backend: una vista núcleo centrada en actores, catálogo, reservas y valoraciones, y una vista de soporte operativo con horarios, ausencias, invitaciones y tokens.
+
+\clearpage
+\begin{landscape}
+\begin{figure}[p]
+\centering
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[
+  classbox/.style={
+    rectangle,
+    draw=gipsiVerde!80!black,
+    fill=white,
+    rounded corners=4pt,
+    very thick,
+    align=left,
+    font=\scriptsize,
+    text width=3.6cm,
+    inner sep=4pt
+  },
+  rel/.style={draw=gipsiVerde!75!black, thick, opacity=.65, {Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}},
+  inherit/.style={draw=gray!75, dashed, opacity=.55, -{Stealth[length=2.2mm]}},
+  assoc/.style={draw=accentblue!75!black, dashed, thick, opacity=.65, {Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}},
+  card/.style={font=\tiny, fill=white, fill opacity=.94, text opacity=1, inner sep=1pt, text=black},
+  verb/.style={font=\tiny\itshape, fill=white, fill opacity=.94, text opacity=1, inner sep=1.2pt, text=black},
+  group/.style={draw=gray!45, rounded corners=8pt, inner sep=10pt}
+]
+
+\node[classbox, fill=gipsiMenta!22] (actor) at (-7.4,0) {\textbf{Actor}\\[-1pt]\rule{\linewidth}{0.4pt}\\id, createdAt, updatedAt\\name, email, username\\phone, role\\banned, deleted, deletedAt};
+
+\node[classbox, fill=blue!8] (customer) at (-7.4,-3.0) {\textbf{Customer}\\[-1pt]\rule{\linewidth}{0.4pt}\\profileImageUrl\\favoriteBusinesses\\favoriteServices};
+\node[classbox, fill=green!8] (business) at (-2.8,0) {\textbf{Business}\\[-1pt]\rule{\linewidth}{0.4pt}\\cif, description, address\\city, profileImageUrl\\coverImageUrl, autonomous\\autoAccept, setupComplete\\availabilityHorizonDays};
+\node[classbox, fill=orange!10] (worker) at (-2.8,-3.0) {\textbf{Worker}\\[-1pt]\rule{\linewidth}{0.4pt}\\business\\available, autoAccept\\allowOvertime\\canActAsBusiness};
+
+\node[classbox, fill=green!6] (booking) at (2.0,-3.0) {\textbf{Booking}\\[-1pt]\rule{\linewidth}{0.4pt}\\startDateTime, endDateTime\\status, notes\\cancelReason, canceledBy};
+\node[classbox, fill=green!6] (service) at (2.0,0) {\textbf{ServiceOffered}\\[-1pt]\rule{\linewidth}{0.4pt}\\name, description\\price, duration\\active, imageUrl};
+\node[classbox, fill=yellow!12] (category) at (6.6,0) {\textbf{Category}\\[-1pt]\rule{\linewidth}{0.4pt}\\code, name\\description, active};
+\node[classbox, fill=red!7] (review) at (6.6,-3.0) {\textbf{Review}\\[-1pt]\rule{\linewidth}{0.4pt}\\rating, comment\\booking, customer\\business, service};
+
+\draw[inherit] (customer.north) -- (actor.south west);
+\draw[inherit] (business.north) -- (actor.south);
+\draw[inherit] (worker.north) -- (actor.south east);
+
+\draw[rel] (business) -- node[verb, above]{ofrece} (service)
+  node[card, pos=.08, above]{1} node[card, pos=.92, above]{0..*};
+\draw[rel] (business) -- node[verb, left]{emplea} (worker)
+  node[card, pos=.12, left]{0..1} node[card, pos=.88, left]{0..*};
+\draw[rel] (customer) -- node[verb, below]{realiza} (booking)
+  node[card, pos=.08, below]{1} node[card, pos=.92, below]{0..*};
+\draw[rel] (booking) -- node[verb, left]{reserva} (service)
+  node[card, pos=.10, left]{0..*} node[card, pos=.90, left]{1};
+\draw[rel] (booking) -- node[verb, above]{pertenece a} (business)
+  node[card, pos=.10, above]{0..*} node[card, pos=.90, above]{1};
+\draw[rel] (booking) -- node[verb, above]{asigna} (worker)
+  node[card, pos=.10, above]{0..*} node[card, pos=.90, above]{0..1};
+\draw[rel] (service) -- node[verb, above]{se clasifica en} (category)
+  node[card, pos=.08, above]{0..*} node[card, pos=.92, above]{1};
+\draw[rel] (booking) -- node[verb, below]{genera} (review)
+  node[card, pos=.08, below]{1} node[card, pos=.92, below]{0..1};
+\draw[rel] (review) -- node[verb, left]{valora servicio} (service)
+  node[card, pos=.10, left]{0..*} node[card, pos=.90, left]{1};
+\draw[rel] (review) -- node[verb, below]{valora negocio} (business)
+  node[card, pos=.10, below]{0..*} node[card, pos=.90, below]{1};
+\draw[rel] (review) -- node[verb, below]{la escribe} (customer)
+  node[card, pos=.10, below]{0..*} node[card, pos=.90, below]{1};
+\draw[assoc] (customer.east) to[bend left=12]
+  node[verb, above]{marca favorito}
+  node[card, pos=.10, above]{0..*} node[card, pos=.90, above]{0..*} (business.west);
+\draw[assoc] (customer.east) to[bend right=18]
+  node[verb, below]{guarda favorito}
+  node[card, pos=.10, below]{0..*} node[card, pos=.90, below]{0..*} (service.west);
+\draw[assoc] (worker.south west) to[bend right=12]
+  node[verb, below]{presta}
+  node[card, pos=.10, below]{0..*} node[card, pos=.90, below]{0..*} (service.north east);
+
+\begin{pgfonlayer}{background}
+  \node[group, fill=accentblue!4, fit=(actor)(customer)(business)(worker),
+    label={[font=\small\bfseries, text=accentblue!75!black]90:Actores y perfiles}] {};
+  \node[group, fill=gipsiMenta!10, fit=(business)(service)(category)(worker),
+    label={[font=\small\bfseries, text=gipsiVerde!70!black]90:Catálogo y prestación}] {};
+  \node[group, fill=orange!6, fit=(booking)(review),
+    label={[font=\small\bfseries, text=orange!55!black]90:Reservas y reputación}] {};
+\end{pgfonlayer}
+
+\end{tikzpicture}%
+}
+\caption{Vista núcleo del modelo de dominio de Gipsi}
+\label{fig:dominio-core}
+\end{figure}
+\end{landscape}
+\clearpage
+
+\begin{landscape}
+\begin{figure}[p]
+\centering
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[
+  classbox/.style={
+    rectangle,
+    draw=gipsiVerde!80!black,
+    fill=white,
+    rounded corners=4pt,
+    very thick,
+    align=left,
+    font=\scriptsize,
+    text width=3.7cm,
+    inner sep=4pt
+  },
+  rel/.style={draw=gipsiVerde!75!black, thick, opacity=.65, {Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}},
+  inherit/.style={draw=gray!75, dashed, opacity=.55, -{Stealth[length=2.2mm]}},
+  card/.style={font=\tiny, fill=white, fill opacity=.94, text opacity=1, inner sep=1pt, text=black},
+  verb/.style={font=\tiny\itshape, fill=white, fill opacity=.94, text opacity=1, inner sep=1.2pt, text=black},
+  group/.style={draw=gray!45, rounded corners=8pt, inner sep=10pt}
+]
+
+\node[classbox, fill=gipsiMenta!22] (actor2) at (-7.4,0) {\textbf{Actor}\\[-1pt]\rule{\linewidth}{0.4pt}\\id, createdAt, updatedAt\\name, email, username\\phone, role};
+\node[classbox, fill=green!8] (business2) at (-7.4,-3.0) {\textbf{Business}\\[-1pt]\rule{\linewidth}{0.4pt}\\cif, autonomous\\clockInEnabled\\pendingAutoCancelDays};
+\node[classbox, fill=orange!10] (worker2) at (-2.8,-3.0) {\textbf{Worker}\\[-1pt]\rule{\linewidth}{0.4pt}\\business\\available, autoAccept\\allowOvertime};
+
+\node[classbox, fill=blue!6] (schedule) at (-2.8,0) {\textbf{Schedule}\\[-1pt]\rule{\linewidth}{0.4pt}\\actor\\dayOfWeek\\startTime, endTime};
+\node[classbox, fill=blue!6] (timeoff) at (1.8,0) {\textbf{TimeOff}\\[-1pt]\rule{\linewidth}{0.4pt}\\actor\\startDate, endDate\\reason};
+\node[classbox, fill=blue!6] (absence) at (1.8,-3.0) {\textbf{Absence}\\[-1pt]\rule{\linewidth}{0.4pt}\\worker, business\\type, status\\startDate, endDate\\decidedBy, decisionNote};
+
+\node[classbox, fill=purple!8] (invite) at (-7.4,-6.0) {\textbf{WorkerInvitation}\\[-1pt]\rule{\linewidth}{0.4pt}\\business, email\\token, expiresAt\\used};
+\node[classbox, fill=purple!8] (refresh) at (-2.8,-6.0) {\textbf{RefreshToken}\\[-1pt]\rule{\linewidth}{0.4pt}\\actor\\tokenHash\\expiresAt, revoked};
+\node[classbox, fill=purple!8] (device) at (1.8,-6.0) {\textbf{DeviceToken}\\[-1pt]\rule{\linewidth}{0.4pt}\\actor\\token, platform\\lastUsedAt};
+\node[classbox, fill=teal!9] (clock) at (6.4,-3.0) {\textbf{TimeClockEntry}\\[-1pt]\rule{\linewidth}{0.4pt}\\worker\\checkInAt\\checkOutAt};
+
+\draw[inherit] (business2.north) -- (actor2.south west);
+\draw[inherit] (worker2.north) -- (actor2.south east);
+
+\draw[rel] (actor2) -- node[verb, above]{define} (schedule)
+  node[card, pos=.08, above]{1} node[card, pos=.92, above]{0..*};
+\draw[rel] (actor2) -- node[verb, above]{bloquea} (timeoff)
+  node[card, pos=.08, above]{1} node[card, pos=.92, above]{0..*};
+\draw[rel] (actor2.south west) to[out=-120, in=90]
+  node[verb, left]{mantiene sesion}
+  node[card, pos=.10, left]{1} node[card, pos=.90, left]{0..*} (refresh.north west);
+\draw[rel] (actor2) -- node[verb, right]{registra dispositivo} (device)
+  node[card, pos=.08, right]{1} node[card, pos=.92, right]{0..*};
+\draw[rel] (business2.south west) to[out=-95, in=180]
+  node[verb, left]{emite invitacion}
+  node[card, pos=.10, left]{1} node[card, pos=.90, left]{0..*} (invite.west);
+\draw[rel] (business2.east) -- node[verb, above]{recibe ausencia} (absence.west)
+  node[card, pos=.08, above]{1} node[card, pos=.92, above]{0..*};
+\draw[rel] (worker2) -- node[verb, above]{solicita} (absence)
+  node[card, pos=.08, above]{1} node[card, pos=.92, above]{0..*};
+\draw[rel] (worker2.south west) .. controls +(-3.0,-2.0) and +(0,2.6) ..
+  node[verb, below]{ficha}
+  node[card, pos=.10, below]{1} node[card, pos=.90, below]{0..*} (clock.west);
+
+\begin{pgfonlayer}{background}
+  \node[group, fill=accentblue!4, fit=(actor2)(business2)(worker2),
+    label={[font=\small\bfseries, text=accentblue!75!black]90:Identidad base}] {};
+  \node[group, fill=gipsiMenta!10, fit=(schedule)(timeoff)(absence),
+    label={[font=\small\bfseries, text=gipsiVerde!70!black]90:Agenda y ausencias}] {};
+  \node[group, fill=purple!5, fit=(invite)(refresh)(device)(clock),
+    label={[font=\small\bfseries, text=purple!70!black]90:Invitaciones, sesiones y fichaje}] {};
+\end{pgfonlayer}
+
+\end{tikzpicture}%
+}
+\caption{Vista operativa y de soporte del modelo de dominio}
+\label{fig:dominio-support}
+\end{figure}
+\end{landscape}
+\clearpage
+
+Las entidades \texttt{Customer}, \texttt{Business} y \texttt{Worker} extienden \texttt{Actor}, que concentra las credenciales y metadatos comunes. En la implementación actual la herencia JPA se resuelve mediante \texttt{InheritanceType.JOINED}, lo que separa los atributos específicos de cada subtipo en tablas propias sin perder una identidad compartida en la tabla base.
+
+Además, los favoritos del cliente se materializan mediante relaciones muchos a muchos hacia \texttt{Business} y \texttt{ServiceOffered}, mientras que el catálogo de servicios y la agenda operativa quedan conectados con el motor de reservas a través de \texttt{ServiceOffered}, \texttt{Schedule}, \texttt{TimeOff} y \texttt{Absence}.
+
+%=============================================================
+%  CAPÍTULO 3 — DISEÑO
+%=============================================================
+\chapter{Diseño}
+
+\section{Arquitectura General del Sistema}
+
+Gipsi sigue una arquitectura cliente-servidor clásica con separación física entre la capa de presentación (Flutter) y la capa de lógica de negocio y datos (Spring Boot + PostgreSQL). La comunicación entre ambas se realiza exclusivamente mediante HTTP/HTTPS siguiendo el estilo arquitectónico REST.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, rounded corners=4pt, minimum width=3cm, minimum height=1.2cm, align=center, font=\small},
+  cloud/.style={ellipse, draw, minimum width=2.5cm, minimum height=1cm, align=center, font=\small},
+  arr/.style={-Stealth, thick}
+]
+
+% Capas
+\node[box, fill=blue!10]  (flutter)  at (0,0)    {Flutter App\\(Android / iOS)};
+\node[box, fill=green!10] (api)      at (5,0)    {Spring Boot API\\(REST / JWT / CORS)};
+\node[box, fill=orange!10](db)       at (10,0)   {PostgreSQL\\(+ Flyway)};
+\node[box, fill=gray!10]  (storage)  at (10,-2.5){File Storage\\(local -> S3)};
+\node[box, fill=red!10]   (firebase) at (5,-2.5) {Firebase FCM\\(Push Notifications)};
+
+% Flechas
+\draw[thick, {Stealth}-{Stealth}] (flutter) -- node[above, align=center, font=\footnotesize]{HTTP/REST\\JSON} (api);
+\draw[thick, {Stealth}-{Stealth}] (api)     -- node[above, font=\footnotesize]{JPA/SQL} (db);
+\draw[arr, ->]  (api)     -- node[right, font=\footnotesize]{Admin SDK} (firebase);
+\draw[arr, ->]  (firebase)-- node[below, font=\footnotesize]{Push} (flutter);
+\draw[thick, {Stealth}-{Stealth}] (api)     -- node[right, font=\footnotesize]{I/O ficheros} (storage);
+
+\end{tikzpicture}
+\caption{Arquitectura general del sistema Gipsi}
+\label{fig:arquitectura}
+\end{figure}
+
+\subsection{Principios Arquitectónicos Aplicados}
+
+\paragraph{Separación de responsabilidades.} El backend organiza su código en capas: controladores REST (\textit{Controller}), lógica de negocio (\textit{Service}), acceso a datos (\textit{Repository}) y objetos de transferencia (\textit{DTO}). Ninguna lógica de negocio reside en los controladores; ninguna consulta SQL manual aparece fuera de los repositorios.
+
+\paragraph{Principio de responsabilidad única.} Cada clase tiene una única razón de cambio. Por ejemplo, \texttt{JwtService} solo se ocupa de generación y validación de tokens; \texttt{LocalFileStorage} solo gestiona operaciones de disco; \texttt{AvailabilityService} solo calcula disponibilidad horaria.
+
+\paragraph{Inversión de dependencias.} La interfaz \texttt{FileStorage} actúa como contrato entre el servicio de negocio y la implementación concreta de almacenamiento. Hoy se usa \texttt{LocalFileStorage}; en el futuro puede sustituirse por \texttt{S3FileStorage} sin modificar ningún servicio.
+
+\paragraph{Stateless API.} El servidor no mantiene estado de sesión entre peticiones. Toda la información de autenticación viaja en la cabecera \texttt{Authorization: Bearer <token>}, y el estado de la sesión se reconstituye en cada petición a partir del JWT.
+
+\section{Arquitectura del Backend (Spring Boot)}
+
+\subsection{Estructura de Paquetes}
+
+El proyecto Maven sigue la convención estándar de Spring Boot con el groupId \texttt{com.gipsi}:
+
+\begin{lstlisting}[style=yamlStyle, caption={Estructura de paquetes del backend}, label={lst:backend-estructura}]
+src/main/java/com/gipsi/gipsibackend/
+├── GipsiBackendApplication.java     # Punto de entrada
+├── config/
+│   ├── SecurityConfig.java          # Filtros, CORS, reglas de acceso
+│   ├── CorsConfig.java              # Configuración CORS por entorno
+│   └── FirebaseConfig.java          # Inicialización Firebase Admin SDK
+├── auth/
+│   ├── controller/AuthController.java
+│   ├── service/AuthService.java
+│   ├── service/JwtService.java
+│   ├── filter/JwtAuthFilter.java
+│   └── dto/  (LoginRequest, RegisterRequest, TokenResponse…)
+├── user/
+│   ├── model/ (User, Customer, Business, Worker)
+│   └── repository/UserRepository.java
+├── business/
+│   ├── controller/BusinessController.java
+│   ├── service/BusinessService.java
+│   ├── model/Business.java
+│   ├── repository/BusinessRepository.java
+│   └── dto/ (BusinessRequest, BusinessResponse…)
+├── service/                         # Paquete de servicios ofrecidos
+│   ├── controller/ServiceController.java
+│   ├── service/ServiceOfferedService.java
+│   ├── service/AvailabilityService.java
+│   ├── model/ServiceOffered.java
+│   └── dto/
+├── booking/
+│   ├── controller/BookingController.java
+│   ├── service/BookingService.java
+│   ├── model/ (Booking, BookingStatus)
+│   └── dto/
+├── review/
+│   ├── controller/ReviewController.java
+│   ├── service/ReviewService.java
+│   ├── model/Review.java
+│   └── dto/
+├── notification/
+│   └── service/NotificationService.java
+├── storage/
+│   ├── FileStorage.java             # Interfaz
+│   ├── LocalFileStorage.java
+│   └── S3FileStorage.java           # Esqueleto futuro
+├── category/
+│   ├── model/Category.java
+│   └── repository/CategoryRepository.java
+├── ratelimit/
+│   └── RateLimitFilter.java         # Bucket4j
+├── common/
+│   ├── DataInitializer.java         # Datos de prueba (perfil dev)
+│   └── GlobalExceptionHandler.java
+└── scheduler/
+    └── BookingScheduler.java        # Jobs: auto-cancel + recordatorios
+\end{lstlisting}
+
+\subsection{Capa de Seguridad: JWT y Spring Security}
+
+La seguridad es el aspecto más crítico del backend. Se implementa mediante una cadena de filtros de Spring Security que intercepta cada petición HTTP antes de que llegue a cualquier controlador.
+
+\begin{tcolorbox}[definicionStyle, title={¿Qué es un JSON Web Token?}]
+Un JSON Web Token (JWT) es un estándar abierto (RFC 7519) para transmitir información entre partes de forma compacta y autocontenida. Se compone de tres partes codificadas en Base64URL separadas por puntos:
+
+\begin{enumerate}
+  \item \textbf{Header}: tipo del token y algoritmo de firma (\texttt{HS256} en Gipsi).
+  \item \textbf{Payload}: las \textit{claims} o afirmaciones (subject = username, roles, fecha de expiración).
+  \item \textbf{Signature}: firma HMAC-SHA256 del header y payload usando el secreto del servidor.
+\end{enumerate}
+
+Puesto que el servidor firma el token, cualquier modificación del payload hace que la firma sea inválida. Esto permite verificar la autenticidad del token \textbf{sin consultar la base de datos} en cada petición, lo que aporta escalabilidad. La contrapartida es que los tokens no pueden invalidarse antes de su expiración (de ahí la necesidad del refresh token con revocación en base de datos).
+\end{tcolorbox}
+
+En Gipsi no se utiliza un único token de sesión, sino un par formado por
+\textit{access token} y \textit{refresh token}. Esta separación responde a una
+necesidad de equilibrio entre seguridad y experiencia de usuario: el sistema
+debe poder autenticar cada petición de forma rápida, pero también debe evitar
+que una credencial robada permita acceder indefinidamente a la cuenta.
+
+\paragraph{Access token.} El \textit{access token} es el token que se envía en
+las peticiones normales a la API, dentro de la cabecera
+\texttt{Authorization: Bearer <token>}. Su función es demostrar que el usuario
+ya se ha autenticado y que puede acceder a un recurso concreto. En Gipsi tiene
+una duración corta, de 30 minutos, porque viaja con frecuencia entre la app y el
+backend. Si alguien llegara a interceptarlo, el impacto quedaría limitado a una
+ventana temporal reducida. Además, al ser un JWT firmado, el servidor puede
+validarlo de manera local comprobando su firma, su fecha de expiración y sus
+\textit{claims}, sin consultar la base de datos en cada petición.
+
+\paragraph{Refresh token.} El \textit{refresh token}, en cambio, no se utiliza
+para llamar a endpoints funcionales como reservas, negocios o perfiles. Su
+único propósito es obtener un nuevo par de tokens cuando el \textit{access
+token} caduca. Por eso dura más tiempo, 30 días, y se trata como una credencial
+más sensible. A diferencia del \textit{access token}, el \textit{refresh token}
+sí se guarda en la base de datos, asociado al usuario, con información de
+expiración y revocación. Esto permite invalidarlo cuando el usuario cierra
+sesión, cuando se detecta un uso sospechoso o cuando se rota por uno nuevo.
+
+La existencia de dos tokens evita dos problemas habituales. Si solo existiera
+un token corto, el usuario tendría que iniciar sesión constantemente, lo que
+haría la aplicación incómoda. Si solo existiera un token largo usado en todas
+las peticiones, cualquier robo de esa credencial tendría consecuencias graves,
+porque permitiría acceder a la API durante mucho tiempo. Con el par
+\textit{access}/\textit{refresh}, el acceso diario es ágil y stateless, mientras
+que la continuidad de la sesión queda controlada mediante un token revocable y
+almacenado de forma segura.
+
+El comportamiento práctico es el siguiente: tras un login correcto, el backend
+devuelve ambos tokens. La app guarda el par en almacenamiento seguro y usa el
+\textit{access token} en cada petición autenticada. Cuando una petición falla
+porque el \textit{access token} ha caducado, el interceptor HTTP llama a
+\texttt{POST /auth/refresh} con el \textit{refresh token}. Si este sigue siendo
+válido, el backend emite un nuevo \textit{access token} y un nuevo
+\textit{refresh token}; la app los guarda y reintenta la petición original sin
+obligar al usuario a volver a escribir sus credenciales. Si el \textit{refresh
+token} ha expirado, ha sido revocado o ya fue utilizado anteriormente, la sesión
+se considera inválida y el usuario debe autenticarse de nuevo.
+
+El flujo de autenticación completo se representa en el diagrama de la Figura~\ref{fig:auth-flow}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.6cm,
+  box/.style={rectangle, draw, rounded corners=3pt, minimum width=3.5cm, minimum height=0.7cm, font=\small, align=center},
+  dec/.style={diamond, draw, minimum width=2.5cm, minimum height=0.7cm, font=\small, align=center, aspect=3},
+  arr/.style={-Stealth}
+]
+
+\node[box, fill=blue!10]  (login)    {POST /auth/login};
+\node[box, fill=green!10, below=of login] (val) {Validar credenciales};
+\node[dec, below=of val]  (ok)       {¿Correctas?};
+\node[box, fill=green!10, below=of ok] (gen)  {Generar accessToken (30 min)\\+ refreshToken (30 días)};
+\node[box, fill=orange!10, below=of gen] (save) {Guardar refreshToken en BD};
+\node[box, fill=blue!10,  below=of save] (resp) {Respuesta: ambos tokens};
+
+\node[box, fill=red!10, right=3cm of ok] (err) {401 Unauthorized};
+
+\draw[arr] (login) -- (val);
+\draw[arr] (val)   -- (ok);
+\draw[arr] (ok)    -- node[left, font=\tiny]{Sí} (gen);
+\draw[arr] (ok)    -- node[above, font=\tiny]{No} (err);
+\draw[arr] (gen)   -- (save);
+\draw[arr] (save)  -- (resp);
+
+\end{tikzpicture}
+\caption{Flujo de autenticación en el backend}
+\label{fig:auth-flow}
+\end{figure}
+
+\paragraph{Rotación de Refresh Tokens.} La característica más relevante del sistema de autenticación es la rotación de refresh tokens, implementada siguiendo las recomendaciones de OWASP. Cuando el cliente presenta un refresh token para obtener un nuevo par, el sistema:
+
+\begin{enumerate}
+  \item Verifica que el token existe en la base de datos y no ha sido revocado.
+  \item Emite un nuevo \textit{access token} y un nuevo \textit{refresh token}.
+  \item \textbf{Invalida el refresh token anterior} en la base de datos.
+  \item Si alguien intenta usar el token antiguo (lo que indicaría que fue robado), el sistema detecta que ya fue rotado y \textbf{revoca toda la cadena de tokens del usuario}, forzando un nuevo login.
+\end{enumerate}
+
+Este mecanismo ofrece protección ante el robo de refresh tokens sin necesidad de mantener una lista negra de access tokens.
+
+\subsection{Cálculo de Disponibilidad Horaria}
+
+El cálculo de disponibilidad es la funcionalidad más compleja del backend. El \texttt{AvailabilityService} genera slots de 15 minutos y para cada slot evalúa las siguientes condiciones:
+
+\begin{enumerate}
+  \item \textbf{OUT\_OF\_SCHEDULE}: el slot cae fuera del horario de apertura del negocio para ese día de la semana.
+  \item \textbf{TIME\_OFF}: el trabajador tiene registrado un día libre o ausencia que cubre ese slot.
+  \item \textbf{OVERTIME\_NOT\_ALLOWED}: el servicio terminaría después del cierre del negocio y la política no permite horas extra.
+  \item \textbf{BOOKED}: existe una reserva confirmada o pendiente del mismo trabajador que se solapa con el slot.
+  \item \textbf{WORKER\_UNAVAILABLE}: ningún trabajador habilitado para ese servicio está disponible (en el modo multi-worker).
+\end{enumerate}
+
+\begin{lstlisting}[style=javaStyle, caption={Fragmento conceptual del cálculo de disponibilidad}, label={lst:availability}]
+// Por cada slot del día (granularidad: 15 min)
+for (LocalTime start = openTime; start.plusMinutes(serviceDuration).compareTo(closeTime) <= 0;
+     start = start.plusMinutes(SLOT_GRANULARITY)) {
+
+    LocalTime end = start.plusMinutes(serviceDuration);
+    SlotReason reason = SlotReason.AVAILABLE;
+
+    if (!isWithinSchedule(worker, date, start, end)) {
+        reason = SlotReason.OUT_OF_SCHEDULE;
+    } else if (hasTimeOff(worker, date)) {
+        reason = SlotReason.TIME_OFF;
+    } else if (hasConflictingBooking(worker, date, start, end)) {
+        reason = SlotReason.BOOKED;
+    }
+
+    slots.add(new SlotDto(start, end, reason == SlotReason.AVAILABLE, reason));
+}
+\end{lstlisting}
+
+\section{Arquitectura del Frontend (Flutter)}
+
+\subsection{Monorepo con Melos}
+
+El frontend se organiza como monorepo gestionado por \textbf{Melos}, una herramienta diseñada para proyectos Dart/Flutter con múltiples packages interdependientes. La estructura es:
+
+\begin{lstlisting}[style=yamlStyle, caption={Estructura del monorepo Flutter}, label={lst:monorepo}]
+gipsi-frontend/
+├── apps/
+│   └── gipsi/                  # App ejecutable (Android + iOS)
+│       ├── lib/
+│       │   ├── main.dart
+│       │   ├── router/         # Configuración go_router
+│       │   ├── features/
+│       │   │   ├── explore/    # Pantalla de exploración
+│       │   │   ├── business/   # Detalle de negocio
+│       │   │   ├── auth/       # Login, registro, perfil
+│       │   │   ├── bookings/   # Mis citas (pendiente)
+│       │   │   └── shell/      # Bottom nav + ShellRoute
+│       │   └── providers/      # Riverpod providers globales
+│       └── assets/
+│           └── logo/
+├── packages/
+│   ├── gipsi_api/              # Cliente HTTP, modelos, repositorios
+│   │   └── lib/src/
+│   │       ├── api_client.dart # Dio + interceptor refresh
+│   │       ├── models/         # Clases Dart de dominio
+│   │       └── repositories/  # Contratos y implementaciones
+│   └── gipsi_shared_ui/        # Sistema de diseño
+│       └── lib/src/
+│           ├── theme/          # GipsiTheme (claro + oscuro)
+│           ├── tokens/         # Colores, tipografía, espaciado
+│           ├── components/     # Widgets reutilizables
+│           └── logo/           # GipsiLogo widget
+├── melos.yaml
+└── pubspec.yaml                # Raíz del workspace
+\end{lstlisting}
+
+\paragraph{Ventajas del monorepo con Melos.} Separar el código en packages (en lugar de directorios dentro de una sola app) aporta varias ventajas concretas:
+
+\begin{itemize}
+  \item \texttt{gipsi\_api} puede testearse de forma completamente independiente de la UI, incluso en entornos sin Flutter (Dart puro).
+  \item \texttt{gipsi\_shared\_ui} puede compartirse con futuras apps del ecosistema Gipsi (app de negocio, app de trabajador) sin duplicar código.
+  \item Los cambios en un package quedan aislados: modificar el cliente HTTP no fuerza recompilación de los tests de UI.
+\end{itemize}
+
+\subsection{Gestión de Estado con Riverpod}
+
+\textbf{Riverpod} es el sistema de gestión de estado elegido para Gipsi. Es la evolución madura del paquete Provider, diseñada para eliminar sus limitaciones principales (dependencia del árbol de widgets, ausencia de capacidades de computación asíncrona, dificultad para combinar providers).
+
+\begin{tcolorbox}[definicionStyle, title={¿Por qué Riverpod y no BLoC o setState?}]
+\begin{description}
+  \item[\texttt{setState}] Es adecuado para estado local y efímero (animaciones, expansión de un panel). No escala cuando el estado debe compartirse entre pantallas distantes en el árbol de widgets.
+  \item[BLoC] Potente y muy estructurado, pero introduce considerable boilerplate (eventos, estados, mappers) que puede ser excesivo para proyectos de tamaño medio.
+  \item[Riverpod] Ofrece un equilibrio: providers que pueden ser asíncronos (\texttt{FutureProvider}, \texttt{StreamProvider}), reactivos (\texttt{NotifierProvider}) y composables (un provider puede depender de otro). El código de Gipsi usa \texttt{AsyncNotifier} para los controladores de auth y exploración, lo que simplifica enormemente el manejo de estados cargando/error/datos.
+\end{description}
+\end{tcolorbox}
+
+\subsection{Navegación con go\_router}
+
+La navegación se implementa con \texttt{go\_router}, que define las rutas de forma declarativa y permite la integración con el estado de autenticación mediante \textit{redirects} reactivos. La estructura de rutas utiliza un \texttt{ShellRoute} para el bottom navigation bar, de modo que las cuatro pestañas principales (Explorar, Buscar, Mis citas, Perfil) comparten el mismo scaffold mientras sus contenidos se sustituyen.
+
+\begin{lstlisting}[style=dartStyle, caption={Esquema simplificado de rutas con go\_router}, label={lst:router}]
+final router = GoRouter(
+  redirect: (context, state) {
+    final isAuth = ref.read(authProvider).isAuthenticated;
+    final requiresAuth = ['/bookings'].contains(state.matchedLocation);
+    if (requiresAuth && !isAuth) return '/login';
+    return null;
+  },
+  routes: [
+    ShellRoute(
+      builder: (_, __, child) => AppShell(child: child),
+      routes: [
+        GoRoute(path: '/explore',  builder: (_, __) => ExplorePage()),
+        GoRoute(path: '/search',   builder: (_, __) => SearchPage()),
+        GoRoute(path: '/bookings', builder: (_, __) => BookingsPage()),
+        GoRoute(path: '/profile',  builder: (_, __) => ProfilePage()),
+      ],
+    ),
+    GoRoute(path: '/business/:id', builder: (_, s) =>
+        BusinessDetailPage(id: s.pathParameters['id']!)),
+    GoRoute(path: '/login',    builder: (_, __) => LoginPage()),
+    GoRoute(path: '/register', builder: (_, __) => RegisterPage()),
+  ],
+);
+\end{lstlisting}
+
+\subsection{Sistema de Diseño: gipsi\_shared\_ui}
+
+El package \texttt{gipsi\_shared\_ui} centraliza toda la identidad visual de la aplicación. Esto garantiza que cualquier cambio en el tema (colores, tipografía, espaciado) se propaga automáticamente a todos los widgets sin modificaciones individuales.
+
+\begin{table}[H]
+\centering
+\caption{Tokens de color del sistema de diseño Gipsi}
+\label{tab:colores}
+\begin{tabular}{llll}
+\toprule
+Token & Hex & Uso & Modo \\
+\midrule
+\texttt{gipsiFondo} & \texttt{\#1d292f} & Fondo principal & Oscuro \\
+\texttt{gipsiPrimario} & \texttt{\#c0eed3} & Acento de marca (verde menta) & Ambos \\
+\texttt{gipsiSecundario} & \texttt{\#83a38e} & Elementos secundarios & Ambos \\
+\texttt{gipsiContraste} & \texttt{\#44544b} & Bordes, separadores & Ambos \\
+\texttt{white} & \texttt{\#ffffff} & Texto principal sobre oscuro & Oscuro \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La tipografía utilizada en toda la aplicación es \textbf{Montserrat}, servida mediante el paquete \texttt{google\_fonts}, que la descarga y cachea automáticamente en el primer uso.
+
+\section{Modelo de Datos Relacional}
+
+\subsection{Esquema Principal}
+
+\begin{lstlisting}[style=sqlStyle, caption={DDL simplificado de las tablas principales (Flyway V1)}, label={lst:ddl}]
+-- Tabla base de usuarios (esquema simplificado de una versión temprana)
+CREATE TABLE users (
+    id          BIGSERIAL PRIMARY KEY,
+    dtype       VARCHAR(20) NOT NULL,   -- 'CUSTOMER', 'BUSINESS', 'WORKER'
+    username    VARCHAR(50)  UNIQUE NOT NULL,
+    email       VARCHAR(100) UNIQUE NOT NULL,
+    password    VARCHAR(255) NOT NULL,  -- bcrypt hash
+    full_name   VARCHAR(100),
+    phone       VARCHAR(20),
+    created_at  TIMESTAMP DEFAULT NOW()
+);
+
+-- Campos específicos de BUSINESS (nulos para otros roles)
+ALTER TABLE users ADD COLUMN description  TEXT;
+ALTER TABLE users ADD COLUMN city         VARCHAR(100);
+ALTER TABLE users ADD COLUMN address      VARCHAR(255);
+ALTER TABLE users ADD COLUMN is_solo      BOOLEAN DEFAULT FALSE;
+ALTER TABLE users ADD COLUMN profile_img  VARCHAR(255);
+ALTER TABLE users ADD COLUMN cover_img    VARCHAR(255);
+ALTER TABLE users ADD COLUMN setup_complete BOOLEAN DEFAULT FALSE;
+
+-- Categorías
+CREATE TABLE categories (
+    id      BIGSERIAL PRIMARY KEY,
+    name    VARCHAR(100) UNIQUE NOT NULL,
+    active  BOOLEAN DEFAULT TRUE
+);
+
+-- Servicios ofrecidos
+CREATE TABLE services_offered (
+    id           BIGSERIAL PRIMARY KEY,
+    business_id  BIGINT REFERENCES users(id),
+    category_id  BIGINT REFERENCES categories(id),
+    name         VARCHAR(100) NOT NULL,
+    duration_min INTEGER NOT NULL,
+    price        NUMERIC(8,2),
+    image_url    VARCHAR(255),
+    active       BOOLEAN DEFAULT TRUE
+);
+
+-- Reservas
+CREATE TABLE bookings (
+    id              BIGSERIAL PRIMARY KEY,
+    customer_id     BIGINT REFERENCES users(id),
+    service_id      BIGINT REFERENCES services_offered(id),
+    worker_id       BIGINT REFERENCES users(id),
+    start_datetime  TIMESTAMP NOT NULL,
+    end_datetime    TIMESTAMP NOT NULL,
+    status          VARCHAR(20) DEFAULT 'PENDING',
+    created_at      TIMESTAMP DEFAULT NOW()
+);
+
+-- Valoraciones
+CREATE TABLE reviews (
+    id          BIGSERIAL PRIMARY KEY,
+    booking_id  BIGINT UNIQUE REFERENCES bookings(id),
+    customer_id BIGINT REFERENCES users(id),
+    business_id BIGINT REFERENCES users(id),
+    service_id  BIGINT REFERENCES services_offered(id),
+    rating      SMALLINT CHECK (rating BETWEEN 1 AND 5),
+    comment     TEXT,
+    created_at  TIMESTAMP DEFAULT NOW()
+);
+
+-- Refresh tokens con rotación
+CREATE TABLE refresh_tokens (
+    id          BIGSERIAL PRIMARY KEY,
+    user_id     BIGINT REFERENCES users(id),
+    token       VARCHAR(512) UNIQUE NOT NULL,
+    revoked     BOOLEAN DEFAULT FALSE,
+    expires_at  TIMESTAMP NOT NULL,
+    created_at  TIMESTAMP DEFAULT NOW()
+);
+\end{lstlisting}
+
+\subsection{Gestión de Migraciones con Flyway}
+
+Flyway aplica las migraciones en orden al arrancar la aplicación, lo que garantiza que el esquema de base de datos es siempre consistente con el código. El convenio de nombrado es \texttt{V\{número\}\_\_\{descripción\}.sql}. La versión 2 del proyecto (v2) aplica \texttt{V2\_\_improvements.sql} sobre bases de datos existentes sin necesidad de recrearlas.
+
+\begin{tcolorbox}[notaStyle]
+Las migraciones de Flyway son \textbf{inmutables} una vez aplicadas: no se deben modificar los archivos \texttt{V1\_\_...sql} ni \texttt{V2\_\_...sql} una vez que están en producción. Las correcciones se realizan siempre mediante nuevas versiones (\texttt{V3\_\_...sql}).
+\end{tcolorbox}
+
+\section{Diseño de la API REST}
+
+\subsection{Convenciones Generales}
+
+La API sigue las convenciones REST estándar: recursos en plural y en minúsculas (\texttt{/businesses}, \texttt{/services}), verbos HTTP semánticos (GET para consultas, POST para creación, PUT para actualización completa, PATCH para parcial, DELETE para eliminación), y códigos de respuesta HTTP estándar (200, 201, 400, 401, 403, 404, 409, 429).
+
+\subsection{Catálogo de Endpoints}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Endpoints de la API — Autenticación y Perfil}
+\label{tab:endpoints-auth}
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+Método & Ruta & Descripción & Rol requerido \\
+\midrule
+POST & \texttt{/auth/login} & Autenticación, devuelve par de tokens & Público \\
+POST & \texttt{/auth/register/customer} & Registro de cliente & Público \\
+POST & \texttt{/auth/refresh} & Rota refresh token & Público \\
+POST & \texttt{/auth/logout} & Revoca refresh token & Autenticado \\
+GET  & \texttt{/me} & Perfil del usuario actual (polimórfico) & Autenticado \\
+GET  & \texttt{/me/devices} & Lista de dispositivos FCM registrados & Autenticado \\
+POST & \texttt{/me/devices} & Registra token FCM & Autenticado \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Endpoints de la API — Negocios y Servicios}
+\label{tab:endpoints-biz}
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+Método & Ruta & Descripción & Rol requerido \\
+\midrule
+GET  & \texttt{/businesses} & Lista paginada con filtros & Público \\
+GET  & \texttt{/businesses/\{id\}} & Detalle de negocio & Público \\
+POST & \texttt{/businesses/me/images/profile} & Sube imagen de perfil & BUSINESS \\
+POST & \texttt{/businesses/me/images/cover} & Sube imagen de portada & BUSINESS \\
+GET  & \texttt{/categories} & Lista categorías & Público \\
+GET  & \texttt{/services} & Lista servicios con filtros & Público \\
+GET  & \texttt{/services/\{id\}} & Detalle de servicio & Público \\
+GET  & \texttt{/services/\{id\}/availability} & Disponibilidad por fecha & Público \\
+POST & \texttt{/services/\{id\}/image} & Sube imagen de servicio & BUSINESS \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Endpoints de la API — Reservas y Valoraciones}
+\label{tab:endpoints-bookings}
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+Método & Ruta & Descripción & Rol requerido \\
+\midrule
+POST & \texttt{/bookings} & Crea reserva & CUSTOMER \\
+GET  & \texttt{/bookings/me} & Mis reservas & CUSTOMER \\
+PUT  & \texttt{/bookings/\{id\}/cancel} & Cancela reserva & CUSTOMER \\
+POST & \texttt{/reviews} & Crea valoración & CUSTOMER \\
+PUT  & \texttt{/reviews/\{id\}} & Edita valoración propia & CUSTOMER \\
+DELETE & \texttt{/reviews/\{id\}} & Elimina valoración propia & CUSTOMER \\
+GET  & \texttt{/reviews/business/\{bId\}} & Reviews de un negocio & Público \\
+GET  & \texttt{/reviews/service/\{sId\}} & Reviews de un servicio & Público \\
+GET  & \texttt{/files/\{cat\}/\{filename\}} & Sirve imagen estática & Público \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%=============================================================
+%  CAPÍTULO 4 — IMPLEMENTACIÓN
+%=============================================================
+\chapter{Implementación}
+
+\section{Backend: Detalles de Implementación}
+
+\subsection{Configuración de Spring Security}
+
+Spring Security 6 (integrado en Spring Boot 3) adopta un modelo de configuración basado en beans en lugar de la herencia de \texttt{WebSecurityConfigurerAdapter} de versiones anteriores. La configuración de Gipsi define una cadena de filtros que:
+
+\begin{enumerate}
+  \item Deshabilita CSRF (innecesario en APIs REST stateless, donde no hay sesiones ni cookies de sesión).
+  \item Configura CORS con los orígenes permitidos leídos de variables de entorno.
+  \item Establece la política de sesión como \texttt{STATELESS} (sin sesiones HTTP del servidor).
+  \item Define las reglas de autorización: endpoints públicos (exploración, imágenes, auth), endpoints por rol.
+  \item Registra el filtro \texttt{JwtAuthFilter} antes del filtro de autenticación estándar de Spring.
+\end{enumerate}
+
+\begin{lstlisting}[style=javaStyle, caption={Configuración de Spring Security (SecurityConfig.java)}, label={lst:security}]
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http,
+            JwtAuthFilter jwtFilter) throws Exception {
+        return http
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .sessionManagement(sm ->
+                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**", "/businesses/**",
+                    "/services/**", "/categories/**",
+                    "/reviews/**", "/files/**",
+                    "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/bookings").hasRole("CUSTOMER")
+                .requestMatchers(HttpMethod.POST, "/reviews").hasRole("CUSTOMER")
+                .requestMatchers("/businesses/me/**").hasRole("BUSINESS")
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtFilter,
+                UsernamePasswordAuthenticationFilter.class)
+            .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+\end{lstlisting}
+
+\subsection{Rate Limiting con Bucket4j}
+
+Para proteger los endpoints de autenticación contra ataques de fuerza bruta, Gipsi implementa rate limiting en memoria usando la librería \textbf{Bucket4j}, que implementa el algoritmo del \textit{token bucket}.
+
+\begin{tcolorbox}[definicionStyle, title={Algoritmo Token Bucket}]
+El token bucket es un algoritmo de control de flujo que funciona de la siguiente manera: existe un cubo que puede contener hasta $N$ tokens. Cada petición consume un token; si el cubo está vacío, la petición se rechaza (429 Too Many Requests). El cubo se recarga a una tasa constante de $r$ tokens por unidad de tiempo. En Gipsi, la configuración es $N=10$ tokens con recarga de 10 tokens/minuto por dirección IP, lo que permite ráfagas cortas respetando un límite sostenido de 10 req/min.
+\end{tcolorbox}
+
+\subsection{Notificaciones Push con Firebase}
+
+El servicio de notificaciones (\texttt{NotificationService}) utiliza el SDK de Firebase Admin para Java para enviar mensajes FCM. Los tokens de dispositivo se registran en la entidad \texttt{DeviceToken} vinculada al usuario. El envío se realiza de forma asíncrona mediante eventos de Spring (\texttt{@EventListener} + \texttt{@Async}), de modo que el envío de la notificación no bloquea la respuesta HTTP principal.
+
+\begin{lstlisting}[style=javaStyle, caption={Envío asíncrono de notificación push}, label={lst:fcm}]
+@Async
+@EventListener
+public void onBookingCreated(BookingCreatedEvent event) {
+    Booking booking = event.getBooking();
+    List<String> tokens = deviceTokenRepository
+        .findByUserId(booking.getBusiness().getId())
+        .stream().map(DeviceToken::getToken).toList();
+
+    if (tokens.isEmpty()) return;
+
+    MulticastMessage message = MulticastMessage.builder()
+        .setNotification(Notification.builder()
+            .setTitle("Nueva reserva")
+            .setBody("Reserva de " + booking.getCustomer().getFullName()
+                   + " para " + booking.getService().getName())
+            .build())
+        .addAllTokens(tokens)
+        .build();
+
+    try {
+        firebaseMessaging.sendEachForMulticast(message);
+    } catch (FirebaseMessagingException e) {
+        log.warn("Error FCM: {}", e.getMessage());
+    }
+}
+\end{lstlisting}
+
+\subsection{Jobs Programados}
+
+El \texttt{BookingScheduler} ejecuta dos tareas programadas:
+
+\begin{enumerate}
+  \item \textbf{Auto-cancelación de reservas PENDING}: Se ejecuta cada hora y cancela las reservas en estado \texttt{PENDING} cuya fecha de inicio ya ha pasado sin ser confirmadas por el negocio.
+  \item \textbf{Recordatorios diarios}: Se ejecuta cada mañana y envía notificaciones push a los clientes con reservas confirmadas para el día siguiente.
+\end{enumerate}
+
+\begin{lstlisting}[style=javaStyle, caption={Job de auto-cancelación con @Scheduled}, label={lst:scheduler}]
+@Scheduled(cron = "0 0 * * * *")  // Cada hora en punto
+@Transactional
+public void autoCancelExpiredPendingBookings() {
+    List<Booking> expired = bookingRepository
+        .findByStatusAndStartDatetimeBefore(
+            BookingStatus.PENDING, LocalDateTime.now());
+    expired.forEach(b -> {
+        b.setStatus(BookingStatus.CANCELLED);
+        log.info("Auto-cancelled booking {}", b.getId());
+    });
+    bookingRepository.saveAll(expired);
+}
+
+@Scheduled(cron = "0 0 8 * * *")  // 08:00 cada día
+public void sendDailyReminders() {
+    LocalDate tomorrow = LocalDate.now().plusDays(1);
+    List<Booking> upcoming = bookingRepository
+        .findConfirmedForDate(tomorrow);
+    upcoming.forEach(notificationService::sendReminder);
+}
+\end{lstlisting}
+
+\section{Frontend: Detalles de Implementación}
+
+\subsection{Cliente HTTP con Dio e Interceptor de Refresh}
+
+El package \texttt{gipsi\_api} encapsula toda la comunicación con el backend. El cliente HTTP se construye sobre \textbf{Dio}, una librería que supera a \texttt{http} en capacidades (interceptores, cancelación, progreso de subida). El interceptor de refresh token implementa la siguiente lógica:
+
+\begin{enumerate}
+  \item Cada petición lleva la cabecera \texttt{Authorization: Bearer \{accessToken\}}.
+  \item Si la respuesta es un error 401, el interceptor captura el error antes de que llegue al código de la feature.
+  \item Llama a \texttt{POST /auth/refresh} con el refresh token almacenado en \texttt{flutter\_secure\_storage}.
+  \item Si el refresh tiene éxito, guarda los nuevos tokens y \textbf{reintenta la petición original} de forma transparente.
+  \item Si el refresh falla (token expirado o revocado), llama a \texttt{AuthController.expireSession()} que limpia el estado de auth y la UI transiciona automáticamente al estado no-autenticado.
+\end{enumerate}
+
+\begin{lstlisting}[style=dartStyle, caption={Interceptor de refresh token en Dio}, label={lst:interceptor}]
+class TokenRefreshInterceptor extends Interceptor {
+  @override
+  Future<void> onError(DioException err,
+      ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode != 401) {
+      return handler.next(err);
+    }
+    try {
+      final newTokens = await _authRepo.refresh();
+      await _storage.saveTokens(newTokens);
+      // Reintentar peticion original con nuevo access token
+      final opts = err.requestOptions;
+      opts.headers['Authorization'] = 'Bearer ${newTokens.accessToken}';
+      final response = await _dio.fetch(opts);
+      return handler.resolve(response);
+    } catch (_) {
+      await _authController.expireSession();
+      return handler.reject(err);
+    }
+  }
+}
+\end{lstlisting}
+
+\subsection{Pantalla de Exploración}
+
+La pantalla \texttt{ExplorePage} implementa varios patrones de UX avanzados:
+
+\begin{itemize}
+  \item \textbf{Skeleton loading}: mientras carga la primera página, se muestran tarjetas con shimmer efecto para indicar carga sin un spinner bloqueante.
+  \item \textbf{Pull-to-refresh}: el usuario puede tirar hacia abajo para forzar una recarga.
+  \item \textbf{Paginación infinita}: al llegar al último elemento visible, se dispara la carga de la siguiente página.
+  \item \textbf{Estado vacío}: si no hay resultados para los filtros aplicados, se muestra un mensaje específico con sugerencia de acción.
+  \item \textbf{Estado de error}: si la petición falla, se muestra el error con un botón «Reintentar» que vuelve a lanzar la petición.
+\end{itemize}
+
+\subsection{Pantalla de Detalle de Negocio}
+
+El detalle de negocio utiliza un \texttt{CustomScrollView} con \texttt{SliverAppBar} para conseguir el efecto de portada colapsable:
+
+\begin{itemize}
+  \item La imagen de portada ocupa 320 px de altura y colapsa al hacer scroll, revelando el AppBar con el nombre del negocio.
+  \item Un efecto de zoom se activa al hacer pull hacia abajo, usando el \texttt{FlexibleSpaceBar} de Flutter.
+  \item Sobre la imagen, botones circulares semi-transparentes para volver, marcar como favorito y compartir.
+  \item El resto del contenido (descripción, servicios, reviews) se estructura como slivers debajo.
+\end{itemize}
+
+\subsection{Almacenamiento Seguro de Tokens}
+
+Los tokens JWT se almacenan en \texttt{flutter\_secure\_storage}, que utiliza el Keystore de Android (o el Keychain de iOS) para el cifrado, garantizando que los tokens no son accesibles por otras aplicaciones ni aparecen en backups no cifrados.
+
+\begin{lstlisting}[style=dartStyle, caption={Servicio de almacenamiento seguro de tokens}, label={lst:storage}]
+class SecureTokenStorage {
+  static const _storage = FlutterSecureStorage();
+  static const _accessKey  = 'access_token';
+  static const _refreshKey = 'refresh_token';
+
+  Future<void> saveTokens(TokenPair tokens) async {
+    await Future.wait([
+      _storage.write(key: _accessKey,  value: tokens.accessToken),
+      _storage.write(key: _refreshKey, value: tokens.refreshToken),
+    ]);
+  }
+
+  Future<TokenPair?> loadTokens() async {
+    final access  = await _storage.read(key: _accessKey);
+    final refresh = await _storage.read(key: _refreshKey);
+    if (access == null || refresh == null) return null;
+    return TokenPair(accessToken: access, refreshToken: refresh);
+  }
+
+  Future<void> clear() async {
+    await Future.wait([
+      _storage.delete(key: _accessKey),
+      _storage.delete(key: _refreshKey),
+    ]);
+  }
+}
+\end{lstlisting}
+
+%=============================================================
+%  CAPÍTULO 5 — PRUEBAS Y EVALUACIÓN
+%=============================================================
+\chapter{Pruebas y Evaluación}
+
+\section{Estrategia de Pruebas}
+
+La estrategia de pruebas de Gipsi sigue la pirámide de testing clásica adaptada al contexto del proyecto. En la base se sitúan las pruebas unitarias (las más numerosas y rápidas), en el nivel intermedio las pruebas de integración, y en el vértice las pruebas end-to-end (manuales en esta fase del proyecto).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+  \fill[gipsiMenta!40] (0,0) -- (6,0) -- (3,4) -- cycle;
+  \fill[gipsiSecundario!40] (1,1.3) -- (5,1.3) -- (3,4) -- cycle;
+  \fill[gipsiVerde!40] (2,2.6) -- (4,2.6) -- (3,4) -- cycle;
+
+  \node[font=\small] at (3,0.6)  {Pruebas Unitarias (JUnit 5, flutter\_test)};
+  \node[font=\small] at (3,2)    {Pruebas de Integración};
+  \node[font=\small] at (3,3.2)  {Pruebas E2E};
+\end{tikzpicture}
+\caption{Pirámide de testing aplicada a Gipsi}
+\label{fig:piramide}
+\end{figure}
+
+\section{Pruebas Funcionales}
+
+Las pruebas funcionales verifican que el sistema se comporta correctamente desde la perspectiva del usuario, sin analizar el código interno.
+
+\subsection{Pruebas del Flujo de Autenticación}
+
+\begin{table}[H]
+\centering
+\caption{Casos de prueba — Autenticación}
+\label{tab:pruebas-auth}
+\TestTableSetup
+\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y C{0.12\textwidth}@{}}
+\toprule
+ID & Caso & Resultado Esperado & Resultado \\
+\midrule
+PF-A01 & Login con credenciales correctas & HTTP 200, par de tokens en respuesta & \checkmark \\
+PF-A02 & Login con contraseña incorrecta & HTTP 401, mensaje de error en español & \checkmark \\
+PF-A03 & 11 intentos de login seguidos & 11ª petición devuelve HTTP 429 & \checkmark \\
+PF-A04 & Refresh con token válido & HTTP 200, nuevos tokens; el antiguo queda revocado & \checkmark \\
+PF-A05 & Refresh con token ya rotado (simulación de robo) & HTTP 401, sesión invalidada & \checkmark \\
+PF-A06 & Acceso a \texttt{/me} sin token & HTTP 401 & \checkmark \\
+PF-A07 & Acceso a \texttt{/businesses/me/images} con rol CUSTOMER & HTTP 403 & \checkmark \\
+PF-A08 & Registro con email ya existente & HTTP 409 Conflict & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\subsection{Pruebas del Módulo de Exploración (Frontend)}
+
+\begin{table}[H]
+\centering
+\caption{Casos de prueba — Exploración en frontend}
+\label{tab:pruebas-explore}
+\TestTableSetup
+\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y C{0.12\textwidth}@{}}
+\toprule
+ID & Caso & Resultado Esperado & Resultado \\
+\midrule
+PF-E01 & Abrir la pestaña Explorar con backend activo & Se cargan categorías y tarjetas de negocio & \checkmark \\
+PF-E02 & Seleccionar categoría «Peluquería» & Lista filtrada solo con negocios de esa categoría & \checkmark \\
+PF-E03 & Pull-to-refresh en la lista & La lista se recarga desde el servidor & \checkmark \\
+PF-E04 & Tocar tarjeta de negocio & Navega a la pantalla de detalle & \checkmark \\
+PF-E05 & Abrir con backend caído & Muestra estado de error con botón reintentar & \checkmark \\
+PF-E06 & Filtro sin resultados & Muestra estado vacío con mensaje descriptivo & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas del Módulo de Disponibilidad}
+
+\begin{table}[H]
+\centering
+\caption{Casos de prueba — Disponibilidad horaria}
+\label{tab:pruebas-avail}
+\TestTableSetup
+\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y C{0.12\textwidth}@{}}
+\toprule
+ID & Caso & Resultado Esperado & Resultado \\
+\midrule
+PF-D01 & Consultar disponibilidad día laborable & Lista de slots con correcta mezcla de disponibles e indisponibles & \checkmark \\
+PF-D02 & Consultar disponibilidad día festivo (fuera de horario) & Todos los slots \texttt{OUT\_OF\_SCHEDULE} & \checkmark \\
+PF-D03 & Slot con reserva existente & Slot marcado como \texttt{BOOKED} & \checkmark \\
+PF-D04 & Consulta sin \texttt{workerId} en negocio multi-worker & Slots con \texttt{availableWorkerIds} rellenos & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Pruebas Unitarias}
+
+\subsection{Pruebas del Backend con JUnit 5}
+
+Spring Boot incluye soporte para pruebas unitarias mediante JUnit 5 y Mockito. Los siguientes casos de prueba representan la batería básica para los componentes más críticos.
+
+\subsubsection{JwtService}
+
+\begin{lstlisting}[style=javaStyle, caption={Pruebas unitarias de JwtService}, label={lst:test-jwt}]
+@ExtendWith(MockitoExtension.class)
+class JwtServiceTest {
+
+    @InjectMocks
+    private JwtService jwtService;
+
+    private static final String SECRET =
+        "dGVzdFNlY3JldEtleVBhcmFUZXN0c0RlR2lwc2lBcHAxMjM0NTY3ODkw"; // >=64 bytes base64
+
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(jwtService, "secretKey", SECRET);
+        ReflectionTestUtils.setField(jwtService, "expirationMs", 1800000L);
+    }
+
+    @Test
+    void generateToken_shouldContainUsername() {
+        UserDetails user = User.withUsername("laurasanchez")
+            .password("hash").roles("CUSTOMER").build();
+
+        String token = jwtService.generateToken(user);
+
+        assertThat(jwtService.extractUsername(token)).isEqualTo("laurasanchez");
+    }
+
+    @Test
+    void isTokenValid_withExpiredToken_shouldReturnFalse() {
+        // Token con expiración en el pasado (1 ms)
+        ReflectionTestUtils.setField(jwtService, "expirationMs", 1L);
+        UserDetails user = User.withUsername("test")
+            .password("hash").roles("CUSTOMER").build();
+        String token = jwtService.generateToken(user);
+
+        // Esperar expiración
+        Thread.sleep(10);
+
+        assertThat(jwtService.isTokenValid(token, user)).isFalse();
+    }
+
+    @Test
+    void isTokenValid_withTamperedPayload_shouldReturnFalse() {
+        UserDetails user = User.withUsername("test")
+            .password("hash").roles("CUSTOMER").build();
+        String token = jwtService.generateToken(user);
+        // Modificar el payload (cambiamos un carácter en el medio)
+        String tampered = token.substring(0, token.indexOf('.') + 10)
+                        + "X"
+                        + token.substring(token.indexOf('.') + 11);
+
+        assertThatThrownBy(() -> jwtService.extractUsername(tampered))
+            .isInstanceOf(JwtException.class);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{AvailabilityService}
+
+\begin{lstlisting}[style=javaStyle, caption={Pruebas unitarias del servicio de disponibilidad}, label={lst:test-avail}]
+@ExtendWith(MockitoExtension.class)
+class AvailabilityServiceTest {
+
+    @Mock BookingRepository bookingRepository;
+    @Mock WorkScheduleRepository scheduleRepository;
+
+    @InjectMocks AvailabilityService availabilityService;
+
+    @Test
+    void getSlots_whenWorkerHasTimeOff_allSlotsUnavailable() {
+        Worker worker = buildWorker();
+        ServiceOffered service = buildService(60); // 60 min duración
+        LocalDate date = LocalDate.of(2026, 7, 15);
+
+        when(scheduleRepository.hasTimeOff(worker.getId(), date))
+            .thenReturn(true);
+        when(bookingRepository.findConflicting(anyLong(), any(), any()))
+            .thenReturn(List.of());
+
+        List<SlotDto> slots = availabilityService.getSlots(service, worker, date);
+
+        assertThat(slots).allMatch(s ->
+            !s.isAvailable() && s.getReason() == SlotReason.TIME_OFF);
+    }
+
+    @Test
+    void getSlots_whenSlotBooked_markedAsBooked() {
+        Worker worker = buildWorker();
+        ServiceOffered service = buildService(30);
+        LocalDate date = LocalDate.of(2026, 7, 16);
+
+        // Simular reserva de 09:00-09:30
+        Booking existing = buildBooking(
+            LocalDateTime.of(date, LocalTime.of(9, 0)),
+            LocalDateTime.of(date, LocalTime.of(9, 30)));
+        when(bookingRepository.findConflicting(anyLong(), any(), any()))
+            .thenReturn(List.of(existing));
+
+        List<SlotDto> slots = availabilityService.getSlots(service, worker, date);
+        SlotDto nineOClock = slots.stream()
+            .filter(s -> s.getStart().equals(LocalTime.of(9, 0)))
+            .findFirst().orElseThrow();
+
+        assertThat(nineOClock.isAvailable()).isFalse();
+        assertThat(nineOClock.getReason()).isEqualTo(SlotReason.BOOKED);
+    }
+}
+\end{lstlisting}
+
+\subsection{Pruebas del Frontend con flutter\_test}
+
+Flutter proporciona el framework de testing \texttt{flutter\_test} que permite renderizar widgets en un entorno de prueba sin necesidad de un dispositivo o emulador.
+
+\begin{lstlisting}[style=dartStyle, caption={Prueba de widget — BusinessCard}, label={lst:test-widget}]
+import 'package:flutter_test/flutter_test.dart';
+import 'package:gipsi_shared_ui/gipsi_shared_ui.dart';
+import 'package:gipsi/features/explore/widgets/business_card.dart';
+
+void main() {
+  testWidgets('BusinessCard muestra nombre y ciudad', (tester) async {
+    final business = BusinessModel(
+      id: 1,
+      name: 'Peluquería Style',
+      city: 'Sevilla',
+      avgRating: 4.5,
+      reviewCount: 23,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: BusinessCard(business: business)),
+      ),
+    );
+
+    expect(find.text('Peluquería Style'), findsOneWidget);
+    expect(find.text('Sevilla'),          findsOneWidget);
+    expect(find.text('4.5'),              findsOneWidget);
+  });
+
+  testWidgets('BusinessCard navega al hacer tap', (tester) async {
+    String? navigatedTo;
+    final business = BusinessModel(id: 42, name: 'Test', city: 'Málaga');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: BusinessCard(
+            business: business,
+            onTap: (id) => navigatedTo = '/business/$id',
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(BusinessCard));
+    expect(navigatedTo, equals('/business/42'));
+  });
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=dartStyle, caption={Prueba del AuthController con Riverpod}, label={lst:test-auth-provider}]
+void main() {
+  group('AuthController', () {
+    late ProviderContainer container;
+
+    setUp(() {
+      container = ProviderContainer(overrides: [
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+        secureStorageProvider.overrideWithValue(FakeSecureStorage()),
+      ]);
+    });
+
+    tearDown(() => container.dispose());
+
+    test('login exitoso actualiza estado a autenticado', () async {
+      final notifier = container.read(authControllerProvider.notifier);
+      await notifier.login('laurasanchez', 'password123');
+
+      final state = container.read(authControllerProvider);
+      expect(state.isAuthenticated, isTrue);
+      expect(state.user?.username, equals('laurasanchez'));
+    });
+
+    test('login fallido mantiene estado no autenticado', () async {
+      final notifier = container.read(authControllerProvider.notifier);
+      expect(
+        () => notifier.login('usuario', 'incorrecta'),
+        throwsA(isA<AuthException>()),
+      );
+
+      final state = container.read(authControllerProvider);
+      expect(state.isAuthenticated, isFalse);
+    });
+  });
+}
+\end{lstlisting}
+
+\section{Evaluación del Sistema}
+
+\subsection{Pruebas de Rendimiento Manual}
+
+Se realizaron pruebas manuales de rendimiento midiendo el tiempo de respuesta de los endpoints más frecuentes con la base de datos con datos de prueba cargados por \texttt{DataInitializer}:
+
+\begin{table}[H]
+\centering
+\caption{Tiempos de respuesta medidos en entorno local}
+\label{tab:rendimiento}
+\begin{tabular}{lrr}
+\toprule
+Endpoint & Tiempo medio (ms) & Requisito (RNF-1) \\
+\midrule
+\texttt{GET /businesses?page=0\&size=20} & 87 & $<$500 ms \checkmark \\
+\texttt{GET /businesses/\{id\}} (con reviews) & 134 & $<$500 ms \checkmark \\
+\texttt{GET /services/\{id\}/availability} & 203 & $<$500 ms \checkmark \\
+\texttt{POST /auth/login} & 312 & $<$500 ms \checkmark \\
+\texttt{POST /auth/refresh} & 45 & $<$500 ms \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El tiempo de login es el más elevado debido al costo computacional del hash bcrypt (factor de trabajo 10 por defecto), lo cual es deliberado: un atacante que prueba miles de contraseñas por segundo experimenta el mismo retardo.
+
+\section{Capturas de las Pruebas}
+
+\subsection{Pruebas del flujo de autenticación}
+
+\subsubsection{Procedimiento manual para obtener las capturas}
+
+Para documentar las pruebas del flujo de autenticaci\'on se ejecuta cada caso con el backend iniciado en perfil \texttt{dev}, usando los usuarios cargados por \texttt{DataInitializer}.
+\begin{enumerate}
+  \item Iniciar el backend con el perfil \texttt{dev} y comprobar que la API responde en \texttt{http://localhost:8080}.
+  \item Abrir Postman, Insomnia o la terminal con \texttt{curl}. Crear una petici\'on por cada caso de la Tabla~\ref{tab:pruebas-auth}.
+  \item Ejecutar la prueba, verificar que el estado HTTP coincide con el resultado esperado y realizar una captura de pantalla.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Gu\'ia de ejecuci\'on manual para capturas del flujo de autenticaci\'on}
+\label{tab:guia-capturas-auth}
+\TestTableSetup
+\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y@{}}
+\toprule
+ID & Preparaci\'on y acci\'on & Captura a guardar \\
+\midrule
+PF-A01 & Enviar \texttt{POST /auth/login} con \texttt{laurasanchez/password123}. Comprobar \texttt{200 OK} y presencia de \texttt{accessToken} y \texttt{refreshToken}. & \texttt{pf-a01-login-correcto.png} \\
+PF-A02 & Enviar \texttt{POST /auth/login} con \texttt{laurasanchez} y una contrase\~na incorrecta. Comprobar \texttt{401 Unauthorized}. & \texttt{pf-a02-login-error.png} \\
+PF-A03 & Repetir 11 veces el login incorrecto desde el mismo cliente/IP. La captura debe mostrar la und\'ecima respuesta con \texttt{429 Too Many Requests}. & \texttt{pf-a03-rate-limit-login.png} \\
+PF-A04 & Hacer login correcto, copiar el \texttt{refreshToken} y enviarlo a \texttt{POST /auth/refresh}. Comprobar \texttt{200 OK} y nuevos tokens. & \texttt{pf-a04-refresh-valido.png} \\
+PF-A05 & Reutilizar el \texttt{refreshToken} antiguo del caso PF-A04. Comprobar \texttt{403 Forbidden} y que la sesi\'on queda invalidada. & \texttt{pf-a05-refresh-reutilizado.png} \\
+PF-A06 & Enviar \texttt{GET /me} sin cabecera \texttt{Authorization}. Comprobar \texttt{401 Unauthorized}. & \texttt{pf-a06-me-sin-token.png} \\
+PF-A07 & Hacer login como \texttt{laurasanchez}, usar su \texttt{accessToken} en \texttt{POST /businesses/me/images/profile} y comprobar \texttt{403 Forbidden}. & \texttt{pf-a07-rol-customer.png} \\
+PF-A08 & Enviar \texttt{POST /auth/register/customer} con un email ya existente. Comprobar \texttt{409 Conflict}. & \texttt{pf-a08-email-existente.png} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\TestScreenshot{PF-A01 --- Login con credenciales correctas}{capturas_pruebas/pf-a01-login-correcto.png}{fig:captura-pf-a01}
+\TestScreenshot{PF-A02 --- Login con contraseña incorrecta}{capturas_pruebas/pf-a02-login-error.png}{fig:captura-pf-a02}
+\TestScreenshot{PF-A03 --- Rate limiting tras 11 intentos de login}{capturas_pruebas/pf-a03-rate-limit-login.png}{fig:captura-pf-a03}
+\TestScreenshot{PF-A04 --- Refresh con token válido}{capturas_pruebas/pf-a04-refresh-valido.png}{fig:captura-pf-a04}
+\TestScreenshot{PF-A05 --- Refresh con token ya rotado}{capturas_pruebas/pf-a05-refresh-reutilizado.png}{fig:captura-pf-a05}
+\TestScreenshot{PF-A06 --- Acceso al endpoint /me sin token}{capturas_pruebas/pf-a06-me-sin-token.png}{fig:captura-pf-a06}
+\TestScreenshot{PF-A07 --- Acceso a recurso de negocio con rol CUSTOMER}{capturas_pruebas/pf-a07-rol-customer.png}{fig:captura-pf-a07}
+\TestScreenshot{PF-A08 --- Registro con email ya existente}{capturas_pruebas/pf-a08-email-existente.png}{fig:captura-pf-a08}
+
+\subsection{Resto de capturas funcionales y técnicas}
+
+\TestScreenshot{Captura de pruebas del módulo de exploración}{capturas_pruebas/prueba-exploracion.png}{fig:captura-prueba-exploracion}
+\TestScreenshot{Captura de pruebas del módulo de disponibilidad}{capturas_pruebas/prueba-disponibilidad.png}{fig:captura-prueba-disponibilidad}
+\TestScreenshot{Captura de ejecución de pruebas unitarias}{capturas_pruebas/pruebas-unitarias.png}{fig:captura-pruebas-unitarias}
+\TestScreenshot{Captura de pruebas de rendimiento manual}{capturas_pruebas/pruebas-rendimiento.png}{fig:captura-pruebas-rendimiento}
+
+%=============================================================
+%  CAPÍTULO 6 — DESPLIEGUE
+%=============================================================
+\chapter{Despliegue}
+
+\section{Requisitos de Entorno}
+
+\subsection{Backend}
+
+\begin{table}[H]
+\centering
+\caption{Requisitos de entorno del backend}
+\label{tab:req-backend}
+\begin{tabular}{ll}
+\toprule
+Componente & Versión / Requisito \\
+\midrule
+Java & 21 (LTS) \\
+Maven & 3.9+ (o usar el wrapper \texttt{mvnw} incluido) \\
+PostgreSQL & 15+ \\
+Firebase Admin credentials & JSON de cuenta de servicio (opcional para push) \\
+RAM mínima & 512 MB (JVM + Spring Boot) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Frontend}
+
+\begin{table}[H]
+\centering
+\caption{Requisitos de entorno del frontend}
+\label{tab:req-frontend}
+\begin{tabular}{ll}
+\toprule
+Componente & Versión / Requisito \\
+\midrule
+Flutter SDK & 3.24.0+ (Dart 3.5+) \\
+Android Studio & Hedgehog+ (para Android) \\
+Xcode & 15+ (para iOS, solo en macOS) \\
+Melos & 6.2.0+ (\texttt{dart pub global activate melos}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Configuración del Backend}
+
+\subsection{Variables de Entorno}
+
+El backend se configura íntegramente mediante variables de entorno, sin credenciales en el repositorio:
+
+\begin{lstlisting}[style=yamlStyle, caption={Variables de entorno del backend}, label={lst:env-backend}]
+# Base de datos
+DB_URL=jdbc:postgresql://localhost:5432/gipsi
+DB_USER=postgres
+DB_PASSWORD=your_secure_password
+
+# JWT — usar un secreto real de al menos 64 bytes en base64
+JWT_SECRET=your_base64_encoded_secret_of_at_least_64_bytes
+JWT_EXPIRATION_MS=1800000     # 30 minutos
+REFRESH_EXPIRATION_DAYS=30
+
+# URL base (para URLs absolutas de imágenes en respuestas)
+GIPSI_BASE_URL=https://api.gipsi.com
+
+# CORS — nunca usar * en producción
+CORS_ALLOWED_ORIGINS=https://app.gipsi.com
+
+# Almacenamiento de imágenes
+STORAGE_TYPE=local            # 'local' o 's3' (futuro)
+STORAGE_PATH=/var/gipsi/storage
+
+# Firebase (dejar vacío para deshabilitar push)
+FIREBASE_CREDENTIALS_PATH=/etc/gipsi/firebase-credentials.json
+
+# Perfil Spring
+SPRING_PROFILES_ACTIVE=prod
+\end{lstlisting}
+
+\subsection{Proceso de Arranque}
+
+\begin{lstlisting}[style=yamlStyle, caption={Comandos de arranque del backend}, label={lst:arranque-backend}]
+# 1. Crear la base de datos
+psql -U postgres -c "CREATE DATABASE gipsi;"
+
+# 2. Arrancar (Flyway aplica migraciones automáticamente)
+./mvnw spring-boot:run
+
+# --- O bien, para producción ---
+
+# 3. Compilar el JAR
+./mvnw clean package -DskipTests
+
+# 4. Ejecutar el JAR
+java -jar target/gipsi-backend-0.0.1-SNAPSHOT.jar
+
+# Verificar: Swagger disponible en http://localhost:8080/swagger-ui.html
+\end{lstlisting}
+
+\section{Configuración del Frontend}
+
+\subsection{Bootstrap del Monorepo}
+
+\begin{lstlisting}[style=yamlStyle, caption={Proceso de setup del frontend}, label={lst:setup-frontend}]
+# 1. Instalar Melos globalmente
+dart pub global activate melos
+
+# 2. Instalar dependencias de todos los packages
+melos bootstrap
+
+# 3. Generar carpetas de plataforma (solo primera vez)
+cd apps/gipsi
+flutter create --project-name gipsi \
+               --org com.gipsi \
+               --platforms=android,ios .
+
+# 4. Lanzar la app (emulador Android apunta a 10.0.2.2:8080)
+flutter run
+
+# Para iOS Simulator
+flutter run --dart-define=API_URL=http://localhost:8080
+
+# Para dispositivo físico en red local
+flutter run --dart-define=API_URL=http://192.168.1.10:8080
+
+# Para producción
+flutter run --dart-define=API_URL=https://api.gipsi.com
+\end{lstlisting}
+
+\subsection{Compilación para Distribución}
+
+\begin{lstlisting}[style=yamlStyle, caption={Compilación para Android e iOS}, label={lst:build}]
+# Android — APK de debug
+flutter build apk --debug
+
+# Android — APK de release (requiere keystore configurado)
+flutter build apk --release \
+    --dart-define=API_URL=https://api.gipsi.com
+
+# Android — App Bundle para Google Play
+flutter build appbundle --release \
+    --dart-define=API_URL=https://api.gipsi.com
+
+# iOS — Archivo para App Store (requiere cuenta Apple Developer)
+flutter build ios --release \
+    --dart-define=API_URL=https://api.gipsi.com
+\end{lstlisting}
+
+\section{Despliegue con Docker (Recomendado para Producción)}
+
+Aunque no existe un \texttt{Dockerfile} en el repositorio actual, la configuración recomendada para producción es la siguiente:
+
+\begin{lstlisting}[style=yamlStyle, caption={docker-compose.yml para producción}, label={lst:docker}]
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: gipsi
+      POSTGRES_USER: gipsi_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "gipsi_user"]
+      interval: 10s
+
+  api:
+    image: gipsi-api:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/gipsi
+      DB_USER: gipsi_user
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ALLOWED_ORIGINS: https://app.gipsi.com
+      GIPSI_BASE_URL: https://api.gipsi.com
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
+    volumes:
+      - storage:/var/gipsi/storage
+
+volumes:
+  pgdata:
+  storage:
+\end{lstlisting}
+
+%=============================================================
+%  CAPÍTULO 7 — CONCLUSIONES Y POSIBLES MEJORAS
+%=============================================================
+\chapter{Conclusiones y Posibles Mejoras}
+
+\section{Conclusiones}
+
+El desarrollo de Gipsi ha permitido construir una plataforma funcional de gestión de citas para el sector de la estética y el bienestar, demostrando la viabilidad técnica de la combinación Spring Boot + Flutter para aplicaciones de gestión con requisitos de seguridad y disponibilidad real.
+
+\subsection{Logros Técnicos Destacados}
+
+\paragraph{Arquitectura de seguridad robusta.} La implementación del sistema de autenticación JWT con rotación de refresh tokens sigue las recomendaciones OWASP y proporciona protección real ante el robo de tokens. La revocación en cadena cuando se detecta uso de un token ya rotado es una característica de nivel profesional.
+
+\paragraph{Monorepo Flutter con Melos.} La organización del frontend en tres packages interdependientes (\texttt{gipsi}, \texttt{gipsi\_api}, \texttt{gipsi\_shared\_ui}) establece una base sólida para la escalabilidad del proyecto. La separación entre lógica de red, sistema de diseño y app ejecutable facilita el testing independiente y la reutilización futura.
+
+\paragraph{Cálculo de disponibilidad.} El motor de disponibilidad horaria considera múltiples variables simultáneas (horario del negocio, reservas existentes, días libres del trabajador, política de horas extra) con una respuesta bien tipada que indica la causa específica de cada indisponibilidad, lo que permite una UX informativa para el cliente.
+
+\paragraph{Abstracción del almacenamiento.} La interfaz \texttt{FileStorage} con implementación local y esqueleto S3 es un ejemplo real del principio de inversión de dependencias aplicado con un propósito práctico: la migración a almacenamiento cloud no requerirá modificar ningún servicio de negocio.
+
+\subsection{Lecciones Aprendidas}
+
+\begin{itemize}
+  \item La gestión de estado en Flutter con Riverpod es significativamente más manejable que con soluciones más rudimentarias (\texttt{setState} global), especialmente cuando el estado de autenticación debe afectar a múltiples partes de la UI de forma reactiva.
+  \item Las migraciones de base de datos con Flyway son imprescindibles desde el primer día de desarrollo, no como añadido posterior, porque el historial de migraciones es en sí mismo documentación del modelo de datos.
+  \item La documentación automática con Springdoc OpenAPI no es solo un lujo: acelera enormemente el desarrollo del frontend al proporcionar un contrato ejecutable y actualizado de la API.
+\end{itemize}
+
+\section{Posibles Mejoras}
+
+\subsection{Mejoras a Corto Plazo (Bloques Pendientes)}
+
+\begin{enumerate}
+  \item \textbf{Flujo de reserva completo (Bloque 3)}: Implementar los cuatro pasos de reserva en el frontend: selección de servicio, selección de trabajador o «cualquier disponible», selección de fecha y hora desde el calendario de disponibilidad, y pantalla de confirmación.
+
+  \item \textbf{Gestión de citas propias (Bloque 5)}: La pestaña «Mis citas» necesita listar las reservas del cliente, permitir su cancelación dentro del plazo permitido y habilitar el flujo de valoración post-servicio.
+
+  \item \textbf{Tests automatizados con Testcontainers}: El backend carece de pruebas de integración contra una base de datos real. Testcontainers permite levantar un contenedor PostgreSQL en tiempo de prueba, eliminando la necesidad de un servidor externo y haciendo las pruebas reproducibles en cualquier entorno CI.
+
+  \item \textbf{Búsqueda con filtros y favoritos}: La pestaña «Buscar» está preparada en navegación pero sin implementación. Los favoritos requieren el endpoint \texttt{PUT /customers/me/favorites/businesses/\{id\}} en el backend.
+\end{enumerate}
+
+\subsection{Mejoras Arquitectónicas}
+
+\begin{enumerate}
+  \item \textbf{Migración a almacenamiento S3/R2}: Sustituir \texttt{LocalFileStorage} por \texttt{S3FileStorage} usando el SDK de AWS o la API compatible S3 de Cloudflare R2, que es más económica para proyectos en sus fases iniciales. El código ya dispone del esqueleto necesario.
+
+  \item \textbf{Caché de queries frecuentes}: Endpoints como \texttt{GET /categories} o \texttt{GET /businesses} con filtros comunes pueden beneficiarse de una caché en memoria (Caffeine integrado en Spring) o distribuida (Redis) para reducir carga en la base de datos.
+
+  \item \textbf{Paginación por cursor}: La paginación actual usa \texttt{page}/\texttt{size} (offset-based), que tiene problemas de consistencia cuando se insertan o eliminan registros entre páginas. Una paginación por cursor (keyset pagination) es más eficiente y estable para feeds en tiempo real.
+
+  \item \textbf{App de negocio independiente}: La arquitectura del monorepo facilita crear \texttt{apps/gipsi\_business} que comparta \texttt{gipsi\_api} y \texttt{gipsi\_shared\_ui} pero ofrezca una experiencia específica para propietarios (gestión de agenda, perfil de negocio, estadísticas).
+
+  \item \textbf{Pipeline CI/CD}: Configurar GitHub Actions con: ejecución de tests del backend con Testcontainers, análisis estático con \texttt{flutter analyze} y \texttt{dart analyze}, build del APK de Android en cada push a \texttt{main}, y despliegue automático al servidor de producción.
+\end{enumerate}
+
+\subsection{Mejoras de Seguridad}
+
+\begin{enumerate}
+  \item \textbf{HTTPS obligatorio}: En producción, toda comunicación debe ser HTTPS. El backend no gestiona certificados (esa responsabilidad recae en un proxy inverso como Nginx o Caddy), pero debe configurarse para rechazar peticiones no seguras.
+  \item \textbf{Validación de tipos MIME en upload}: Al subir imágenes, verificar que el tipo MIME real del fichero (magic bytes) coincide con la extensión declarada, para prevenir upload de ficheros maliciosos disfrazados de imágenes.
+  \item \textbf{Auditoría de accesos}: Registrar en base de datos los intentos de autenticación fallidos, rotaciones de tokens y acciones administrativas para facilitar la detección de incidentes.
+\end{enumerate}
+
+%=============================================================
+%  BIBLIOGRAFÍA
+%=============================================================
+\begin{thebibliography}{99}
+
+\bibitem{spring-boot}
+Pivotal Software.
+\textit{Spring Boot Reference Documentation, version 3.4}.
+2024.
+\url{https://docs.spring.io/spring-boot/docs/3.4.x/reference/html/}
+
+\bibitem{spring-security}
+Spring Security Team.
+\textit{Spring Security Reference, version 6}.
+2024.
+\url{https://docs.spring.io/spring-security/reference/}
+
+\bibitem{jjwt}
+Stormpath / io.jsonwebtoken.
+\textit{JJWT — Java JWT library, version 0.12}.
+2024.
+\url{https://github.com/jwtk/jjwt}
+
+\bibitem{jwt-rfc}
+M. Jones, J. Bradley, N. Sakimura.
+\textit{JSON Web Token (JWT)}.
+RFC 7519.
+Internet Engineering Task Force, mayo 2015.
+\url{https://www.rfc-editor.org/rfc/rfc7519}
+
+\bibitem{owasp-jwt}
+OWASP Foundation.
+\textit{JSON Web Token Cheat Sheet for Java}.
+2024.
+\url{https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html}
+
+\bibitem{flutter-docs}
+Google LLC.
+\textit{Flutter documentation}.
+2024.
+\url{https://docs.flutter.dev/}
+
+\bibitem{riverpod}
+Remi Rousselet.
+\textit{Riverpod documentation}.
+2024.
+\url{https://riverpod.dev/}
+
+\bibitem{go-router}
+Flutter team.
+\textit{go\_router package documentation}.
+2024.
+\url{https://pub.dev/packages/go_router}
+
+\bibitem{dio}
+Flute DEV.
+\textit{Dio — A powerful HTTP networking package for Dart/Flutter}.
+2024.
+\url{https://pub.dev/packages/dio}
+
+\bibitem{melos}
+Invertase.
+\textit{Melos — A tool for managing Dart/Flutter monorepos}.
+2024.
+\url{https://melos.invertase.dev/}
+
+\bibitem{flyway}
+Redgate.
+\textit{Flyway — Database schema migration made easy}.
+2024.
+\url{https://flywaydb.org/documentation/}
+
+\bibitem{bucket4j}
+Vladimir Bukhtoyarov.
+\textit{Bucket4j — Rate limiting library for Java}.
+2024.
+\url{https://github.com/bucket4j/bucket4j}
+
+\bibitem{firebase-fcm}
+Google LLC.
+\textit{Firebase Cloud Messaging documentation}.
+2024.
+\url{https://firebase.google.com/docs/cloud-messaging}
+
+\bibitem{springdoc}
+Springdoc contributors.
+\textit{springdoc-openapi — Library for Spring Boot projects}.
+2024.
+\url{https://springdoc.org/}
+
+\bibitem{postgresql}
+The PostgreSQL Global Development Group.
+\textit{PostgreSQL 16 Documentation}.
+2024.
+\url{https://www.postgresql.org/docs/16/}
+
+\bibitem{testcontainers}
+AtomicJar.
+\textit{Testcontainers for Java}.
+2024.
+\url{https://java.testcontainers.org/}
+
+\bibitem{rest-fielding}
+Roy Thomas Fielding.
+\textit{Architectural Styles and the Design of Network-based Software Architectures}.
+Doctoral dissertation, University of California, Irvine, 2000.
+\url{https://ics.uci.edu/~fielding/pubs/dissertation/top.htm}
+
+\bibitem{clean-architecture}
+Robert C. Martin.
+\textit{Clean Architecture: A Craftsman's Guide to Software Structure and Design}.
+Prentice Hall, 2017.
+
+\bibitem{dart-lang}
+Google LLC.
+\textit{Dart language tour}.
+2024.
+\url{https://dart.dev/language}
+
+\end{thebibliography}
+
+%=============================================================
+%  ANEXOS
+%=============================================================
+\appendix
+\chapter{Configuración Completa del pom.xml}
+
+\begin{lstlisting}[style=yamlStyle, caption={pom.xml del proyecto Gipsi-API}, label={lst:pom}]
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.4</version>
+  </parent>
+  <groupId>com.gipsi</groupId>
+  <artifactId>gipsi-backend</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <properties>
+    <java.version>21</java.version>
+    <jjwt.version>0.12.6</jjwt.version>
+    <springdoc.version>2.8.5</springdoc.version>
+  </properties>
+  <dependencies>
+    <!-- Spring Boot Starters -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!-- Base de datos -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
+    <!-- JWT -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- OpenAPI / Swagger -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc.version}</version>
+    </dependency>
+    <!-- Firebase Admin SDK -->
+    <dependency>
+      <groupId>com.google.firebase</groupId>
+      <artifactId>firebase-admin</artifactId>
+      <version>9.4.1</version>
+    </dependency>
+    <!-- Rate Limiting -->
+    <dependency>
+      <groupId>com.bucket4j</groupId>
+      <artifactId>bucket4j-core</artifactId>
+      <version>8.10.1</version>
+    </dependency>
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+\end{lstlisting}
+
+\chapter{Configuración del Monorepo (melos.yaml)}
+
+\begin{lstlisting}[style=yamlStyle, caption={melos.yaml del monorepo Flutter}, label={lst:melos}]
+name: gipsi_monorepo
+repository: https://github.com/gipsi/gipsi-frontend
+
+packages:
+  - apps/*
+  - packages/*
+
+command:
+  clean:
+    hooks:
+      post: melos exec -- "flutter clean"
+  bootstrap:
+    runPubGetInParallel: false
+
+scripts:
+  analyze:
+    run: melos exec -- "flutter analyze"
+    description: Ejecuta flutter analyze en todos los paquetes
+
+  format:
+    run: melos exec -- "dart format ."
+    description: Formatea todo el codigo
+
+  test:
+    run: melos exec --dir-exists="test" -- "flutter test"
+    description: Ejecuta los tests
+
+  gen:
+    run: >
+      melos exec --depends-on="build_runner" --
+      "dart run build_runner build --delete-conflicting-outputs"
+    description: Regenera los archivos freezed/json_serializable
+\end{lstlisting}
+
+\chapter{Usuarios de Prueba (DataInitializer)}
+
+La clase \texttt{DataInitializer} se activa con el perfil \texttt{dev} y crea los siguientes usuarios de prueba para facilitar el desarrollo y las demos:
+
+\begin{table}[H]
+\centering
+\caption{Usuarios de prueba creados por DataInitializer}
+\label{tab:usuarios-prueba}
+\begin{tabular}{lll}
+\toprule
+Nombre de usuario & Rol & Contraseña \\
+\midrule
+\texttt{laurasanchez} & Cliente & \texttt{password123} \\
+\texttt{migueltorres} & Cliente & \texttt{password123} \\
+\texttt{sofiaruiz} & Cliente & \texttt{password123} \\
+\texttt{peluqueriastyle} & Negocio & \texttt{password123} \\
+\texttt{elmaestrobarbero} & Negocio & \texttt{password123} \\
+\texttt{nailartstudio} & Negocio & \texttt{password123} \\
+\texttt{esteticaandaluza} & Negocio & \texttt{password123} \\
+\texttt{spabienestar} & Negocio & \texttt{password123} \\
+\texttt{mariagarcia} & Trabajador & \texttt{password123} \\
+\texttt{carloslopez} & Trabajador & \texttt{password123} \\
+\texttt{anamartinez} & Trabajador & \texttt{password123} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{tcolorbox}[advertenciaStyle]
+Los usuarios de prueba \textbf{nunca} deben estar presentes en entornos de producción. El perfil \texttt{dev} (y por tanto el \texttt{DataInitializer}) debe estar desactivado mediante la variable \texttt{SPRING\_PROFILES\_ACTIVE=prod}.
+\end{tcolorbox}
+
+\chapter{Formato de Respuesta de Disponibilidad}
+
+El endpoint \texttt{GET /services/\{id\}/availability?date=YYYY-MM-DD\&workerId=\{id\}} devuelve el siguiente formato JSON:
+
+\begin{lstlisting}[style=yamlStyle, caption={Ejemplo de respuesta del endpoint de disponibilidad}, label={lst:availability-response}]
+{
+  "serviceId": 5,
+  "workerId": 12,
+  "date": "2026-07-15",
+  "slotMinutes": 15,
+  "serviceDuration": 45,
+  "slots": [
+    {
+      "start": "09:00",
+      "end": "09:45",
+      "available": true,
+      "reason": null,
+      "availableWorkerIds": null
+    },
+    {
+      "start": "09:15",
+      "end": "10:00",
+      "available": true,
+      "reason": null,
+      "availableWorkerIds": null
+    },
+    {
+      "start": "09:30",
+      "end": "10:15",
+      "available": false,
+      "reason": "BOOKED",
+      "availableWorkerIds": null
+    },
+    {
+      "start": "14:00",
+      "end": "14:45",
+      "available": false,
+      "reason": "OUT_OF_SCHEDULE",
+      "availableWorkerIds": null
+    }
+  ]
+}
+\end{lstlisting}
+
+\textbf{Razones de indisponibilidad posibles:}
+\begin{description}
+  \item[\texttt{BOOKED}] Existe una reserva confirmada o pendiente que se solapa con este slot.
+  \item[\texttt{OUT\_OF\_SCHEDULE}] El slot cae fuera del horario de apertura del negocio.
+  \item[\texttt{TIME\_OFF}] El trabajador tiene registrado un día libre o ausencia.
+  \item[\texttt{OVERTIME\_NOT\_ALLOWED}] El servicio terminaría después del cierre y no se permiten horas extra.
+  \item[\texttt{WORKER\_UNAVAILABLE}] Ningún trabajador habilitado está libre en este slot (modo multi-worker).
+\end{description}
+
+\chapter{Glosario de Términos}
+
+\section{Glosario de términos técnicos}
+
+\begin{description}
+
+  \item[Access Token]
+  Token JWT de corta duración, de 30 minutos en Gipsi, que se envía en la cabecera
+  \texttt{Authorization} de cada petición autenticada. Sirve para identificar al usuario
+  que realiza la petición y comprobar sus permisos sin consultar la sesión en cada
+  solicitud.
+
+  \item[API REST]
+  Interfaz de comunicación entre el frontend móvil y el backend. Utiliza HTTP como
+  protocolo de transporte y organiza las operaciones mediante recursos, métodos y
+  respuestas estructuradas, normalmente en formato JSON.
+
+  \item[Backend]
+  Parte del sistema ejecutada en el servidor. En Gipsi se encarga de gestionar la lógica
+  de negocio, la seguridad, la base de datos, las reservas, los usuarios, las valoraciones,
+  las notificaciones y la exposición de endpoints a través de la API REST.
+
+  \item[Bucket4j]
+  Librería Java utilizada para aplicar mecanismos de limitación de peticiones. Permite
+  controlar cuántas solicitudes puede realizar un cliente en un periodo determinado,
+  ayudando a proteger la API frente a abuso, errores o ataques de fuerza bruta.
+
+  \item[Dart]
+  Lenguaje de programación fuertemente tipado, orientado a objetos y desarrollado por
+  Google. Es el lenguaje utilizado por Flutter para construir aplicaciones móviles,
+  web y de escritorio desde una misma base de código.
+
+  \item[Dio]
+  Cliente HTTP para Dart y Flutter. En Gipsi se utiliza para realizar peticiones a la API,
+  gestionar cabeceras, procesar respuestas y configurar interceptores, por ejemplo para
+  añadir automáticamente el access token o refrescar credenciales cuando sea necesario.
+
+  \item[DTO]
+  Data Transfer Object. Objeto utilizado para transferir datos entre capas o entre cliente
+  y servidor. Permite separar el modelo interno de base de datos de la información que
+  realmente se expone o recibe a través de la API.
+
+  \item[Firebase Cloud Messaging]
+  Servicio de Google utilizado para enviar notificaciones push a dispositivos móviles.
+  En Gipsi permite avisar a los usuarios de eventos relevantes, como confirmaciones,
+  cambios o recordatorios relacionados con sus citas.
+
+  \item[Flutter]
+  Framework de desarrollo multiplataforma creado por Google. Permite construir interfaces
+  móviles nativas para Android e iOS utilizando Dart y una arquitectura basada en widgets.
+
+  \item[Flyway]
+  Herramienta de migración de esquema de base de datos. Aplica scripts SQL versionados
+  en orden, permitiendo que la estructura de PostgreSQL evolucione de forma controlada
+  entre entornos de desarrollo, pruebas y producción.
+
+  \item[Frontend]
+  Parte visible de la aplicación con la que interactúa el usuario. En Gipsi corresponde a
+  la aplicación móvil desarrollada con Flutter, encargada de mostrar pantallas, formularios,
+  navegación, estados de carga y respuestas procedentes del backend.
+
+  \item[go\_router]
+  Librería de navegación declarativa para Flutter. Permite definir las rutas de la
+  aplicación, gestionar parámetros, redirecciones, rutas protegidas y estructuras de
+  navegación como pestañas o layouts persistentes.
+
+  \item[Hibernate]
+  Implementación de JPA utilizada habitualmente por Spring Boot. Se encarga de traducir
+  entidades Java a tablas relacionales y de generar las operaciones SQL necesarias para
+  consultar, insertar, actualizar o eliminar datos.
+
+  \item[JPA]
+  Java Persistence API. Especificación estándar de Java para mapear objetos Java a tablas
+  relacionales. Permite trabajar con entidades, relaciones y consultas sin escribir SQL
+  manual en la mayoría de operaciones comunes.
+
+  \item[JSON]
+  JavaScript Object Notation. Formato ligero de intercambio de datos utilizado en la
+  comunicación entre frontend y backend. Es legible para humanos y fácil de procesar
+  por aplicaciones.
+
+  \item[JSON Web Token]
+  Formato estándar de token firmado que permite transportar información de identidad
+  y autorización. En Gipsi se utiliza para autenticar peticiones sin mantener una sesión
+  tradicional en memoria del servidor.
+
+  \item[Melos]
+  Herramienta de gestión de monorepos Dart y Flutter. Permite administrar varios paquetes
+  dentro de un mismo repositorio y ejecutar comandos comunes como \texttt{bootstrap},
+  \texttt{test} o \texttt{analyze} sobre todos ellos.
+
+  \item[Monorepo]
+  Estrategia de organización del código donde varios módulos, aplicaciones o paquetes
+  conviven dentro de un único repositorio. En Gipsi facilita compartir código entre
+  paquetes como la aplicación principal, la capa de datos o el sistema de diseño.
+
+  \item[OpenAPI]
+  Especificación estándar para describir APIs REST. Define endpoints, métodos HTTP,
+  parámetros, cuerpos de petición, respuestas y modelos de datos, facilitando la
+  documentación y la integración con otros sistemas.
+
+  \item[PostgreSQL]
+  Sistema gestor de base de datos relacional utilizado por Gipsi. Almacena la información
+  persistente del sistema, como usuarios, negocios, servicios, citas, valoraciones y tokens.
+
+  \item[Provider (Riverpod)]
+  Unidad básica de Riverpod que encapsula un estado, una dependencia o una función.
+  Los widgets pueden observar providers para reconstruirse automáticamente cuando el
+  estado cambia.
+
+  \item[Rate Limiting]
+  Técnica de control de tráfico que limita el número de peticiones que un cliente puede
+  realizar en un intervalo de tiempo. Se utiliza para proteger la API frente a uso abusivo,
+  errores de integración o ataques automatizados.
+
+  \item[Refresh Token]
+  Token opaco de larga duración, de 30 días en Gipsi, almacenado en base de datos y usado
+  exclusivamente para obtener un nuevo par de tokens. Se rota en cada uso para reducir
+  el riesgo de reutilización indebida si el token anterior queda comprometido.
+
+  \item[Repository]
+  Patrón de arquitectura que encapsula el acceso a datos. En el frontend permite que la
+  interfaz no dependa directamente de Dio ni de los detalles de la API, sino de una capa
+  intermedia que ofrece métodos de negocio más claros.
+
+  \item[REST]
+  Representational State Transfer. Estilo arquitectónico para sistemas distribuidos que
+  define una forma de comunicación cliente-servidor basada en recursos, métodos HTTP
+  y respuestas sin estado.
+
+  \item[Riverpod]
+  Solución de gestión de estado para Flutter. Permite manejar datos reactivos,
+  dependencias y lógica compartida entre pantallas de forma segura, testeable y
+  desacoplada del árbol de widgets.
+
+  \item[S3]
+  Sistema de almacenamiento de objetos popularizado por Amazon Simple Storage Service.
+  Se utiliza para guardar archivos, imágenes u otros recursos binarios fuera de la base
+  de datos. En Gipsi existe una capa de abstracción preparada para migrar el almacenamiento
+  de imágenes a S3 o a servicios compatibles en el futuro.
+
+  \item[ShellRoute]
+  Concepto de go\_router que permite mantener una estructura visual persistente, como
+  un \texttt{Scaffold} con barra de navegación inferior, mientras se sustituye únicamente
+  el contenido correspondiente a la ruta activa.
+
+  \item[JOINED Inheritance]
+  Estrategia de herencia en JPA donde la entidad base y cada subtipo se almacenan en
+  tablas separadas, enlazadas por la misma clave primaria. Permite compartir campos
+  comunes en una tabla base sin mezclar en una sola tabla todos los atributos específicos.
+
+  \item[Slot]
+  Franja horaria calculada por el motor de disponibilidad. En Gipsi la granularidad por
+  defecto es de 15 minutos, lo que permite dividir la agenda en bloques reservables y
+  comprobar qué huecos están libres según servicios, trabajadores y reservas existentes.
+
+  \item[Spring Boot]
+  Framework Java que simplifica la creación de aplicaciones backend. Proporciona
+  configuración automática, integración con seguridad, persistencia, validación,
+  documentación y despliegue de APIs REST.
+
+  \item[Springdoc OpenAPI]
+  Librería que genera automáticamente documentación OpenAPI a partir de los controladores
+  y modelos definidos en Spring Boot. Permite disponer de una documentación técnica
+  actualizada de la API sin mantenerla manualmente.
+
+  \item[Token Bucket]
+  Algoritmo de control de flujo utilizado por herramientas como Bucket4j para implementar
+  rate limiting con soporte de ráfagas. Funciona como un depósito de tokens que se consume
+  con cada petición y se rellena progresivamente con el tiempo.
+
+  \item[Widget]
+  Unidad básica de construcción de interfaces en Flutter. Todo elemento visual, desde
+  un texto hasta una pantalla completa, se representa mediante widgets que pueden
+  componerse entre sí.
+
+  \item[Android App Bundle]
+  Formato de distribuci\'on recomendado para publicar aplicaciones Android en Google
+  Play. A partir de este paquete, la tienda genera APKs optimizados para cada dispositivo,
+  reduciendo el tama\~no de descarga frente a un APK universal.
+
+  \item[APK]
+  Android Package Kit. Archivo instalable de una aplicaci\'on Android. En Gipsi se usa
+  principalmente para compilaciones de depuraci\'on o pruebas manuales antes de preparar
+  una versi\'on de distribuci\'on.
+
+  \item[@Async]
+  Anotaci\'on de Spring que permite ejecutar un m\'etodo en segundo plano, fuera del hilo
+  principal que atiende la petici\'on HTTP. En Gipsi se utiliza para enviar notificaciones
+  push sin bloquear la respuesta al usuario.
+
+  \item[@EventListener]
+  Anotaci\'on de Spring que permite reaccionar a eventos internos de la aplicaci\'on.
+  En Gipsi se aplica para desacoplar acciones como la creaci\'on de una reserva del envio
+  posterior de notificaciones.
+
+  \item[@Scheduled]
+  Anotaci\'on de Spring usada para ejecutar tareas programadas seg\'un una expresi\'on
+  temporal. En Gipsi permite automatizar procesos como la cancelaci\'on de reservas
+  pendientes vencidas o el envio diario de recordatorios.
+
+  \item[BCrypt]
+  Algoritmo de hash de contrase\~nas dise\~nado para ser resistente a ataques de fuerza
+  bruta. Spring Security lo utiliza mediante \texttt{BCryptPasswordEncoder} para almacenar
+  contrase\~nas sin guardar el texto original.
+
+  \item[Bearer Token]
+  Esquema de autorizaci\'on HTTP en el que el cliente envia un token dentro de la cabecera
+  \texttt{Authorization}. En Gipsi se usa con la forma
+  \texttt{Authorization: Bearer <token>} para autenticar peticiones protegidas.
+
+  \item[Claim]
+  Afirmaci\'on incluida en el payload de un JWT, como el identificador del usuario, sus
+  roles o la fecha de expiraci\'on. Estas claims permiten al backend reconstruir la
+  identidad del usuario en APIs stateless.
+
+  \item[CORS]
+  Cross-Origin Resource Sharing. Mecanismo de seguridad del navegador que controla que
+  origenes pueden realizar peticiones a una API. En Gipsi se configura mediante variables
+  de entorno para permitir solo clientes autorizados en producci\'on.
+
+  \item[Controller]
+  Capa del backend encargada de recibir peticiones HTTP, validar la entrada b\'asica y
+  delegar la operaci\'on en los servicios. En la arquitectura de Gipsi no contiene l\'ogica
+  de negocio compleja.
+
+  \item[Cron]
+  Sintaxis para definir calendarios de ejecuci\'on de tareas programadas. En Gipsi aparece
+  en los jobs de Spring que se ejecutan cada hora o cada ma\~nana.
+
+  \item[CSRF]
+  Cross-Site Request Forgery. Tipo de ataque que intenta forzar acciones autenticadas
+  desde otro sitio web. En APIs REST stateless como Gipsi se deshabilita porque no se
+  usan sesiones basadas en cookies del servidor.
+
+  \item[DataInitializer]
+  Componente de arranque utilizado en el perfil de desarrollo para cargar usuarios,
+  negocios, servicios y datos de prueba. Facilita probar la aplicaci\'on sin introducir
+  manualmente toda la informaci\'on inicial.
+
+  \item[Device Token]
+  Identificador emitido por Firebase Cloud Messaging para representar un dispositivo
+  concreto. Gipsi lo asocia al usuario para saber a que terminales enviar notificaciones
+  push.
+
+  \item[Docker Compose]
+  Herramienta para definir y levantar varios servicios mediante un archivo YAML. En el
+  despliegue propuesto de Gipsi coordina la API, PostgreSQL y los volumenes persistentes.
+
+  \item[Endpoint]
+  Ruta concreta de una API que expone una operaci\'on o recurso, por ejemplo
+  \texttt{POST /auth/login} o \texttt{GET /businesses}. Cada endpoint define un contrato
+  de entrada, autenticaci\'on y respuesta.
+
+  \item[Entidad]
+  Clase Java mapeada a una tabla de base de datos mediante JPA. Representa objetos
+  persistentes del dominio, como usuarios, negocios, reservas, servicios o valoraciones.
+
+  \item[Estado vacio]
+  Estado de interfaz mostrado cuando una consulta no devuelve resultados. En Gipsi se usa,
+  por ejemplo, en la pantalla de exploraci\'on para explicar que no hay negocios que
+  coincidan con los filtros aplicados.
+
+  \item[FileStorage]
+  Interfaz interna que abstrae el almacenamiento de archivos. Permite que la l\'ogica de
+  negocio no dependa de si las imagenes se guardan localmente o en un servicio externo
+  compatible con S3.
+
+  \item[Firebase Admin SDK]
+  SDK de servidor que permite a Spring Boot comunicarse con Firebase. En Gipsi se usa
+  para enviar mensajes FCM desde el backend a los dispositivos registrados.
+
+  \item[flutter\_secure\_storage]
+  Paquete de Flutter usado para guardar informaci\'on sensible en el almacenamiento seguro
+  del sistema operativo. En Android utiliza Keystore y en iOS Keychain para proteger los
+  tokens de sesi\'on.
+
+  \item[GlobalExceptionHandler]
+  Componente centralizado para transformar excepciones del backend en respuestas HTTP
+  consistentes. Evita repetir manejo de errores en cada controlador y mejora la claridad
+  de la API.
+
+  \item[Granularidad]
+  Tama\~no minimo de divisi\'on usado por un algoritmo. En el motor de disponibilidad
+  de Gipsi la granularidad de 15 minutos determina cada cuanto se generan slots
+  reservables.
+
+  \item[Healthcheck]
+  Comprobaci\'on automatica que indica si un servicio esta listo para recibir trafico.
+  En el despliegue con Docker se usa para esperar a que PostgreSQL este disponible antes
+  de arrancar la API.
+
+  \item[HTTP 401 Unauthorized]
+  C\'odigo de respuesta que indica que la petici\'on no esta autenticada correctamente.
+  En Gipsi puede activar el interceptor de Dio para intentar renovar el access token.
+
+  \item[HTTP 429 Too Many Requests]
+  C\'odigo de respuesta que indica que el cliente ha superado el limite de peticiones.
+  Es la respuesta esperada cuando el rate limiting rechaza una solicitud por falta de
+  tokens en el bucket.
+
+  \item[Interceptor]
+  Componente que intercepta peticiones o respuestas HTTP para a\~nadir comportamiento
+  transversal. En Gipsi, el interceptor de Dio incorpora tokens, detecta errores 401 y
+  reintenta peticiones tras refrescar credenciales.
+
+  \item[JUnit 5]
+  Framework de pruebas unitarias para Java. En Gipsi se utiliza para verificar servicios
+  del backend, especialmente l\'ogica de autenticaci\'on, reservas y disponibilidad.
+
+  \item[Keychain]
+  Almacen seguro de credenciales de iOS. La aplicaci\'on Flutter lo utiliza, a traves de
+  \texttt{flutter\_secure\_storage}, para proteger tokens y datos sensibles del usuario.
+
+  \item[Keystore]
+  Sistema seguro de Android para proteger claves y credenciales. En Gipsi se usa
+  indirectamente mediante \texttt{flutter\_secure\_storage} para evitar que los tokens
+  queden expuestos como texto plano.
+
+  \item[LocalFileStorage]
+  Implementaci\'on local de la interfaz \texttt{FileStorage}. Guarda archivos en disco y
+  sirve como soluci\'on inicial antes de migrar a almacenamiento cloud.
+
+  \item[Maven]
+  Herramienta de gesti\'on y construcci\'on de proyectos Java. En Gipsi compila el backend,
+  descarga dependencias, ejecuta pruebas y genera el archivo JAR desplegable.
+
+  \item[Migraci\'on]
+  Script versionado que modifica el esquema de base de datos de forma controlada. Flyway
+  aplica estas migraciones en orden para mantener sincronizados los entornos.
+
+  \item[OWASP]
+  Open Worldwide Application Security Project. Comunidad y conjunto de guias de buenas
+  practicas de seguridad. La rotaci\'on de refresh tokens de Gipsi sigue recomendaciones
+  alineadas con estas guias.
+
+  \item[Payload]
+  Parte de un JWT que contiene las claims del token. Aunque esta codificada, no debe
+  tratarse como informaci\'on secreta; la seguridad del token depende de su firma y de
+  transportarlo por canales seguros.
+
+  \item[Pull-to-refresh]
+  Patr\'on de interfaz en aplicaciones moviles que permite recargar contenido arrastrando
+  la lista hacia abajo. En Gipsi se aplica en la pantalla de exploraci\'on.
+
+  \item[Repositorio de datos]
+  Capa de Spring Data JPA que ofrece operaciones de consulta y persistencia sobre
+  entidades. Reduce la necesidad de escribir SQL manual para operaciones comunes.
+
+  \item[Rotaci\'on de Refresh Tokens]
+  Estrategia de seguridad en la que cada uso del refresh token emite uno nuevo e invalida
+  el anterior. Si un token ya rotado se reutiliza, Gipsi puede detectar el abuso y revocar
+  la cadena de tokens.
+
+  \item[Service]
+  Capa de la arquitectura backend que concentra la l\'ogica de negocio. En Gipsi incluye
+  clases como \texttt{BookingService}, \texttt{AuthService} o \texttt{AvailabilityService}.
+
+  \item[Signature]
+  Firma criptografica de un JWT calculada a partir del header, el payload y el secreto
+  del servidor. Permite detectar si alguien ha modificado el token.
+
+  \item[Skeleton loading]
+  Patr\'on visual que muestra estructuras de carga con forma similar al contenido final.
+  En la exploraci\'on de Gipsi evita una pantalla vacia mientras se recupera la primera
+  pagina de resultados.
+
+  \item[SliverAppBar]
+  Componente de Flutter usado dentro de un \texttt{CustomScrollView} para crear barras
+  superiores flexibles y colapsables. En Gipsi se utiliza en el detalle de negocio para
+  mostrar una portada que cambia al hacer scroll.
+
+  \item[Spring Security]
+  M\'odulo de Spring encargado de autenticaci\'on, autorizaci\'on y filtros de seguridad.
+  En Gipsi valida JWT, aplica reglas por rol y protege endpoints privados.
+
+  \item[Stateless]
+  Propiedad de una API que no guarda sesi\'on del usuario en el servidor entre peticiones.
+  Cada solicitud debe aportar sus credenciales, normalmente mediante un token.
+
+  \item[Swagger UI]
+  Interfaz web generada a partir de OpenAPI para explorar y probar endpoints de la API.
+  En Gipsi se expone durante el desarrollo para facilitar validaci\'on e integraci\'on.
+
+  \item[Transactional]
+  Concepto asociado a operaciones de base de datos que deben ejecutarse como una unidad:
+  si una parte falla, se deshacen los cambios. En Spring se aplica mediante
+  \texttt{@Transactional}.
+
+  \item[Variable de entorno]
+  Valor externo usado para configurar la aplicaci\'on sin escribir credenciales ni ajustes
+  especificos en el c\'odigo fuente. Gipsi las usa para base de datos, JWT, CORS, Firebase
+  y rutas de almacenamiento.
+
+  \item[Volumen Docker]
+  Mecanismo de persistencia usado por Docker para conservar datos fuera del ciclo de vida
+  de los contenedores. En el despliegue de Gipsi se usa para PostgreSQL y almacenamiento
+  de archivos.
+
+\end{description}
+
+\end{document}

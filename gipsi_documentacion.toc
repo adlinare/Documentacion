@@ -1,0 +1,116 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{Resumen}{2}{chapter*.1}%
+\contentsline {chapter}{\'{I}ndice de figuras}{6}{section*.2}%
+\contentsline {chapter}{\'{I}ndice de tablas}{7}{section*.3}%
+\contentsline {chapter}{\numberline {1}Introducción y Contexto}{9}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivación del Proyecto}{9}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Descripción General del Sistema}{9}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Alcance de la Versión Actual}{10}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Objetivos del Proyecto}{11}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Estructura del Documento}{11}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Análisis y Requisitos}{13}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Identificación de Actores}{13}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Requisitos Funcionales}{13}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Módulo de Autenticación (RF-1)}{13}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Módulo de Negocios (RF-2)}{14}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Módulo de Servicios (RF-3)}{15}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Módulo de Reservas (RF-4)}{16}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Módulo de Valoraciones (RF-5)}{17}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}Módulo de Equipo y Horarios (RF-6)}{17}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}Módulo de Perfil y Favoritos (RF-7)}{18}{subsection.2.2.7}%
+\contentsline {section}{\numberline {2.3}Requisitos No Funcionales}{19}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Casos de Uso Principales}{23}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}CU-01: Registro de Cliente}{23}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}CU-02: Exploración y Descubrimiento de Negocios}{23}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}CU-03: Consulta de Disponibilidad}{24}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}CU-04: Dejar Valoración}{24}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}CU-05: Crear Reserva}{25}{subsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.4.6}CU-06: Gestionar Favoritos}{25}{subsection.2.4.6}%
+\contentsline {subsection}{\numberline {2.4.7}CU-07: Cancelar Reserva}{26}{subsection.2.4.7}%
+\contentsline {subsection}{\numberline {2.4.8}CU-08: Vincular Trabajador a un Negocio}{26}{subsection.2.4.8}%
+\contentsline {subsection}{\numberline {2.4.9}CU-09: Gestionar Ausencias del Equipo}{27}{subsection.2.4.9}%
+\contentsline {section}{\numberline {2.5}Modelo de Dominio Conceptual}{27}{section.2.5}%
+\contentsline {chapter}{\numberline {3}Diseño}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Arquitectura General del Sistema}{31}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Principios Arquitectónicos Aplicados}{31}{subsection.3.1.1}%
+\contentsline {paragraph}{Separación de responsabilidades.}{31}{section*.9}%
+\contentsline {paragraph}{Principio de responsabilidad única.}{31}{section*.10}%
+\contentsline {paragraph}{Inversión de dependencias.}{31}{section*.11}%
+\contentsline {paragraph}{Stateless API.}{32}{section*.12}%
+\contentsline {section}{\numberline {3.2}Arquitectura del Backend (Spring Boot)}{32}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Estructura de Paquetes}{32}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Capa de Seguridad: JWT y Spring Security}{33}{subsection.3.2.2}%
+\contentsline {paragraph}{Access token.}{33}{section*.13}%
+\contentsline {paragraph}{Refresh token.}{33}{section*.14}%
+\contentsline {paragraph}{Rotación de Refresh Tokens.}{34}{section*.16}%
+\contentsline {subsection}{\numberline {3.2.3}Cálculo de Disponibilidad Horaria}{35}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Arquitectura del Frontend (Flutter)}{36}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Monorepo con Melos}{36}{subsection.3.3.1}%
+\contentsline {paragraph}{Ventajas del monorepo con Melos.}{36}{section*.17}%
+\contentsline {subsection}{\numberline {3.3.2}Gestión de Estado con Riverpod}{36}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Navegación con go\_router}{37}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Sistema de Diseño: gipsi\_shared\_ui}{38}{subsection.3.3.4}%
+\contentsline {section}{\numberline {3.4}Modelo de Datos Relacional}{38}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Esquema Principal}{38}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Gestión de Migraciones con Flyway}{39}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Diseño de la API REST}{40}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Convenciones Generales}{40}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Catálogo de Endpoints}{40}{subsection.3.5.2}%
+\contentsline {chapter}{\numberline {4}Implementación}{42}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Backend: Detalles de Implementación}{42}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Configuración de Spring Security}{42}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Rate Limiting con Bucket4j}{43}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Notificaciones Push con Firebase}{43}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Jobs Programados}{44}{subsection.4.1.4}%
+\contentsline {section}{\numberline {4.2}Frontend: Detalles de Implementación}{44}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Cliente HTTP con Dio e Interceptor de Refresh}{44}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Pantalla de Exploración}{45}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Pantalla de Detalle de Negocio}{45}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Almacenamiento Seguro de Tokens}{46}{subsection.4.2.4}%
+\contentsline {chapter}{\numberline {5}Pruebas y Evaluación}{47}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Estrategia de Pruebas}{47}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Pruebas Funcionales}{47}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Pruebas del Flujo de Autenticación}{48}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Pruebas del Módulo de Exploración (Frontend)}{48}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Pruebas del Módulo de Disponibilidad}{49}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Pruebas Unitarias}{49}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Pruebas del Backend con JUnit 5}{49}{subsection.5.3.1}%
+\contentsline {subsubsection}{JwtService}{49}{section*.26}%
+\contentsline {subsubsection}{AvailabilityService}{50}{section*.27}%
+\contentsline {subsection}{\numberline {5.3.2}Pruebas del Frontend con flutter\_test}{51}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Evaluación del Sistema}{53}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Pruebas de Rendimiento Manual}{53}{subsection.5.4.1}%
+\contentsline {section}{\numberline {5.5}Capturas de las Pruebas}{53}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Pruebas del flujo de autenticación}{53}{subsection.5.5.1}%
+\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{53}{section*.29}%
+\contentsline {subsection}{\numberline {5.5.2}Resto de capturas funcionales y técnicas}{59}{subsection.5.5.2}%
+\contentsline {chapter}{\numberline {6}Despliegue}{61}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Requisitos de Entorno}{61}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Backend}{61}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Frontend}{61}{subsection.6.1.2}%
+\contentsline {section}{\numberline {6.2}Configuración del Backend}{61}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Variables de Entorno}{61}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Proceso de Arranque}{62}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.3}Configuración del Frontend}{62}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Bootstrap del Monorepo}{62}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Compilación para Distribución}{63}{subsection.6.3.2}%
+\contentsline {section}{\numberline {6.4}Despliegue con Docker (Recomendado para Producción)}{63}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Conclusiones y Posibles Mejoras}{65}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusiones}{65}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Logros Técnicos Destacados}{65}{subsection.7.1.1}%
+\contentsline {paragraph}{Arquitectura de seguridad robusta.}{65}{section*.45}%
+\contentsline {paragraph}{Monorepo Flutter con Melos.}{65}{section*.46}%
+\contentsline {paragraph}{Cálculo de disponibilidad.}{65}{section*.47}%
+\contentsline {paragraph}{Abstracción del almacenamiento.}{65}{section*.48}%
+\contentsline {subsection}{\numberline {7.1.2}Lecciones Aprendidas}{65}{subsection.7.1.2}%
+\contentsline {section}{\numberline {7.2}Posibles Mejoras}{66}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Mejoras a Corto Plazo (Bloques Pendientes)}{66}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Mejoras Arquitectónicas}{66}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Mejoras de Seguridad}{67}{subsection.7.2.3}%
+\contentsline {chapter}{Bibliograf\'{\i }a}{68}{chapter*.49}%
+\contentsline {chapter}{\numberline {A}Configuración Completa del pom.xml}{70}{appendix.Alph1}%
+\contentsline {chapter}{\numberline {B}Configuración del Monorepo (melos.yaml)}{73}{appendix.Alph2}%
+\contentsline {chapter}{\numberline {C}Usuarios de Prueba (DataInitializer)}{74}{appendix.Alph3}%
+\contentsline {chapter}{\numberline {D}Formato de Respuesta de Disponibilidad}{75}{appendix.Alph4}%
+\contentsline {chapter}{\numberline {E}Glosario de Términos}{77}{appendix.Alph5}%
+\contentsline {section}{\numberline {E.1}Glosario de términos técnicos}{77}{section.Alph5.1}%
