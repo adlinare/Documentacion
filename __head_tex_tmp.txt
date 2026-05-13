@@ -1,4 +1,4 @@
-%=============================================================
+﻿%=============================================================
 %  GIPSI — Documentación Técnica del Proyecto
 %  Compilar con: pdflatex → bibtex → pdflatex × 2
 %  Compatible con Overleaf (pdfLaTeX o XeLaTeX)
@@ -1734,14 +1734,6 @@ La estrategia de pruebas de Gipsi sigue la pirámide de testing clásica adaptad
 \label{fig:piramide}
 \end{figure}
 
-Las \textbf{pruebas unitarias} verifican una pieza pequeña y aislada del sistema, normalmente una clase o un método, sustituyendo sus dependencias por \emph{mocks} o dobles de prueba. Su objetivo es comprobar reglas de negocio concretas con la máxima rapidez posible. En este proyecto se usan para validar componentes sensibles del backend, como la generación y validación de tokens o la lógica de cálculo de disponibilidad.
-
-Las \textbf{pruebas de integración} amplían el alcance y comprueban que varios componentes colaboran correctamente entre sí, por ejemplo controlador, servicio, repositorio, seguridad o acceso a base de datos. A diferencia de las unitarias, aquí no interesa tanto aislar una clase como detectar errores de configuración, contratos incorrectos entre capas o fallos en la interacción entre módulos.
-
-Las \textbf{pruebas end-to-end} reproducen un flujo completo desde la perspectiva del usuario o del consumidor de la API, recorriendo el sistema de extremo a extremo. En Gipsi este nivel se ha cubierto en esta fase mediante ejecuciones manuales guiadas, centradas en escenarios funcionales reales como autenticación, exploración y consulta de disponibilidad.
-
-La diferencia principal entre estos tres niveles está en el alcance, la velocidad y el tipo de fallo que permiten detectar. Las unitarias son las más rápidas y precisas para aislar lógica interna; las de integración validan la cooperación entre piezas técnicas; y las end-to-end ofrecen la mayor confianza funcional, aunque son más costosas de ejecutar y mantener.
-
 \section{Pruebas Funcionales}
 
 Las pruebas funcionales verifican que el sistema se comporta correctamente desde la perspectiva del usuario, sin analizar el código interno.
@@ -1816,255 +1808,203 @@ PF-D04 & Consulta sin \texttt{workerId} en negocio multi-worker & Slots con \tex
 
 Spring Boot incluye soporte para pruebas unitarias mediante JUnit 5 y Mockito. Los siguientes casos de prueba representan la batería básica para los componentes más críticos.
 
-En el backend se han priorizado pruebas pequeñas y aisladas que validan reglas de negocio sensibles sin necesidad de levantar toda la aplicación ni depender de integraciones externas. Este enfoque permite comprobar con rapidez el comportamiento de componentes clave y detectar regresiones antes de que alcancen pruebas manuales o escenarios de integración.
-
-Las pruebas incluidas en esta sección no se limitan a verificar que un método devuelve un dato esperado. También comprueban cómo responde el sistema ante tokens expirados, manipulaciones maliciosas y conflictos reales de agenda. Por ello, constituyen una red de seguridad especialmente útil en dos áreas críticas del proyecto: la autenticación y el cálculo de disponibilidad.
-
 \subsubsection{JwtService}
 
 \begin{lstlisting}[style=javaStyle, caption={Pruebas unitarias de JwtService}, label={lst:test-jwt}]
-package com.gipsi.security;
-
-import io.jsonwebtoken.JwtException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+@ExtendWith(MockitoExtension.class)
 class JwtServiceTest {
 
-    private static final String SECRET =
-            Base64.getEncoder().encodeToString(
-                    "testSecretKeyForJwtServiceTestsDeGipsiApp1234567890-HS512-safe-length"
-                            .getBytes(StandardCharsets.UTF_8)
-            );
-
+    @InjectMocks
     private JwtService jwtService;
+
+    private static final String SECRET =
+        "dGVzdFNlY3JldEtleVBhcmFUZXN0c0RlR2lwc2lBcHAxMjM0NTY3ODkw"; // >=64 bytes base64
 
     @BeforeEach
     void setUp() {
-        jwtService = new JwtService(SECRET, 1_800_000L);
-        jwtService.init();
+        ReflectionTestUtils.setField(jwtService, "secretKey", SECRET);
+        ReflectionTestUtils.setField(jwtService, "expirationMs", 1800000L);
     }
 
     @Test
     void generateToken_shouldContainUsername() {
-        String token = jwtService.generateToken("laurasanchez", "CUSTOMER", 1L);
+        UserDetails user = User.withUsername("laurasanchez")
+            .password("hash").roles("CUSTOMER").build();
+
+        String token = jwtService.generateToken(user);
 
         assertThat(jwtService.extractUsername(token)).isEqualTo("laurasanchez");
     }
 
     @Test
-    void isValid_withExpiredToken_shouldReturnFalse() throws InterruptedException {
-        JwtService shortLivedJwtService = new JwtService(SECRET, 1L);
-        shortLivedJwtService.init();
-        String token = shortLivedJwtService.generateToken("test", "CUSTOMER", 1L);
+    void isTokenValid_withExpiredToken_shouldReturnFalse() {
+        // Token con expiración en el pasado (1 ms)
+        ReflectionTestUtils.setField(jwtService, "expirationMs", 1L);
+        UserDetails user = User.withUsername("test")
+            .password("hash").roles("CUSTOMER").build();
+        String token = jwtService.generateToken(user);
 
-        Thread.sleep(25);
+        // Esperar expiración
+        Thread.sleep(10);
 
-        assertThat(shortLivedJwtService.isValid(token)).isFalse();
+        assertThat(jwtService.isTokenValid(token, user)).isFalse();
     }
 
     @Test
-    void extractUsername_withTamperedPayload_shouldThrowJwtException() {
-        String token = jwtService.generateToken("test", "CUSTOMER", 1L);
-        String[] parts = token.split("\\.");
-        String tamperedPayload = parts[1].substring(0, parts[1].length() - 1)
-                + (parts[1].endsWith("A") ? "B" : "A");
-        String tamperedToken = parts[0] + "." + tamperedPayload + "." + parts[2];
+    void isTokenValid_withTamperedPayload_shouldReturnFalse() {
+        UserDetails user = User.withUsername("test")
+            .password("hash").roles("CUSTOMER").build();
+        String token = jwtService.generateToken(user);
+        // Modificar el payload (cambiamos un carácter en el medio)
+        String tampered = token.substring(0, token.indexOf('.') + 10)
+                        + "X"
+                        + token.substring(token.indexOf('.') + 11);
 
-        assertThatThrownBy(() -> jwtService.extractUsername(tamperedToken))
+        assertThatThrownBy(() -> jwtService.extractUsername(tampered))
             .isInstanceOf(JwtException.class);
     }
 }
 \end{lstlisting}
 
-Las pruebas de \texttt{JwtService} verifican el ciclo esencial de vida del token. La primera asegura que, tras generar un JWT, el nombre de usuario queda correctamente embebido y puede recuperarse después. Esto garantiza que el backend podrá reconstruir la identidad del actor autenticado a partir del token recibido en cada petición protegida.
-
-La segunda fuerza la caducidad del token creando una instancia con un tiempo de vida mínimo. Con ello se comprueba que un token deja de considerarse válido una vez superada su ventana temporal, incluso aunque su formato siga siendo correcto. La tercera prueba modifica manualmente el \emph{payload} del JWT para simular una manipulación externa; el resultado esperado es una excepción de tipo \texttt{JwtException}, lo que confirma que la firma deja de ser válida cuando se altera el contenido. En conjunto, estas verificaciones demuestran que el servicio no solo emite tokens, sino que también protege su integridad y aplica correctamente las restricciones de expiración.
-
 \subsubsection{AvailabilityService}
 
 \begin{lstlisting}[style=javaStyle, caption={Pruebas unitarias del servicio de disponibilidad}, label={lst:test-avail}]
-package com.gipsi.service;
-
-import com.gipsi.dto.availability.AvailabilityDtos.AvailabilityResponse;
-import com.gipsi.dto.availability.AvailabilityDtos.AvailabilitySlot;
-import com.gipsi.dto.availability.AvailabilityDtos.SlotUnavailableReason;
-import com.gipsi.entity.Booking;
-import com.gipsi.entity.Business;
-import com.gipsi.entity.Schedule;
-import com.gipsi.entity.ServiceOffered;
-import com.gipsi.entity.Worker;
-import com.gipsi.repository.AbsenceRepository;
-import com.gipsi.repository.BookingRepository;
-import com.gipsi.repository.ScheduleRepository;
-import com.gipsi.repository.ServiceOfferedRepository;
-import com.gipsi.repository.TimeOffRepository;
-import com.gipsi.repository.WorkerRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class AvailabilityServiceTest {
 
-    @Mock
-    private ServiceOfferedRepository serviceRepository;
+    @Mock BookingRepository bookingRepository;
+    @Mock WorkScheduleRepository scheduleRepository;
 
-    @Mock
-    private WorkerRepository workerRepository;
+    @InjectMocks AvailabilityService availabilityService;
 
-    @Mock
-    private ScheduleRepository scheduleRepository;
+    @Test
+    void getSlots_whenWorkerHasTimeOff_allSlotsUnavailable() {
+        Worker worker = buildWorker();
+        ServiceOffered service = buildService(60); // 60 min duración
+        LocalDate date = LocalDate.of(2026, 7, 15);
 
-    @Mock
-    private TimeOffRepository timeOffRepository;
+        when(scheduleRepository.hasTimeOff(worker.getId(), date))
+            .thenReturn(true);
+        when(bookingRepository.findConflicting(anyLong(), any(), any()))
+            .thenReturn(List.of());
 
-    @Mock
-    private BookingRepository bookingRepository;
+        List<SlotDto> slots = availabilityService.getSlots(service, worker, date);
 
-    @Mock
-    private AbsenceRepository absenceRepository;
-
-    private AvailabilityService availabilityService;
-
-    @BeforeEach
-    void setUp() {
-        availabilityService = new AvailabilityService(
-                serviceRepository,
-                workerRepository,
-                scheduleRepository,
-                timeOffRepository,
-                bookingRepository,
-                absenceRepository
-        );
+        assertThat(slots).allMatch(s ->
+            !s.isAvailable() && s.getReason() == SlotReason.TIME_OFF);
     }
 
     @Test
-    void getAvailability_whenWorkerHasTimeOff_allSlotsUnavailable() {
-        LocalDate date = LocalDate.now().plusDays(1);
-        Business business = buildBusiness(1L);
-        Worker worker = buildWorker(10L, business);
-        ServiceOffered service = buildService(100L, business, worker, 60);
+    void getSlots_whenSlotBooked_markedAsBooked() {
+        Worker worker = buildWorker();
+        ServiceOffered service = buildService(30);
+        LocalDate date = LocalDate.of(2026, 7, 16);
 
-        when(serviceRepository.findById(service.getId())).thenReturn(java.util.Optional.of(service));
-        when(workerRepository.findById(worker.getId())).thenReturn(java.util.Optional.of(worker));
-        when(timeOffRepository.findOverlapping(eq(worker.getId()), any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(List.of(new com.gipsi.entity.TimeOff()));
+        // Simular reserva de 09:00-09:30
+        Booking existing = buildBooking(
+            LocalDateTime.of(date, LocalTime.of(9, 0)),
+            LocalDateTime.of(date, LocalTime.of(9, 30)));
+        when(bookingRepository.findConflicting(anyLong(), any(), any()))
+            .thenReturn(List.of(existing));
 
-        AvailabilityResponse response = availabilityService.getAvailability(service.getId(), date, worker.getId());
+        List<SlotDto> slots = availabilityService.getSlots(service, worker, date);
+        SlotDto nineOClock = slots.stream()
+            .filter(s -> s.getStart().equals(LocalTime.of(9, 0)))
+            .findFirst().orElseThrow();
 
-        assertThat(response.slots()).hasSize(96);
-        assertThat(response.slots()).allSatisfy(slot -> {
-            assertThat(slot.available()).isFalse();
-            assertThat(slot.reason()).isEqualTo(SlotUnavailableReason.TIME_OFF);
-        });
-    }
-
-    @Test
-    void getAvailability_whenSlotBooked_markedAsBooked() {
-        LocalDate date = LocalDate.now().plusDays(1);
-        Business business = buildBusiness(2L);
-        Worker worker = buildWorker(20L, business);
-        ServiceOffered service = buildService(200L, business, worker, 30);
-        Schedule schedule = buildSchedule(date, LocalTime.of(9, 0), LocalTime.of(10, 0));
-
-        LocalDateTime bookingStart = LocalDateTime.of(date, LocalTime.of(9, 0));
-        LocalDateTime bookingEnd = LocalDateTime.of(date, LocalTime.of(9, 30));
-
-        when(serviceRepository.findById(service.getId())).thenReturn(java.util.Optional.of(service));
-        when(workerRepository.findById(worker.getId())).thenReturn(java.util.Optional.of(worker));
-        when(timeOffRepository.findOverlapping(eq(worker.getId()), any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(List.of());
-        when(absenceRepository.findApprovedOverlapping(eq(worker.getId()), any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(List.of());
-        when(scheduleRepository.findByActorIdAndDayOfWeek(worker.getId(), date.getDayOfWeek()))
-                .thenReturn(List.of(schedule));
-        when(bookingRepository.findOverlappingForWorker(
-                eq(worker.getId()),
-                any(LocalDateTime.class),
-                any(LocalDateTime.class),
-                anyCollection()))
-                .thenAnswer(invocation -> {
-                    LocalDateTime slotStart = invocation.getArgument(1);
-                    LocalDateTime slotEnd = invocation.getArgument(2);
-                    boolean overlaps = slotStart.isBefore(bookingEnd) && slotEnd.isAfter(bookingStart);
-                    return overlaps ? List.of(new Booking()) : List.of();
-                });
-
-        AvailabilityResponse response = availabilityService.getAvailability(service.getId(), date, worker.getId());
-
-        AvailabilitySlot nineOClock = response.slots().stream()
-                .filter(slot -> slot.start().equals(LocalTime.of(9, 0)))
-                .findFirst()
-                .orElseThrow();
-
-        assertThat(nineOClock.available()).isFalse();
-        assertThat(nineOClock.reason()).isEqualTo(SlotUnavailableReason.BOOKED);
-        assertThat(nineOClock.end()).isEqualTo(LocalTime.of(9, 30));
-    }
-
-    private Business buildBusiness(Long id) {
-        Business business = new Business();
-        business.setId(id);
-        business.setAutonomous(false);
-        business.setAvailabilityHorizonDays(60);
-        return business;
-    }
-
-    private Worker buildWorker(Long id, Business business) {
-        Worker worker = new Worker();
-        worker.setId(id);
-        worker.setBusiness(business);
-        worker.setAvailable(true);
-        worker.setAllowOvertime(false);
-        return worker;
-    }
-
-    private ServiceOffered buildService(Long id, Business business, Worker worker, int duration) {
-        ServiceOffered service = new ServiceOffered();
-        service.setId(id);
-        service.setBusiness(business);
-        service.setDuration(duration);
-        service.setActive(true);
-        service.setWorkers(Set.of(worker));
-        return service;
-    }
-
-    private Schedule buildSchedule(LocalDate date, LocalTime start, LocalTime end) {
-        Schedule schedule = new Schedule();
-        schedule.setDayOfWeek(date.getDayOfWeek());
-        schedule.setStartTime(start);
-        schedule.setEndTime(end);
-        return schedule;
+        assertThat(nineOClock.isAvailable()).isFalse();
+        assertThat(nineOClock.getReason()).isEqualTo(SlotReason.BOOKED);
     }
 }
 \end{lstlisting}
 
-Las pruebas de \texttt{AvailabilityService} se centran en validar la lógica que traduce horarios, reservas y ausencias en tramos de disponibilidad consumibles por el cliente. Para ello se aíslan los repositorios con Mockito y se controla el estado de entrada de cada dependencia, de forma que el resultado dependa únicamente de las reglas de negocio del servicio.
+\subsection{Pruebas del Frontend con flutter\_test}
 
-La primera prueba simula que el trabajador tiene un periodo de \texttt{TimeOff} solapado con la fecha consultada. El resultado esperado es que los 96 slots de quince minutos del día se marquen como no disponibles y que todos informen de la razón \texttt{TIME\_OFF}. De este modo se verifica que la indisponibilidad global del trabajador prevalece sobre cualquier otra posible condición.
+Flutter proporciona el framework de testing \texttt{flutter\_test} que permite renderizar widgets en un entorno de prueba sin necesidad de un dispositivo o emulador.
 
-La segunda prueba reproduce un escenario más preciso: el trabajador sí tiene horario, no presenta ausencias aprobadas y existe una reserva previa exactamente en la franja de las 09:00 a las 09:30. La comprobación final confirma que ese slot concreto aparece como no disponible, que la causa informada es \texttt{BOOKED} y que la duración del tramo coincide con la del servicio solicitado. Esto valida que el algoritmo detecta solapes reales con reservas existentes y devuelve al frontend una representación fiel de qué huecos pueden ofrecerse y cuáles no.
+\begin{lstlisting}[style=dartStyle, caption={Prueba de widget — BusinessCard}, label={lst:test-widget}]
+import 'package:flutter_test/flutter_test.dart';
+import 'package:gipsi_shared_ui/gipsi_shared_ui.dart';
+import 'package:gipsi/features/explore/widgets/business_card.dart';
+
+void main() {
+  testWidgets('BusinessCard muestra nombre y ciudad', (tester) async {
+    final business = BusinessModel(
+      id: 1,
+      name: 'Peluquería Style',
+      city: 'Sevilla',
+      avgRating: 4.5,
+      reviewCount: 23,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: BusinessCard(business: business)),
+      ),
+    );
+
+    expect(find.text('Peluquería Style'), findsOneWidget);
+    expect(find.text('Sevilla'),          findsOneWidget);
+    expect(find.text('4.5'),              findsOneWidget);
+  });
+
+  testWidgets('BusinessCard navega al hacer tap', (tester) async {
+    String? navigatedTo;
+    final business = BusinessModel(id: 42, name: 'Test', city: 'Málaga');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: BusinessCard(
+            business: business,
+            onTap: (id) => navigatedTo = '/business/$id',
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(BusinessCard));
+    expect(navigatedTo, equals('/business/42'));
+  });
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=dartStyle, caption={Prueba del AuthController con Riverpod}, label={lst:test-auth-provider}]
+void main() {
+  group('AuthController', () {
+    late ProviderContainer container;
+
+    setUp(() {
+      container = ProviderContainer(overrides: [
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+        secureStorageProvider.overrideWithValue(FakeSecureStorage()),
+      ]);
+    });
+
+    tearDown(() => container.dispose());
+
+    test('login exitoso actualiza estado a autenticado', () async {
+      final notifier = container.read(authControllerProvider.notifier);
+      await notifier.login('laurasanchez', 'password123');
+
+      final state = container.read(authControllerProvider);
+      expect(state.isAuthenticated, isTrue);
+      expect(state.user?.username, equals('laurasanchez'));
+    });
+
+    test('login fallido mantiene estado no autenticado', () async {
+      final notifier = container.read(authControllerProvider.notifier);
+      expect(
+        () => notifier.login('usuario', 'incorrecta'),
+        throwsA(isA<AuthException>()),
+      );
+
+      final state = container.read(authControllerProvider);
+      expect(state.isAuthenticated, isFalse);
+    });
+  });
+}
+\end{lstlisting}
 
 \section{Evaluación del Sistema}
 
@@ -2134,107 +2074,13 @@ PF-A08 & Enviar \texttt{POST /auth/register/customer} con un email ya existente.
 \TestScreenshot{PF-A07 --- Acceso a recurso de negocio con rol CUSTOMER}{capturas_pruebas/pf-a07-rol-customer.png}{fig:captura-pf-a07}
 \TestScreenshot{PF-A08 --- Registro con email ya existente}{capturas_pruebas/pf-a08-email-existente.png}{fig:captura-pf-a08}
 
-\subsection{Pruebas del módulo de exploración}
+\subsection{Resto de capturas funcionales y técnicas}
 
-\subsubsection{Procedimiento manual para obtener las capturas}
+\TestScreenshot{Captura de pruebas del módulo de exploración}{capturas_pruebas/prueba-exploracion.png}{fig:captura-prueba-exploracion}
+\TestScreenshot{Captura de pruebas del módulo de disponibilidad}{capturas_pruebas/prueba-disponibilidad.png}{fig:captura-prueba-disponibilidad}
+\TestScreenshot{Captura de ejecución de pruebas unitarias}{capturas_pruebas/pruebas-unitarias.png}{fig:captura-pruebas-unitarias}
+\TestScreenshot{Captura de pruebas de rendimiento manual}{capturas_pruebas/pruebas-rendimiento.png}{fig:captura-pruebas-rendimiento}
 
-Para documentar las pruebas de exploración se ejecuta la app Flutter conectada al backend local con datos de ejemplo cargados por \texttt{DataInitializer}. Las capturas se realizan desde el emulador Android, simulador iOS o dispositivo físico mientras se navega por la pestaña \texttt{Explorar}.
-\begin{enumerate}
-  \item Iniciar el backend con el perfil \texttt{dev} y comprobar que la API responde en \texttt{http://localhost:8080}.
-  \item Lanzar el frontend con \texttt{flutter run} y verificar que la app carga la pestaña \texttt{Explorar} consumiendo \texttt{GET /categories} y \texttt{GET /businesses} con paginación y orden ascendente.
-  \item Ejecutar cada caso de la Tabla~\ref{tab:guia-capturas-explore}, verificando el comportamiento visual esperado antes de realizar la captura.
-  \item Guardar cada imagen con el nombre indicado para mantener trazabilidad directa entre el caso de prueba y la evidencia visual.
-\end{enumerate}
-
-\begin{table}[H]
-\centering
-\caption{Guía de ejecución manual para capturas del módulo de exploración}
-\label{tab:guia-capturas-explore}
-\TestTableSetup
-\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y@{}}
-\toprule
-ID & Preparación y acción & Captura a guardar \\
-\midrule
-PF-E01 & Abrir la pestaña \texttt{Explorar} con backend activo y esperar a que terminen la carga inicial de categorías y tarjetas. Comprobar que se muestran negocios reales. & \texttt{pf-e01-explorar-inicial.png} \\
-PF-E02 & Seleccionar la categoría \texttt{Peluquería} y comprobar que el listado queda filtrado mostrando solo negocios de esa categoría. & \texttt{pf-e02-explorar-peluqueria.png} \\
-PF-E03 & Realizar gesto de \textit{pull-to-refresh} sobre la lista y capturar el estado de recarga mientras se solicitan de nuevo los datos al servidor. & \texttt{pf-e03-explorar-refresh.png} \\
-PF-E04 & Tocar una tarjeta de negocio desde \texttt{Explorar} y comprobar que la navegación lleva a la vista de detalle del negocio seleccionado. & \texttt{pf-e04-explorar-detalle.png} \\
-PF-E05 & Repetir la apertura de \texttt{Explorar} con el backend detenido o inaccesible para comprobar que aparece el estado de error con botón \texttt{Reintentar}. & \texttt{pf-e05-explorar-error.png} \\
-PF-E06 & Aplicar un filtro o dataset de prueba sin resultados y comprobar que se muestra el estado vacío con mensaje descriptivo. & \texttt{pf-e06-explorar-vacio.png} \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\TestScreenshot{PF-E01 --- Carga inicial de la pestaña Explorar}{capturas_pruebas/pf-e01-explorar-inicial.png}{fig:captura-pf-e01}
-\TestScreenshot{PF-E02 --- Filtrado por categoría Peluquería}{capturas_pruebas/pf-e02-explorar-peluqueria.png}{fig:captura-pf-e02}
-\TestScreenshot{PF-E03 --- Recarga manual con pull-to-refresh}{capturas_pruebas/pf-e03-explorar-refresh.png}{fig:captura-pf-e03}
-\TestScreenshot{PF-E04 --- Navegación al detalle de negocio}{capturas_pruebas/pf-e04-explorar-detalle.png}{fig:captura-pf-e04}
-\TestScreenshot{PF-E05 --- Estado de error con backend caído}{capturas_pruebas/pf-e05-explorar-error.png}{fig:captura-pf-e05}
-\TestScreenshot{PF-E06 --- Estado vacío sin resultados}{capturas_pruebas/pf-e06-explorar-vacio.png}{fig:captura-pf-e06}
-
-\subsection{Pruebas del módulo de disponibilidad}
-
-\subsubsection{Procedimiento manual para obtener las capturas}
-
-Para documentar las pruebas de disponibilidad se consulta manualmente el endpoint \texttt{GET /services/\{id\}/availability} desde Postman, Insomnia o Swagger UI, utilizando el backend local con el perfil \texttt{dev}. Este enfoque permite inspeccionar directamente los campos \texttt{slots}, \texttt{reason} y \texttt{availableWorkerIds} que constituyen la evidencia funcional del cálculo horario.
-\begin{enumerate}
-  \item Iniciar el backend con el perfil \texttt{dev} y abrir Swagger UI o Postman apuntando a \texttt{http://localhost:8080}.
-  \item Localizar un \texttt{serviceId} de prueba y, cuando aplique, un \texttt{workerId}, a partir de los datos expuestos por la API o de los negocios de ejemplo cargados por \texttt{DataInitializer}.
-  \item Ejecutar una petición por cada caso de la Tabla~\ref{tab:guia-capturas-avail}, comprobando que la respuesta JSON refleja el escenario esperado.
-  \item Guardar la captura de la respuesta con el nombre indicado para que la evidencia quede alineada con el ID del caso de prueba.
-\end{enumerate}
-
-\begin{table}[H]
-\centering
-\caption{Guía de ejecución manual para capturas del módulo de disponibilidad}
-\label{tab:guia-capturas-avail}
-\TestTableSetup
-\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y@{}}
-\toprule
-ID & Preparación y acción & Captura a guardar \\
-\midrule
-PF-D01 & Consultar \texttt{GET /services/\{id\}/availability} indicando \texttt{date=YYYY-MM-DD} para un día laborable con horario activo. Comprobar mezcla de slots disponibles e indisponibles. & \texttt{pf-d01-disponibilidad-laborable.png} \\
-PF-D02 & Consultar la disponibilidad para una fecha fuera de horario o festiva y comprobar que todos los slots devueltos aparecen con motivo \texttt{OUT\_OF\_SCHEDULE}. & \texttt{pf-d02-disponibilidad-fuera-horario.png} \\
-PF-D03 & Consultar una fecha con una reserva previa y comprobar que el slot afectado se devuelve con motivo \texttt{BOOKED}. & \texttt{pf-d03-disponibilidad-booked.png} \\
-PF-D04 & Repetir la consulta omitiendo \texttt{workerId} en un negocio con varios trabajadores y comprobar que la respuesta incluye \texttt{availableWorkerIds}. & \texttt{pf-d04-disponibilidad-multiworker.png} \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\TestScreenshot{PF-D01 --- Disponibilidad en día laborable}{capturas_pruebas/pf-d01-disponibilidad-laborable.png}{fig:captura-pf-d01}
-\TestScreenshot{PF-D02 --- Disponibilidad fuera de horario}{capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png}{fig:captura-pf-d02}
-\TestScreenshot{PF-D03 --- Slot marcado como BOOKED}{capturas_pruebas/pf-d03-disponibilidad-booked.png}{fig:captura-pf-d03}
-\TestScreenshot{PF-D04 --- Disponibilidad agregada en negocio multi-worker}{capturas_pruebas/pf-d04-disponibilidad-multiworker.png}{fig:captura-pf-d04}
-
-\subsection{Capturas de pruebas unitarias del backend}
-
-\subsubsection{Procedimiento seguido para obtener las capturas}
-
-Las evidencias visuales del punto 5.3.1 se obtuvieron ejecutando las pruebas unitarias del backend desde el proyecto \texttt{repos/Gipsi-API}, utilizando el runner del entorno de desarrollo para dejar visibles todos los métodos de cada clase. Como en esta documentación se incluyó una captura por clase de prueba, se ejecutó cada clase completa y se guardó la imagen una vez que todos sus métodos aparecieron en estado correcto.
-\begin{enumerate}
-  \item Se abrió el proyecto backend y se accedió a las clases \texttt{JwtServiceTest} y \texttt{AvailabilityServiceTest}.
-  \item Se ejecutó cada clase completa, sin lanzar los métodos \texttt{@Test} por separado.
-  \item Se comprobó que todos los métodos aparecían en verde o como finalizados correctamente dentro del runner.
-  \item Se guardó una captura por clase con el nombre indicado para mantener la correspondencia directa entre la evidencia y la prueba documentada en el punto 5.3.1.
-\end{enumerate}
-
-\begin{table}[H]
-\centering
-\caption{Resumen del procedimiento seguido para las capturas de las pruebas unitarias del backend}
-\label{tab:guia-capturas-unitarias-backend}
-\TestTableSetup
-\begin{tabularx}{\textwidth}{@{}C{0.13\textwidth}Y Y@{}}
-\toprule
-ID & Clase y evidencia & Captura guardada \\
-\midrule
-PU-B01 & Se ejecutó la clase completa \texttt{JwtServiceTest}. En la captura aparecieron en verde los métodos \texttt{generateToken\_shouldContainUsername}, \texttt{isValid\_withExpiredToken\_shouldReturnFalse} y \texttt{extractUsername\_withTamperedPayload\_shouldThrowJwtException}. & \texttt{pu-b01-jwtservice-completo.png} \\
-PU-B02 & Se ejecutó la clase completa \texttt{AvailabilityServiceTest}. En la captura aparecieron en verde los métodos \texttt{getAvailability\_whenWorkerHasTimeOff\_allSlotsUnavailable} y \texttt{getAvailability\_whenSlotBooked\_markedAsBooked}. & \texttt{pu-b02-availabilityservice-completo.png} \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\TestScreenshot{PU-B01 --- Ejecucion completa de JwtServiceTest}{capturas_pruebas/pu-b01-jwtservice-completo.png}{fig:captura-pu-b01}
-\TestScreenshot{PU-B02 --- Ejecucion completa de AvailabilityServiceTest}{capturas_pruebas/pu-b02-availabilityservice-completo.png}{fig:captura-pu-b02}
 %=============================================================
 %  CAPÍTULO 6 — DESPLIEGUE
 %=============================================================

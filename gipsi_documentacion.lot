@@ -1,34 +1,37 @@
 \babel@toc {spanish}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces Actores del sistema Gipsi}}{13}{table.caption.5}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Requisitos funcionales --- Módulo de Autenticación}}{14}{table.2.2}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Requisitos funcionales --- Módulo de Negocios}}{14}{table.2.3}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces Requisitos funcionales --- Módulo de Servicios}}{15}{table.2.4}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces Requisitos funcionales --- Módulo de Reservas}}{16}{table.2.5}%
-\contentsline {table}{\numberline {2.6}{\ignorespaces Requisitos funcionales --- Módulo de Valoraciones}}{17}{table.2.6}%
-\contentsline {table}{\numberline {2.7}{\ignorespaces Requisitos funcionales --- Módulo de Equipo y Horarios}}{18}{table.2.7}%
-\contentsline {table}{\numberline {2.8}{\ignorespaces Requisitos funcionales --- Módulo de Perfil y Favoritos}}{18}{table.2.8}%
-\contentsline {table}{\numberline {2.9}{\ignorespaces Requisitos no funcionales}}{19}{table.2.9}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Actores del sistema Gipsi}}{15}{table.caption.5}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Requisitos funcionales --- Módulo de Autenticación}}{16}{table.2.2}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Requisitos funcionales --- Módulo de Negocios}}{16}{table.2.3}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces Requisitos funcionales --- Módulo de Servicios}}{17}{table.2.4}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces Requisitos funcionales --- Módulo de Reservas}}{18}{table.2.5}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces Requisitos funcionales --- Módulo de Valoraciones}}{19}{table.2.6}%
+\contentsline {table}{\numberline {2.7}{\ignorespaces Requisitos funcionales --- Módulo de Equipo y Horarios}}{20}{table.2.7}%
+\contentsline {table}{\numberline {2.8}{\ignorespaces Requisitos funcionales --- Módulo de Perfil y Favoritos}}{20}{table.2.8}%
+\contentsline {table}{\numberline {2.9}{\ignorespaces Requisitos no funcionales}}{21}{table.2.9}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Tokens de color del sistema de diseño Gipsi}}{38}{table.caption.18}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Endpoints de la API — Autenticación y Perfil}}{40}{table.caption.19}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Endpoints de la API — Negocios y Servicios}}{40}{table.caption.20}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Endpoints de la API — Reservas y Valoraciones}}{41}{table.caption.21}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Casos de prueba — Autenticación}}{48}{table.caption.23}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Casos de prueba — Exploración en frontend}}{48}{table.caption.24}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Casos de prueba — Disponibilidad horaria}}{49}{table.caption.25}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Tiempos de respuesta medidos en entorno local}}{53}{table.caption.28}%
-\contentsline {table}{\numberline {5.5}{\ignorespaces Gu\'ia de ejecuci\'on manual para capturas del flujo de autenticaci\'on}}{54}{table.caption.30}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Requisitos de entorno del backend}}{61}{table.caption.43}%
-\contentsline {table}{\numberline {6.2}{\ignorespaces Requisitos de entorno del frontend}}{61}{table.caption.44}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Tokens de color del sistema de diseño Gipsi}}{40}{table.caption.18}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Endpoints de la API — Autenticación y Perfil}}{42}{table.caption.19}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Endpoints de la API — Negocios y Servicios}}{42}{table.caption.20}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Endpoints de la API — Reservas y Valoraciones}}{43}{table.caption.21}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Casos de prueba — Autenticación}}{50}{table.caption.23}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Casos de prueba — Exploración en frontend}}{51}{table.caption.24}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Casos de prueba — Disponibilidad horaria}}{51}{table.caption.25}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Tiempos de respuesta medidos en entorno local}}{57}{table.caption.28}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Gu\'ia de ejecuci\'on manual para capturas del flujo de autenticaci\'on}}{58}{table.caption.30}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Guía de ejecución manual para capturas del módulo de exploración}}{63}{table.caption.40}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Guía de ejecución manual para capturas del módulo de disponibilidad}}{67}{table.caption.48}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Resumen del procedimiento seguido para las capturas de las pruebas unitarias del backend}}{70}{table.caption.54}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Requisitos de entorno del backend}}{72}{table.caption.57}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Requisitos de entorno del frontend}}{72}{table.caption.58}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {C.1}{\ignorespaces Usuarios de prueba creados por DataInitializer}}{74}{table.caption.50}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {C.1}{\ignorespaces Usuarios de prueba creados por DataInitializer}}{85}{table.caption.64}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
