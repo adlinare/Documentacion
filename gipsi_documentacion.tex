@@ -411,7 +411,7 @@ El sistema distingue tres tipos de actores: \textbf{clientes}, \textbf{negocios}
 
 \section{Alcance de la Versión Actual}
 
-La versión documentada en este proyecto recoge el estado funcional actual de los repositorios backend y frontend. El objetivo de esta versión es mostrar una experiencia completa del producto: el cliente puede descubrir negocios, consultar servicios, reservar citas y gestionar su perfil; por su parte, el negocio o trabajador dispone de una aplicación de gestión para agenda, equipo, horarios, servicios y ausencias.
+La versión documentada en este proyecto recoge el estado funcional actual de los repositorios backend y frontend. El objetivo de esta versión es mostrar una experiencia completa del producto: el cliente puede descubrir negocios, consultar servicios, reservar citas y gestionar su perfil, por su parte, el negocio o trabajador dispone de una aplicación de gestión para agenda, equipo, horarios, servicios y ausencias.
 
 \begin{enumerate}
   \item Registro y autenticación de usuarios con gestión de sesiones mediante tokens JWT, refresh tokens y refresco automático de credenciales.
@@ -568,7 +568,7 @@ RF-4.13 & El sistema debe enviar notificaciones push en eventos de creación, co
 \RequirementTableEnd
 
 \begin{tcolorbox}[notaStyle]
-En la implementación actual una reserva \textbf{activa} es aquella en estado \texttt{PENDING} o \texttt{CONFIRMED}. Las reservas en \texttt{CANCELED} quedan en el histórico, pero dejan de bloquear disponibilidad. El sistema no persiste un estado \texttt{COMPLETED}; para habilitar una valoración se comprueba que la reserva esté \texttt{CONFIRMED}, pertenezca al cliente y que su fecha de fin sea anterior al momento actual.
+En la implementación actual una reserva \textbf{activa} es aquella en estado \texttt{PENDING} o \texttt{CONFIRMED}. Las reservas en \texttt{CANCELED} quedan en el histórico, pero dejan de bloquear disponibilidad. El sistema no persiste un estado \texttt{COMPLETED}, para habilitar una valoración se comprueba que la reserva esté \texttt{CONFIRMED}, pertenezca al cliente y que su fecha de fin sea anterior al momento actual.
 \end{tcolorbox}
 
 \subsection{Módulo de Valoraciones (RF-5)}
@@ -1022,7 +1022,7 @@ Gipsi sigue una arquitectura cliente-servidor clásica con separación física e
 
 \subsection{Principios Arquitectónicos Aplicados}
 
-\paragraph{Separación de responsabilidades.} El backend organiza su código en capas: controladores REST (\textit{Controller}), lógica de negocio (\textit{Service}), acceso a datos (\textit{Repository}) y objetos de transferencia (\textit{DTO}). Ninguna lógica de negocio reside en los controladores; ninguna consulta SQL manual aparece fuera de los repositorios.
+\paragraph{Separación de responsabilidades.} El backend organiza su código en capas: controladores REST (\textit{Controller}), lógica de negocio (\textit{Service}), acceso a datos (\textit{Repository}) y objetos de transferencia (\textit{DTO}). Ninguna lógica de negocio reside en los controladores, ninguna consulta SQL manual aparece fuera de los repositorios.
 
 \paragraph{Principio de responsabilidad única.} Cada clase tiene una única razón de cambio. Por ejemplo, \texttt{JwtService} solo se ocupa de generación y validación de tokens; \texttt{LocalFileStorage} solo gestiona operaciones de disco; \texttt{AvailabilityService} solo calcula disponibilidad horaria.
 

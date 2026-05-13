@@ -1,6 +1,6 @@
-PWD C:\Users\Adrian\Desktop\latex\Documentacion
+PWD c:\Users\Adrian\Desktop\latex\Documentacion
 INPUT C:\Users\Adrian\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT gipsi_documentacion.tex
+INPUT c:\Users\Adrian\Desktop\latex\Documentacion\gipsi_documentacion.tex
 OUTPUT gipsi_documentacion.log
 INPUT C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex\latex\base\report.cls
 INPUT C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex\latex\base\report.cls
