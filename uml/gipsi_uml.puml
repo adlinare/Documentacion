@@ -1,0 +1,188 @@
+@startuml Gipsi-API
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam roundcorner 8
+
+skinparam class {
+  BackgroundColor     #FAFAFA
+  BorderColor         #4A90D9
+  HeaderBackgroundColor #4A90D9
+  HeaderFontColor     #FFFFFF
+  HeaderFontStyle     bold
+  ArrowColor          #2C5F8A
+  FontName            Arial
+  FontSize            12
+  AttributeFontSize   11
+}
+
+skinparam note {
+  BackgroundColor #FFF8DC
+  BorderColor     #C8A800
+}
+
+' ============================================================
+' ENTIDADES
+' ============================================================
+
+enum Role {
+  CUSTOMER
+  BUSINESS
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+class User {
+  + id : Long
+  + email : String
+  + passwordHash : String
+  + role : Role
+  + createdAt : LocalDateTime
+}
+
+class Business {
+  + id : Long
+  + name : String
+  + description : String
+  + city : String
+  + setupComplete : Boolean
+  + profileImageUrl : String
+  + coverImageUrl : String
+  + avgRating : Double
+  + reviewCount : Integer
+}
+
+class Worker {
+  + id : Long
+  + name : String
+  + email : String
+}
+
+class Schedule {
+  + id : Long
+  + dayOfWeek : DayOfWeek
+  + startTime : LocalTime
+  + endTime : LocalTime
+}
+
+class Category {
+  + id : Long
+  + name : String
+}
+
+class ServiceOffered {
+  + id : Long
+  + name : String
+  + description : String
+  + durationMinutes : Integer
+  + price : BigDecimal
+  + imageUrl : String
+  + avgRating : Double
+  + reviewCount : Integer
+}
+
+class Booking {
+  + id : Long
+  + startDateTime : LocalDateTime
+  + endDateTime : LocalDateTime
+  + status : BookingStatus
+  + createdAt : LocalDateTime
+}
+
+class Review {
+  + id : Long
+  + rating : Integer
+  + comment : String
+  + createdAt : LocalDateTime
+}
+
+class RefreshToken {
+  + id : Long
+  + token : String
+  + expiresAt : LocalDateTime
+  + revoked : Boolean
+}
+
+class DeviceToken {
+  + id : Long
+  + fcmToken : String
+  + platform : String
+  + createdAt : LocalDateTime
+}
+
+' ============================================================
+' RELACIONES  (verbo + cardinalidad + sentido de flecha)
+' ============================================================
+
+' Un User registra 0..N negocios (rol BUSINESS)
+User "1" -right-> "0..N" Business : registra >
+
+' Un Business emplea 0..N trabajadores
+Business "1" -down-> "0..N" Worker : emplea >
+
+' Un Worker cumple 0..N turnos horarios
+Worker "1" -down-> "0..N" Schedule : define >
+
+' Un Business ofrece 1..N servicios
+Business "1" -right-> "1..N" ServiceOffered : ofrece >
+
+' Una Category clasifica 0..N servicios
+Category "1" -right-> "0..N" ServiceOffered : clasifica >
+
+' Un User (cliente) realiza 0..N reservas
+User "1" -down-> "0..N" Booking : realiza >
+
+' Un ServiceOffered es solicitado en 0..N reservas
+ServiceOffered "1" -down-> "0..N" Booking : es reservado en >
+
+' Un Worker atiende 0..N reservas (puede ser null en negocios autónomos)
+Worker "0..1" -right-> "0..N" Booking : atiende >
+
+' Una Booking origina 0..1 Review (solo si CONFIRMED y finalizada)
+Booking "1" -right-> "0..1" Review : origina >
+
+' Un User escribe 0..N reviews
+User "1" -right-> "0..N" Review : escribe >
+
+' Una Review evalúa 1 servicio
+Review "0..N" -up-> "1" ServiceOffered : evalúa >
+
+' Una Review valora 1 negocio
+Review "0..N" -left-> "1" Business : valora >
+
+' Un User genera 0..N refresh tokens
+User "1" -left-> "0..N" RefreshToken : genera >
+
+' Un User registra 0..N dispositivos (push FCM)
+User "1" -up-> "0..N" DeviceToken : registra >
+
+' ============================================================
+' NOTAS ACLARATORIAS
+' ============================================================
+
+note bottom of Review
+  Solo se puede crear si
+  Booking.status = CONFIRMED
+  y endDateTime < now()
+  UNIQUE(booking_id)
+end note
+
+note right of RefreshToken
+  Rotación: al renovar,
+  el token anterior queda
+  revocado automáticamente
+end note
+
+note bottom of Booking
+  Worker puede ser null
+  en negocios autónomos
+  (se asigna cualquier
+  trabajador disponible)
+end note
+
+@enduml

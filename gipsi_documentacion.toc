@@ -33,20 +33,20 @@
 \contentsline {chapter}{\numberline {3}Diseño}{33}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Arquitectura General del Sistema}{33}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Principios Arquitectónicos Aplicados}{33}{subsection.3.1.1}%
-\contentsline {paragraph}{Separación de responsabilidades.}{33}{section*.9}%
-\contentsline {paragraph}{Principio de responsabilidad única.}{33}{section*.10}%
-\contentsline {paragraph}{Inversión de dependencias.}{33}{section*.11}%
-\contentsline {paragraph}{Stateless API.}{34}{section*.12}%
+\contentsline {paragraph}{Separación de responsabilidades.}{33}{section*.10}%
+\contentsline {paragraph}{Principio de responsabilidad única.}{33}{section*.11}%
+\contentsline {paragraph}{Inversión de dependencias.}{33}{section*.12}%
+\contentsline {paragraph}{Stateless API.}{34}{section*.13}%
 \contentsline {section}{\numberline {3.2}Arquitectura del Backend (Spring Boot)}{34}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Estructura de Paquetes}{34}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}Capa de Seguridad: JWT y Spring Security}{35}{subsection.3.2.2}%
-\contentsline {paragraph}{Access token.}{35}{section*.13}%
-\contentsline {paragraph}{Refresh token.}{36}{section*.14}%
-\contentsline {paragraph}{Rotación de Refresh Tokens.}{36}{section*.16}%
+\contentsline {paragraph}{Access token.}{35}{section*.14}%
+\contentsline {paragraph}{Refresh token.}{36}{section*.15}%
+\contentsline {paragraph}{Rotación de Refresh Tokens.}{36}{section*.17}%
 \contentsline {subsection}{\numberline {3.2.3}Cálculo de Disponibilidad Horaria}{37}{subsection.3.2.3}%
 \contentsline {section}{\numberline {3.3}Arquitectura del Frontend (Flutter)}{38}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Monorepo con Melos}{38}{subsection.3.3.1}%
-\contentsline {paragraph}{Ventajas del monorepo con Melos.}{39}{section*.18}%
+\contentsline {paragraph}{Ventajas del monorepo con Melos.}{39}{section*.19}%
 \contentsline {subsection}{\numberline {3.3.2}Gestión de Estado con Riverpod}{39}{subsection.3.3.2}%
 \contentsline {subsection}{\numberline {3.3.3}Navegación con go\_router}{40}{subsection.3.3.3}%
 \contentsline {subsection}{\numberline {3.3.4}Sistema de Diseño: gipsi\_shared\_ui}{40}{subsection.3.3.4}%
@@ -75,19 +75,19 @@
 \contentsline {subsection}{\numberline {5.2.3}Pruebas del Módulo de Disponibilidad}{54}{subsection.5.2.3}%
 \contentsline {section}{\numberline {5.3}Pruebas Unitarias}{54}{section.5.3}%
 \contentsline {subsection}{\numberline {5.3.1}Pruebas del Backend con JUnit 5}{54}{subsection.5.3.1}%
-\contentsline {subsubsection}{JwtService}{55}{section*.28}%
-\contentsline {subsubsection}{AvailabilityService}{56}{section*.29}%
+\contentsline {subsubsection}{JwtService}{55}{section*.29}%
+\contentsline {subsubsection}{AvailabilityService}{56}{section*.30}%
 \contentsline {section}{\numberline {5.4}Evaluación del Sistema}{60}{section.5.4}%
 \contentsline {subsection}{\numberline {5.4.1}Pruebas de Rendimiento Manual}{60}{subsection.5.4.1}%
 \contentsline {section}{\numberline {5.5}Capturas de las Pruebas}{60}{section.5.5}%
 \contentsline {subsection}{\numberline {5.5.1}Pruebas del flujo de autenticación}{60}{subsection.5.5.1}%
-\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{60}{section*.31}%
+\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{60}{section*.32}%
 \contentsline {subsection}{\numberline {5.5.2}Pruebas del módulo de exploración}{65}{subsection.5.5.2}%
-\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{65}{section*.41}%
+\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{65}{section*.42}%
 \contentsline {subsection}{\numberline {5.5.3}Pruebas del módulo de disponibilidad}{69}{subsection.5.5.3}%
-\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{69}{section*.49}%
+\contentsline {subsubsection}{Procedimiento manual para obtener las capturas}{69}{section*.50}%
 \contentsline {subsection}{\numberline {5.5.4}Capturas de pruebas unitarias del backend}{72}{subsection.5.5.4}%
-\contentsline {subsubsection}{Procedimiento seguido para obtener las capturas}{72}{section*.55}%
+\contentsline {subsubsection}{Procedimiento seguido para obtener las capturas}{72}{section*.56}%
 \contentsline {chapter}{\numberline {6}Despliegue}{75}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Requisitos de Entorno}{75}{section.6.1}%
 \contentsline {subsection}{\numberline {6.1.1}Backend}{75}{subsection.6.1.1}%
@@ -106,16 +106,16 @@
 \contentsline {chapter}{\numberline {7}Conclusiones y Posibles Mejoras}{83}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Conclusiones}{83}{section.7.1}%
 \contentsline {subsection}{\numberline {7.1.1}Logros Técnicos Destacados}{83}{subsection.7.1.1}%
-\contentsline {paragraph}{Arquitectura de seguridad robusta.}{83}{section*.62}%
-\contentsline {paragraph}{Monorepo Flutter con Melos.}{83}{section*.63}%
-\contentsline {paragraph}{Cálculo de disponibilidad.}{83}{section*.64}%
-\contentsline {paragraph}{Abstracción del almacenamiento.}{83}{section*.65}%
+\contentsline {paragraph}{Arquitectura de seguridad robusta.}{83}{section*.63}%
+\contentsline {paragraph}{Monorepo Flutter con Melos.}{83}{section*.64}%
+\contentsline {paragraph}{Cálculo de disponibilidad.}{83}{section*.65}%
+\contentsline {paragraph}{Abstracción del almacenamiento.}{83}{section*.66}%
 \contentsline {subsection}{\numberline {7.1.2}Lecciones Aprendidas}{83}{subsection.7.1.2}%
 \contentsline {section}{\numberline {7.2}Posibles Mejoras}{84}{section.7.2}%
 \contentsline {subsection}{\numberline {7.2.1}Mejoras a Corto Plazo}{84}{subsection.7.2.1}%
 \contentsline {subsection}{\numberline {7.2.2}Mejoras Arquitectónicas}{84}{subsection.7.2.2}%
 \contentsline {subsection}{\numberline {7.2.3}Mejoras de Seguridad}{85}{subsection.7.2.3}%
-\contentsline {chapter}{Bibliograf\'{\i }a}{86}{chapter*.66}%
+\contentsline {chapter}{Bibliograf\'{\i }a}{86}{chapter*.67}%
 \contentsline {chapter}{\numberline {A}Configuración Completa del pom.xml}{88}{appendix.Alph1}%
 \contentsline {chapter}{\numberline {B}Configuración del Monorepo (melos.yaml)}{91}{appendix.Alph2}%
 \contentsline {chapter}{\numberline {C}Usuarios de Prueba (DataInitializer)}{92}{appendix.Alph3}%

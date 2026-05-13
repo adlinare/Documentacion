@@ -984,6 +984,8 @@ Las entidades \texttt{Customer}, \texttt{Business} y \texttt{Worker} extienden \
 
 Además, los favoritos del cliente se materializan mediante relaciones muchos a muchos hacia \texttt{Business} y \texttt{ServiceOffered}, mientras que el catálogo de servicios y la agenda operativa quedan conectados con el motor de reservas a través de \texttt{ServiceOffered}, \texttt{Schedule}, \texttt{TimeOff} y \texttt{Absence}.
 
+\TestScreenshot{UML completo}{capturas_pruebas/Gipsi-API.png}{fig:uml-entidades claves}
+
 %=============================================================
 %  CAPÍTULO 3 — DISEÑO
 %=============================================================
@@ -1949,7 +1951,7 @@ PF-A03 & 11 intentos de login seguidos & 11ª petición devuelve HTTP 429 & \che
 PF-A04 & Refresh con token válido & HTTP 200, nuevos tokens; el antiguo queda revocado & \checkmark \\
 PF-A05 & Refresh con token ya rotado (simulación de robo) & HTTP 401, sesión invalidada & \checkmark \\
 PF-A06 & Acceso a \texttt{/me} sin token & HTTP 401 & \checkmark \\
-PF-A07 & Acceso a \texttt{/businesses/me/images} con rol CUSTOMER & HTTP 403 & \checkmark \\
+PF-A07 & Acceso a \texttt{/businesses/me} con rol CUSTOMER & HTTP 403 & \checkmark \\
 PF-A08 & Registro con email ya existente & HTTP 409 Conflict & \checkmark \\
 \bottomrule
 \end{tabularx}
@@ -2305,7 +2307,7 @@ PF-A03 & Repetir 11 veces el login incorrecto desde el mismo cliente/IP. La capt
 PF-A04 & Hacer login correcto, copiar el \texttt{refreshToken} y enviarlo a \texttt{POST /auth/refresh}. Comprobar \texttt{200 OK} y nuevos tokens. & \texttt{pf-a04-refresh-valido.png} \\
 PF-A05 & Reutilizar el \texttt{refreshToken} antiguo del caso PF-A04. Comprobar \texttt{403 Forbidden} y que la sesi\'on queda invalidada. & \texttt{pf-a05-refresh-reutilizado.png} \\
 PF-A06 & Enviar \texttt{GET /me} sin cabecera \texttt{Authorization}. Comprobar \texttt{401 Unauthorized}. & \texttt{pf-a06-me-sin-token.png} \\
-PF-A07 & Hacer login como \texttt{laurasanchez}, usar su \texttt{accessToken} en \texttt{POST /businesses/me/images/profile} y comprobar \texttt{403 Forbidden}. & \texttt{pf-a07-rol-customer.png} \\
+PF-A07 & Hacer login como \texttt{laurasanchez}, usar su \texttt{accessToken} en \texttt{POST /businesses/me} y comprobar \texttt{403 Forbidden}. & \texttt{pf-a07-rol-customer.png} \\
 PF-A08 & Enviar \texttt{POST /auth/register/customer} con un email ya existente. Comprobar \texttt{409 Conflict}. & \texttt{pf-a08-email-existente.png} \\
 \bottomrule
 \end{tabularx}
