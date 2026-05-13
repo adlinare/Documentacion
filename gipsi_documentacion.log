@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.12)  13 MAY 2026 16:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.12)  13 MAY 2026 17:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1260,7 +1260,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 LaTeX Info: Redefining \. on input line 2317.
 LaTeX Info: Redefining \% on input line 2317.
  [61]
-<capturas_pruebas/pf-a04-refresh-valido.png, id=1693, 966.61125pt x 572.89032pt>
+<capturas_pruebas/pf-a03-rate-limit-login.png, id=1693, 965.10562pt x 570.63188pt>
+File: capturas_pruebas/pf-a03-rate-limit-login.png Graphic file (type png)
+<use capturas_pruebas/pf-a03-rate-limit-login.png>
+Package pdftex.def Info: capturas_pruebas/pf-a03-rate-limit-login.png  used on input line 2318.
+(pdftex.def)             Requested size: 405.7355pt x 239.89885pt.
+<capturas_pruebas/pf-a04-refresh-valido.png, id=1694, 966.61125pt x 572.89032pt>
 File: capturas_pruebas/pf-a04-refresh-valido.png Graphic file (type png)
 <use capturas_pruebas/pf-a04-refresh-valido.png>
 Package pdftex.def Info: capturas_pruebas/pf-a04-refresh-valido.png  used on input line 2319.
@@ -1269,12 +1274,12 @@ Package pdftex.def Info: capturas_pruebas/pf-a04-refresh-valido.png  used on inp
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [62 <./capturas_pruebas/pf-a01-login-correcto.png> <./capturas_pruebas/pf-a02-login-error.png>]
-<capturas_pruebas/pf-a05-refresh-reutilizado.png, id=1700, 962.84718pt x 570.63188pt>
+<capturas_pruebas/pf-a05-refresh-reutilizado.png, id=1701, 962.84718pt x 570.63188pt>
 File: capturas_pruebas/pf-a05-refresh-reutilizado.png Graphic file (type png)
 <use capturas_pruebas/pf-a05-refresh-reutilizado.png>
 Package pdftex.def Info: capturas_pruebas/pf-a05-refresh-reutilizado.png  used on input line 2320.
 (pdftex.def)             Requested size: 405.7355pt x 240.4561pt.
-<capturas_pruebas/pf-a06-me-sin-token.png, id=1701, 966.61125pt x 571.38469pt>
+<capturas_pruebas/pf-a06-me-sin-token.png, id=1702, 966.61125pt x 571.38469pt>
 File: capturas_pruebas/pf-a06-me-sin-token.png Graphic file (type png)
 <use capturas_pruebas/pf-a06-me-sin-token.png>
 Package pdftex.def Info: capturas_pruebas/pf-a06-me-sin-token.png  used on input line 2321.
@@ -1284,13 +1289,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Info: Redefining \. on input line 2321.
 LaTeX Info: Redefining \% on input line 2321.
- [63 <./capturas_pruebas/pf-a04-refresh-valido.png>]
-<capturas_pruebas/pf-a07-rol-customer.png, id=1707, 964.35281pt x 569.12625pt>
+ [63 <./capturas_pruebas/pf-a03-rate-limit-login.png> <./capturas_pruebas/pf-a04-refresh-valido.png>]
+<capturas_pruebas/pf-a07-rol-customer.png, id=1709, 964.35281pt x 569.12625pt>
 File: capturas_pruebas/pf-a07-rol-customer.png Graphic file (type png)
 <use capturas_pruebas/pf-a07-rol-customer.png>
 Package pdftex.def Info: capturas_pruebas/pf-a07-rol-customer.png  used on input line 2322.
 (pdftex.def)             Requested size: 405.7355pt x 239.44823pt.
-<capturas_pruebas/pf-a08-email-existente.png, id=1708, 960.58875pt x 569.12625pt>
+<capturas_pruebas/pf-a08-email-existente.png, id=1710, 960.58875pt x 569.12625pt>
 File: capturas_pruebas/pf-a08-email-existente.png Graphic file (type png)
 <use capturas_pruebas/pf-a08-email-existente.png>
 Package pdftex.def Info: capturas_pruebas/pf-a08-email-existente.png  used on input line 2323.
@@ -1302,37 +1307,89 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 LaTeX Info: Redefining \. on input line 2332.
 LaTeX Info: Redefining \% on input line 2332.
  [65 <./capturas_pruebas/pf-a07-rol-customer.png> <./capturas_pruebas/pf-a08-email-existente.png>]
+<capturas_pruebas/pf-e01-explorar-inicial.png, id=1725, 934.99312pt x 641.39626pt>
+File: capturas_pruebas/pf-e01-explorar-inicial.png Graphic file (type png)
+<use capturas_pruebas/pf-e01-explorar-inicial.png>
+Package pdftex.def Info: capturas_pruebas/pf-e01-explorar-inicial.png  used on input line 2356.
+(pdftex.def)             Requested size: 405.7355pt x 278.32982pt.
+<capturas_pruebas/pf-e02-explorar-peluqueria.png, id=1726, 927.465pt x 640.64343pt>
+File: capturas_pruebas/pf-e02-explorar-peluqueria.png Graphic file (type png)
+<use capturas_pruebas/pf-e02-explorar-peluqueria.png>
+Package pdftex.def Info: capturas_pruebas/pf-e02-explorar-peluqueria.png  used on input line 2357.
+(pdftex.def)             Requested size: 405.7355pt x 280.26126pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [66]
+<capturas_pruebas/pf-e03-explorar-refresh.png, id=1735, 1086.30844pt x 707.64375pt>
+File: capturas_pruebas/pf-e03-explorar-refresh.png Graphic file (type png)
+<use capturas_pruebas/pf-e03-explorar-refresh.png>
+Package pdftex.def Info: capturas_pruebas/pf-e03-explorar-refresh.png  used on input line 2358.
+(pdftex.def)             Requested size: 405.7355pt x 264.30757pt.
+<capturas_pruebas/pf-e04-explorar-detalle.png, id=1736, 1081.79156pt x 707.64375pt>
+File: capturas_pruebas/pf-e04-explorar-detalle.png Graphic file (type png)
+<use capturas_pruebas/pf-e04-explorar-detalle.png>
+Package pdftex.def Info: capturas_pruebas/pf-e04-explorar-detalle.png  used on input line 2359.
+(pdftex.def)             Requested size: 405.7355pt x 265.40895pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Info: Redefining \. on input line 2359.
 LaTeX Info: Redefining \% on input line 2359.
- [67]
+ [67 <./capturas_pruebas/pf-e01-explorar-inicial.png> <./capturas_pruebas/pf-e02-explorar-peluqueria.png>]
+<capturas_pruebas/pf-e05-explorar-error.png, id=1744, 1129.21875pt x 722.7pt>
+File: capturas_pruebas/pf-e05-explorar-error.png Graphic file (type png)
+<use capturas_pruebas/pf-e05-explorar-error.png>
+Package pdftex.def Info: capturas_pruebas/pf-e05-explorar-error.png  used on input line 2360.
+(pdftex.def)             Requested size: 405.7355pt x 259.67555pt.
+<capturas_pruebas/pf-e06-explorar-vacio.png, id=1745, 1155.56718pt x 705.38531pt>
+File: capturas_pruebas/pf-e06-explorar-vacio.png Graphic file (type png)
+<use capturas_pruebas/pf-e06-explorar-vacio.png>
+Package pdftex.def Info: capturas_pruebas/pf-e06-explorar-vacio.png  used on input line 2361.
+(pdftex.def)             Requested size: 405.7355pt x 247.66351pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [68]
-LaTeX Info: Redefining \. on input line 2372.
-LaTeX Info: Redefining \% on input line 2372.
- [69]
-Underfull \vbox (badness 1776) has occurred while \output is active []
+ [68 <./capturas_pruebas/pf-e03-explorar-refresh.png> <./capturas_pruebas/pf-e04-explorar-detalle.png>]
+LaTeX Info: Redefining \. on input line 2369.
+LaTeX Info: Redefining \% on input line 2369.
+ [69 <./capturas_pruebas/pf-e05-explorar-error.png> <./capturas_pruebas/pf-e06-explorar-vacio.png>]
+<capturas_pruebas/pf-d01-disponibilidad-laborable.png, id=1760, 966.61125pt x 571.38469pt>
+File: capturas_pruebas/pf-d01-disponibilidad-laborable.png Graphic file (type png)
+<use capturas_pruebas/pf-d01-disponibilidad-laborable.png>
+Package pdftex.def Info: capturas_pruebas/pf-d01-disponibilidad-laborable.png  used on input line 2392.
+(pdftex.def)             Requested size: 405.7355pt x 239.84042pt.
+<capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png, id=1761, 963.6pt x 572.1375pt>
+File: capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png Graphic file (type png)
+<use capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png>
+Package pdftex.def Info: capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png  used on input line 2393.
+(pdftex.def)             Requested size: 405.7355pt x 240.89848pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [70]
+<capturas_pruebas/pf-d03-disponibilidad-booked.png, id=1770, 1270.7475pt x 652.68843pt>
+File: capturas_pruebas/pf-d03-disponibilidad-booked.png Graphic file (type png)
+<use capturas_pruebas/pf-d03-disponibilidad-booked.png>
+Package pdftex.def Info: capturas_pruebas/pf-d03-disponibilidad-booked.png  used on input line 2394.
+(pdftex.def)             Requested size: 405.7355pt x 208.39648pt.
+<capturas_pruebas/pf-d04-disponibilidad-multiworker.png, id=1771, 968.11688pt x 574.39594pt>
+File: capturas_pruebas/pf-d04-disponibilidad-multiworker.png Graphic file (type png)
+<use capturas_pruebas/pf-d04-disponibilidad-multiworker.png>
+Package pdftex.def Info: capturas_pruebas/pf-d04-disponibilidad-multiworker.png  used on input line 2395.
+(pdftex.def)             Requested size: 405.7355pt x 240.72752pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2396.
-LaTeX Info: Redefining \% on input line 2396.
- [71]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [72]
-<capturas_pruebas/pu-b01-jwtservice-completo.png, id=1767, 1262.57411pt x 746.79pt>
+LaTeX Info: Redefining \. on input line 2395.
+LaTeX Info: Redefining \% on input line 2395.
+ [71 <./capturas_pruebas/pf-d01-disponibilidad-laborable.png> <./capturas_pruebas/pf-d02-disponibilidad-fuera-horario.png>] [72 <./capturas_pruebas/pf-d03-disponibilidad-booked.png> <./capturas_pruebas/pf-d04-disponibilidad-multiworker.png>]
+<capturas_pruebas/pu-b01-jwtservice-completo.png, id=1786, 1262.57411pt x 746.79pt>
 File: capturas_pruebas/pu-b01-jwtservice-completo.png Graphic file (type png)
 <use capturas_pruebas/pu-b01-jwtservice-completo.png>
 Package pdftex.def Info: capturas_pruebas/pu-b01-jwtservice-completo.png  used on input line 2424.
 (pdftex.def)             Requested size: 405.7355pt x 239.98044pt.
-<capturas_pruebas/pu-b02-availabilityservice-completo.png, id=1768, 1260.8534pt x 751.52196pt>
+<capturas_pruebas/pu-b02-availabilityservice-completo.png, id=1787, 1260.8534pt x 751.52196pt>
 File: capturas_pruebas/pu-b02-availabilityservice-completo.png Graphic file (type png)
 <use capturas_pruebas/pu-b02-availabilityservice-completo.png>
 Package pdftex.def Info: capturas_pruebas/pu-b02-availabilityservice-completo.png  used on input line 2425.
@@ -1450,17 +1507,17 @@ Package rerunfilecheck Info: File `gipsi_documentacion.out' has not changed.
 (rerunfilecheck)             Checksum: 027E501C43049E66EA0EAA0C76DBA702;21187.
  ) 
 Here is how much of TeX's memory you used:
- 41107 strings out of 467870
- 810129 string characters out of 5418355
+ 41162 strings out of 467870
+ 813115 string characters out of 5418355
  2080396 words of memory out of 5000000
- 67717 multiletter control sequences out of 15000+600000
+ 67772 multiletter control sequences out of 15000+600000
  726946 words of font info for 231 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,13n,122p,1045b,2562s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri7.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt8.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtti10.pfb><C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on gipsi_documentacion.pdf (101 pages, 2476578 bytes).
+Output written on gipsi_documentacion.pdf (101 pages, 4489893 bytes).
 PDF statistics:
- 2637 PDF objects out of 2984 (max. 8388607)
+ 2659 PDF objects out of 2984 (max. 8388607)
  1376 named destinations out of 1440 (max. 500000)
- 57735 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 57790 words of extra memory for PDF output out of 61914 (max. 10000000)
 

@@ -2384,7 +2384,7 @@ ID & Preparación y acción & Captura a guardar \\
 PF-D01 & Consultar \texttt{GET /services/\{id\}/availability} indicando \texttt{date=YYYY-MM-DD} para un día laborable con horario activo. Comprobar mezcla de slots disponibles e indisponibles. & \TestFile{pf-d01-disponibilidad-laborable.png} \\
 PF-D02 & Consultar la disponibilidad para una fecha fuera de horario o festiva y comprobar que todos los slots devueltos aparecen con motivo \texttt{OUT\_OF\_SCHEDULE}. & \TestFile{pf-d02-disponibilidad-fuera-horario.png} \\
 PF-D03 & Consultar una fecha con una reserva previa y comprobar que el slot afectado se devuelve con motivo \texttt{BOOKED}. & \TestFile{pf-d03-disponibilidad-booked.png} \\
-PF-D04 & Repetir la consulta omitiendo \texttt{workerId} en un negocio con varios trabajadores y comprobar que la respuesta incluye \texttt{availableWorkerIds}. & \TestFile{pf-d04-disponibilidad-multiworker.png} \\
+PF-D04 & Repetir la consulta añadiendo \texttt{workerId} en un negocio con varios trabajadores y comprobar que la respuesta incluye \texttt{availableWorkerIds}. & \TestFile{pf-d04-disponibilidad-multiworker.png} \\
 \bottomrule
 \end{tabularx}
 \end{table}
