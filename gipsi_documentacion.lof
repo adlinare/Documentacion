@@ -6,29 +6,30 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Arquitectura general del sistema Gipsi}}{33}{figure.caption.8}%
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Flujo de autenticación en el backend}}{36}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Flujo de creación de reserva y validación de disponibilidad}}{37}{figure.caption.17}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Pirámide de testing aplicada a Gipsi}}{49}{figure.caption.22}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces PF-A01 --- Login con credenciales correctas}}{59}{figure.caption.31}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces PF-A02 --- Login con contraseña incorrecta}}{59}{figure.caption.32}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces PF-A03 --- Rate limiting tras 11 intentos de login}}{60}{figure.caption.33}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces PF-A04 --- Refresh con token válido}}{60}{figure.caption.34}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces PF-A05 --- Refresh con token ya rotado}}{61}{figure.caption.35}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces PF-A06 --- Acceso al endpoint /me sin token}}{61}{figure.caption.36}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces PF-A07 --- Acceso a recurso de negocio con rol CUSTOMER}}{62}{figure.caption.37}%
-\contentsline {figure}{\numberline {5.9}{\ignorespaces PF-A08 --- Registro con email ya existente}}{62}{figure.caption.38}%
-\contentsline {figure}{\numberline {5.10}{\ignorespaces PF-E01 --- Carga inicial de la pestaña Explorar}}{64}{figure.caption.41}%
-\contentsline {figure}{\numberline {5.11}{\ignorespaces PF-E02 --- Filtrado por categoría Peluquería}}{64}{figure.caption.42}%
-\contentsline {figure}{\numberline {5.12}{\ignorespaces PF-E03 --- Recarga manual con pull-to-refresh}}{65}{figure.caption.43}%
-\contentsline {figure}{\numberline {5.13}{\ignorespaces PF-E04 --- Navegación al detalle de negocio}}{65}{figure.caption.44}%
-\contentsline {figure}{\numberline {5.14}{\ignorespaces PF-E05 --- Estado de error con backend caído}}{66}{figure.caption.45}%
-\contentsline {figure}{\numberline {5.15}{\ignorespaces PF-E06 --- Estado vacío sin resultados}}{66}{figure.caption.46}%
-\contentsline {figure}{\numberline {5.16}{\ignorespaces PF-D01 --- Disponibilidad en día laborable}}{67}{figure.caption.49}%
-\contentsline {figure}{\numberline {5.17}{\ignorespaces PF-D02 --- Disponibilidad fuera de horario}}{68}{figure.caption.50}%
-\contentsline {figure}{\numberline {5.18}{\ignorespaces PF-D03 --- Slot marcado como BOOKED}}{68}{figure.caption.51}%
-\contentsline {figure}{\numberline {5.19}{\ignorespaces PF-D04 --- Disponibilidad agregada en negocio multi-worker}}{69}{figure.caption.52}%
-\contentsline {figure}{\numberline {5.20}{\ignorespaces PU-B01 --- Ejecucion completa de JwtServiceTest}}{70}{figure.caption.55}%
-\contentsline {figure}{\numberline {5.21}{\ignorespaces PU-B02 --- Ejecucion completa de AvailabilityServiceTest}}{71}{figure.caption.56}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Pirámide de testing aplicada a Gipsi}}{52}{figure.caption.24}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces PF-A01 --- Login con credenciales correctas}}{62}{figure.caption.33}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces PF-A02 --- Login con contraseña incorrecta}}{62}{figure.caption.34}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces PF-A03 --- Rate limiting tras 11 intentos de login}}{63}{figure.caption.35}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces PF-A04 --- Refresh con token válido}}{63}{figure.caption.36}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces PF-A05 --- Refresh con token ya rotado}}{64}{figure.caption.37}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces PF-A06 --- Acceso al endpoint /me sin token}}{64}{figure.caption.38}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces PF-A07 --- Acceso a recurso de negocio con rol CUSTOMER}}{65}{figure.caption.39}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces PF-A08 --- Registro con email ya existente}}{65}{figure.caption.40}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces PF-E01 --- Carga inicial de la pestaña Explorar}}{67}{figure.caption.43}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces PF-E02 --- Filtrado por categoría Peluquería}}{67}{figure.caption.44}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces PF-E03 --- Recarga manual con pull-to-refresh}}{68}{figure.caption.45}%
+\contentsline {figure}{\numberline {5.13}{\ignorespaces PF-E04 --- Navegación al detalle de negocio}}{68}{figure.caption.46}%
+\contentsline {figure}{\numberline {5.14}{\ignorespaces PF-E05 --- Estado de error con backend caído}}{69}{figure.caption.47}%
+\contentsline {figure}{\numberline {5.15}{\ignorespaces PF-E06 --- Estado vacío sin resultados}}{69}{figure.caption.48}%
+\contentsline {figure}{\numberline {5.16}{\ignorespaces PF-D01 --- Disponibilidad en día laborable}}{70}{figure.caption.51}%
+\contentsline {figure}{\numberline {5.17}{\ignorespaces PF-D02 --- Disponibilidad fuera de horario}}{71}{figure.caption.52}%
+\contentsline {figure}{\numberline {5.18}{\ignorespaces PF-D03 --- Slot marcado como BOOKED}}{71}{figure.caption.53}%
+\contentsline {figure}{\numberline {5.19}{\ignorespaces PF-D04 --- Disponibilidad agregada en negocio multi-worker}}{72}{figure.caption.54}%
+\contentsline {figure}{\numberline {5.20}{\ignorespaces PU-B01 --- Ejecucion completa de JwtServiceTest}}{73}{figure.caption.57}%
+\contentsline {figure}{\numberline {5.21}{\ignorespaces PU-B02 --- Ejecucion completa de AvailabilityServiceTest}}{74}{figure.caption.58}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

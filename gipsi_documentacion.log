@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.12)  13 MAY 2026 11:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.12)  13 MAY 2026 12:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1162,7 +1162,7 @@ Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
 Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
 )
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 30
-4.
+6.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -1179,33 +1179,33 @@ Package babel Info: 'spanish' activates 'spanish' shorthands.
 )
 \openout1 = `gipsi_documentacion.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 304.
-LaTeX Font Info:    ... okay on input line 304.
-LaTeX Info: Redefining \. on input line 304.
-LaTeX Info: Redefining \% on input line 304.
-LaTeX Info: Redefining \microtypecontext on input line 304.
-Package microtype Info: Applying patch `item' on input line 304.
-Package microtype Info: Applying patch `toc' on input line 304.
-Package microtype Info: Applying patch `eqnum' on input line 304.
-Package microtype Info: Applying patch `footnote' on input line 304.
-Package microtype Info: Applying patch `verbatim' on input line 304.
-LaTeX Info: Redefining \microtypesetup on input line 304.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 306.
+LaTeX Font Info:    ... okay on input line 306.
+LaTeX Info: Redefining \. on input line 306.
+LaTeX Info: Redefining \% on input line 306.
+LaTeX Info: Redefining \microtypecontext on input line 306.
+Package microtype Info: Applying patch `item' on input line 306.
+Package microtype Info: Applying patch `toc' on input line 306.
+Package microtype Info: Applying patch `eqnum' on input line 306.
+Package microtype Info: Applying patch `footnote' on input line 306.
+Package microtype Info: Applying patch `verbatim' on input line 306.
+LaTeX Info: Redefining \microtypesetup on input line 306.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1291,42 +1291,42 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count380
-Package hyperref Info: Link coloring ON on input line 304.
+Package hyperref Info: Link coloring ON on input line 306.
 (gipsi_documentacion.out) (gipsi_documentacion.out)
 \@outlinefile=\write4
 \openout4 = `gipsi_documentacion.out'.
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3
-06.
+08.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 3
-06.
+08.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-306.
+308.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-306.
+308.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 306.
+(Font)              <12> on input line 308.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 306.
+(Font)              <8> on input line 308.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 306.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 306
+(Font)              <6> on input line 308.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 308
 .
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -1335,7 +1335,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 306
+LaTeX Font Info:    Trying to load font information for U+msb on input line 308
 .
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -1345,7 +1345,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
-06.
+08.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -1355,7 +1355,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
-06.
+08.
 
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -1409,8 +1409,8 @@ Cap\'{\i }tulo 1.
 [11
 
 ] [12]
-LaTeX Info: Redefining \. on input line 469.
-LaTeX Info: Redefining \% on input line 469.
+LaTeX Info: Redefining \. on input line 474.
+LaTeX Info: Redefining \% on input line 474.
  [13] [14]
 Cap\'{\i }tulo 2.
 [15
@@ -1418,73 +1418,63 @@ Cap\'{\i }tulo 2.
 ]
 ignored error: Infinite glue shrinkage found in box being split [16]
 ignored error: Infinite glue shrinkage found in box being split
-LaTeX Info: Redefining \. on input line 545.
-LaTeX Info: Redefining \% on input line 545.
+LaTeX Info: Redefining \. on input line 550.
+LaTeX Info: Redefining \% on input line 550.
  [17]
 ignored error: Infinite glue shrinkage found in box being split [18]
-LaTeX Info: Redefining \. on input line 588.
-LaTeX Info: Redefining \% on input line 588.
- [19]
-ignored error: Infinite glue shrinkage found in box being split [20]
 ignored error: Infinite glue shrinkage found in box being split
-LaTeX Info: Redefining \. on input line 658.
-LaTeX Info: Redefining \% on input line 658.
+LaTeX Info: Redefining \. on input line 583.
+LaTeX Info: Redefining \% on input line 583.
+ [19] [20]
+ignored error: Infinite glue shrinkage found in box being split
+LaTeX Info: Redefining \. on input line 667.
+LaTeX Info: Redefining \% on input line 667.
  [21]
 ignored error: Infinite glue shrinkage found in box being split [22]
 ignored error: Infinite glue shrinkage found in box being split
-LaTeX Info: Redefining \. on input line 658.
-LaTeX Info: Redefining \% on input line 658.
+LaTeX Info: Redefining \. on input line 667.
+LaTeX Info: Redefining \% on input line 667.
  [23]
 ignored error: Infinite glue shrinkage found in box being split [24]
-LaTeX Info: Redefining \. on input line 692.
-LaTeX Info: Redefining \% on input line 692.
+LaTeX Info: Redefining \. on input line 685.
+LaTeX Info: Redefining \% on input line 685.
  [25]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [26]
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 757--758
 []\T1/lmr/m/n/12 (+20) La app en-vía la ope-ra-ción al bac-kend me-dian-te
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+Underfull \hbox (badness 10000) in paragraph at lines 757--758
 \T1/lmtt/m/n/12 PUT /customers/me/favorites/businesses/{id} \T1/lmr/m/n/12 (+20
 ) o \T1/lmtt/m/n/12 PUT
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 764--765
+LaTeX Info: Redefining \. on input line 763.
+LaTeX Info: Redefining \% on input line 763.
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 773--774
 []\T1/lmr/m/n/12 (+20) Introduce op-cio-nal-men-te un mo-ti-vo y la app lla-ma 
 a \T1/lmtt/m/n/12 PUT
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 770.
-LaTeX Info: Redefining \% on input line 770.
- [27]
-Underfull \hbox (badness 10000) in paragraph at lines 782--783
+Underfull \hbox (badness 10000) in paragraph at lines 791--792
 []\T1/lmr/m/n/12 (+20) Si la in-vi-ta-ción es vá-li-da, el tra-ba-ja-dor la can
 -jea con \T1/lmtt/m/n/12 POST
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 798--799
+[28]
+Underfull \hbox (badness 10000) in paragraph at lines 807--808
 []\T1/lmr/m/n/12 (+20) La in-ter-faz pue-de re-cu-pe-rar las ci-tas afec-ta-das
  con \T1/lmtt/m/n/12 GET
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [28]
-LaTeX Info: Redefining \. on input line 809.
-LaTeX Info: Redefining \% on input line 809.
-
+LaTeX Info: Redefining \. on input line 818.
+LaTeX Info: Redefining \% on input line 818.
 [29] [30]
-LaTeX Info: Redefining \. on input line 971.
-LaTeX Info: Redefining \% on input line 971.
+LaTeX Info: Redefining \. on input line 980.
+LaTeX Info: Redefining \% on input line 980.
  [31] [32
 
 
@@ -1505,357 +1495,249 @@ y
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 1030.
+nput line 1039.
  [34]
-LaTeX Info: Redefining \. on input line 1126.
-LaTeX Info: Redefining \% on input line 1126.
+LaTeX Info: Redefining \. on input line 1134.
+LaTeX Info: Redefining \% on input line 1134.
  [35] [36]
-Overfull \hbox (55.56715pt too wide) in paragraph at lines 1192--1193
-[]\T1/lmr/m/n/12 (-20) El cálcu-lo de dis-po-ni-bi-li-dad es la fun-cio-na-li-d
-ad más com-ple-ja del bac-kend. El \T1/lmtt/m/n/12 AvailabilityService
- []
-
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1204.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 1228.
-LaTeX Info: Redefining \% on input line 1228.
- [37]
-Underfull \hbox (badness 10000) in paragraph at lines 1276--1277
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1243.
+LaTeX Info: Redefining \. on input line 1249.
+LaTeX Info: Redefining \% on input line 1249.
+[37] [38]
+Underfull \hbox (badness 10000) in paragraph at lines 1328--1329
 []\T1/lmr/m/n/12 (+20) Ofrece un equi-li-brio: pro-vi-ders que pue-den ser asín
 -cro-nos
  []
 
 
-Underfull \hbox (badness 4505) in paragraph at lines 1276--1277
+Underfull \hbox (badness 4505) in paragraph at lines 1328--1329
 \T1/lmr/m/n/12 (+20) (\T1/lmtt/m/n/12 FutureProvider\T1/lmr/m/n/12 (+20) , \T1/
 lmtt/m/n/12 StreamProvider\T1/lmr/m/n/12 (+20) ), reac-ti-vos (\T1/lmtt/m/n/12 
 NotifierProvider\T1/lmr/m/n/12 (+20) ) y
  []
 
-[38]
-Underfull \vbox (badness 2617) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 1313.
-LaTeX Info: Redefining \% on input line 1313.
+Underfull \vbox (badness 2478) has occurred while \output is active []
+
+LaTeX Info: Redefining \. on input line 1335.
+LaTeX Info: Redefining \% on input line 1335.
  [39]
 (C:\Users\Adrian\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 ) [40]
-LaTeX Info: Redefining \. on input line 1419.
-LaTeX Info: Redefining \% on input line 1419.
+LaTeX Info: Redefining \. on input line 1445.
+LaTeX Info: Redefining \% on input line 1445.
  [41]
-Underfull \vbox (badness 3557) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [42]
-LaTeX Info: Redefining \. on input line 1496.
-LaTeX Info: Redefining \% on input line 1496.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[43]
+LaTeX Info: Redefining \. on input line 1545.
+LaTeX Info: Redefining \% on input line 1545.
+ [43]
+[44]
+LaTeX Info: Redefining \. on input line 1668.
+LaTeX Info: Redefining \% on input line 1668.
+ [45]
 Cap\'{\i }tulo 4.
-[44
+[46
 
 ]
-LaTeX Info: Redefining \. on input line 1578.
-LaTeX Info: Redefining \% on input line 1578.
- [45{C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit
+LaTeX Info: Redefining \. on input line 1748.
+LaTeX Info: Redefining \% on input line 1748.
+ [47{C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit
 .enc}{C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.en
-c}] [46]
-Overfull \hbox (54.35046pt too wide) in paragraph at lines 1627--1628
-[]\T1/lmr/m/n/12 (-20) Llama a \T1/lmtt/m/n/12 POST /auth/refresh \T1/lmr/m/n/1
-2 (-20) con el re-fresh to-ken al-ma-ce-na-do en \T1/lmtt/m/n/12 flutter_secure
-_storage\T1/lmr/m/n/12 (-20) . 
- []
-
-
-Overfull \hbox (37.94412pt too wide) in paragraph at lines 1629--1630
-[]\T1/lmr/m/n/12 (-20) Si el re-fresh fa-lla (to-ken ex-pi-ra-do o re-vo-ca-do)
-, lla-ma a \T1/lmtt/m/n/12 AuthController.expireSession()
- []
-
-LaTeX Info: Redefining \. on input line 1674.
-LaTeX Info: Redefining \% on input line 1674.
-[47] [48]
+c}]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 1752.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 1752.
+ [48]
+LaTeX Info: Redefining \. on input line 1849.
+LaTeX Info: Redefining \% on input line 1849.
+ [49] [50]
+LaTeX Info: Redefining \. on input line 1902.
+LaTeX Info: Redefining \% on input line 1902.
+ [51]
 Cap\'{\i }tulo 5.
-[49
+[52
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [50]
-LaTeX Info: Redefining \. on input line 1821.
-LaTeX Info: Redefining \% on input line 1821.
-
-[51] [52]
-LaTeX Info: Redefining \. on input line 1923.
-LaTeX Info: Redefining \% on input line 1923.
+LaTeX Info: Redefining \. on input line 1979.
+LaTeX Info: Redefining \% on input line 1979.
  [53]
-Overfull \hbox (65.65585pt too wide) in paragraph at lines 1968--1969
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
- []
-
-
-Overfull \hbox (49.9059pt too wide) in paragraph at lines 1969--1970
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
- []
-
-
+[54]
+LaTeX Info: Redefining \. on input line 2064.
+LaTeX Info: Redefining \% on input line 2064.
+ [55] [56]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [54]
-Overfull \hbox (65.65585pt too wide) in paragraph at lines 1993--1994
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
- []
-
-
-Overfull \hbox (49.9059pt too wide) in paragraph at lines 1994--1995
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 2027.
-LaTeX Info: Redefining \% on input line 2027.
- [55]
-[56]
-Overfull \hbox (69.89447pt too wide) in paragraph at lines 2101--2102
-[]\T1/lmr/m/n/12 (-20) Iniciar el bac-kend con el per-fil \T1/lmtt/m/n/12 dev \
-T1/lmr/m/n/12 (-20) y com-pro-bar que la API res-pon-de en \T1/lmtt/m/n/12 http
-://localhost:8080\T1/lmr/m/n/12 (-20) . 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 2126.
-LaTeX Info: Redefining \% on input line 2126.
+LaTeX Info: Redefining \. on input line 2164.
+LaTeX Info: Redefining \% on input line 2164.
  [57]
-<capturas_pruebas/pf-a01-login-correcto.png, id=1581, 967.36406pt x 569.87906pt
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [58]
+LaTeX Info: Redefining \. on input line 2255.
+LaTeX Info: Redefining \% on input line 2255.
+
+[59]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [60]
+<capturas_pruebas/pf-a01-login-correcto.png, id=1682, 967.36406pt x 569.87906pt
 >
 File: capturas_pruebas/pf-a01-login-correcto.png Graphic file (type png)
 <use capturas_pruebas/pf-a01-login-correcto.png>
 Package pdftex.def Info: capturas_pruebas/pf-a01-login-correcto.png  used on in
-put line 2127.
+put line 2314.
 (pdftex.def)             Requested size: 405.7355pt x 239.01714pt.
-<capturas_pruebas/pf-a02-login-error.png, id=1583, 965.10562pt x 569.12625pt>
+<capturas_pruebas/pf-a02-login-error.png, id=1684, 965.10562pt x 569.12625pt>
 File: capturas_pruebas/pf-a02-login-error.png Graphic file (type png)
 <use capturas_pruebas/pf-a02-login-error.png>
 Package pdftex.def Info: capturas_pruebas/pf-a02-login-error.png  used on input
- line 2128.
+ line 2315.
 (pdftex.def)             Requested size: 405.7355pt x 239.26587pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [58]
-<capturas_pruebas/pf-a04-refresh-valido.png, id=1588, 966.61125pt x 572.89032pt
+LaTeX Info: Redefining \. on input line 2315.
+LaTeX Info: Redefining \% on input line 2315.
+ [61]
+<capturas_pruebas/pf-a04-refresh-valido.png, id=1690, 966.61125pt x 572.89032pt
 >
 File: capturas_pruebas/pf-a04-refresh-valido.png Graphic file (type png)
 <use capturas_pruebas/pf-a04-refresh-valido.png>
 Package pdftex.def Info: capturas_pruebas/pf-a04-refresh-valido.png  used on in
-put line 2130.
+put line 2317.
 (pdftex.def)             Requested size: 405.7355pt x 240.47243pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2130.
-LaTeX Info: Redefining \% on input line 2130.
- [59 <./capturas_pruebas/pf-a01-login-correcto.png> <./capturas_pruebas/pf-a02-
+ [62 <./capturas_pruebas/pf-a01-login-correcto.png> <./capturas_pruebas/pf-a02-
 login-error.png>]
-<capturas_pruebas/pf-a05-refresh-reutilizado.png, id=1595, 962.84718pt x 570.63
+<capturas_pruebas/pf-a05-refresh-reutilizado.png, id=1697, 962.84718pt x 570.63
 188pt>
 File: capturas_pruebas/pf-a05-refresh-reutilizado.png Graphic file (type png)
 <use capturas_pruebas/pf-a05-refresh-reutilizado.png>
 Package pdftex.def Info: capturas_pruebas/pf-a05-refresh-reutilizado.png  used 
-on input line 2131.
+on input line 2318.
 (pdftex.def)             Requested size: 405.7355pt x 240.4561pt.
-<capturas_pruebas/pf-a06-me-sin-token.png, id=1596, 966.61125pt x 571.38469pt>
+<capturas_pruebas/pf-a06-me-sin-token.png, id=1698, 966.61125pt x 571.38469pt>
 File: capturas_pruebas/pf-a06-me-sin-token.png Graphic file (type png)
 <use capturas_pruebas/pf-a06-me-sin-token.png>
 Package pdftex.def Info: capturas_pruebas/pf-a06-me-sin-token.png  used on inpu
-t line 2132.
+t line 2319.
 (pdftex.def)             Requested size: 405.7355pt x 239.84042pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [60 <./capturas_pruebas/pf-a04-refresh-valido.png>]
-<capturas_pruebas/pf-a08-email-existente.png, id=1602, 960.58875pt x 569.12625p
+LaTeX Info: Redefining \. on input line 2319.
+LaTeX Info: Redefining \% on input line 2319.
+ [63 <./capturas_pruebas/pf-a04-refresh-valido.png>]
+<capturas_pruebas/pf-a08-email-existente.png, id=1704, 960.58875pt x 569.12625p
 t>
 File: capturas_pruebas/pf-a08-email-existente.png Graphic file (type png)
 <use capturas_pruebas/pf-a08-email-existente.png>
 Package pdftex.def Info: capturas_pruebas/pf-a08-email-existente.png  used on i
-nput line 2134.
+nput line 2321.
 (pdftex.def)             Requested size: 405.7355pt x 240.38612pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2134.
-LaTeX Info: Redefining \% on input line 2134.
- [61 <./capturas_pruebas/pf-a05-refresh-reutilizado.png> <./capturas_pruebas/pf
+ [64 <./capturas_pruebas/pf-a05-refresh-reutilizado.png> <./capturas_pruebas/pf
 -a06-me-sin-token.png>]
-Overfull \hbox (69.89447pt too wide) in paragraph at lines 2142--2143
-[]\T1/lmr/m/n/12 (-20) Iniciar el bac-kend con el per-fil \T1/lmtt/m/n/12 dev \
-T1/lmr/m/n/12 (-20) y com-pro-bar que la API res-pon-de en \T1/lmtt/m/n/12 http
-://localhost:8080\T1/lmr/m/n/12 (-20) . 
- []
-
-[62 <./capturas_pruebas/pf-a08-email-existente.png>]
+LaTeX Info: Redefining \. on input line 2331.
+LaTeX Info: Redefining \% on input line 2331.
+ [65 <./capturas_pruebas/pf-a08-email-existente.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2168.
-LaTeX Info: Redefining \% on input line 2168.
- [63]
+ [66]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [64]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 2172.
-LaTeX Info: Redefining \% on input line 2172.
- [65]
-[66]
-Overfull \hbox (17.36403pt too wide) in paragraph at lines 2200--2200
-[]|\T1/lmtt/m/n/10.95 pf-d01-disponibilidad-laborable.png|  
- []
-
-
-Overfull \hbox (40.35896pt too wide) in paragraph at lines 2200--2200
-[]|\T1/lmtt/m/n/10.95 pf-d02-disponibilidad-fuera-horario.png|  
- []
-
-
-Overfull \hbox (28.8615pt too wide) in paragraph at lines 2200--2200
-[]|\T1/lmtt/m/n/10.95 pf-d04-disponibilidad-multiworker.png|  
- []
-
-
-Underfull \vbox (badness 1776) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 2205.
-LaTeX Info: Redefining \% on input line 2205.
+LaTeX Info: Redefining \. on input line 2357.
+LaTeX Info: Redefining \% on input line 2357.
  [67]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [68]
-Overfull \hbox (86.17027pt too wide) in paragraph at lines 2214--2215
-[]\T1/lmr/m/n/12 (-20) Se abrió el pro-yec-to bac-kend y se ac-ce-dió a las cla
--ses \T1/lmtt/m/n/12 JwtServiceTest \T1/lmr/m/n/12 (-20) y \T1/lmtt/m/n/12 Avai
-labilityServiceTest\T1/lmr/m/n/12 (-20) . 
- []
+LaTeX Info: Redefining \. on input line 2370.
+LaTeX Info: Redefining \% on input line 2370.
 
+[69]
+Underfull \vbox (badness 1776) has occurred while \output is active []
 
-Overfull \hbox (18.82278pt too wide) in paragraph at lines 2232--2232
-\T1/lmtt/m/n/10.95 generateToken_shouldContainUsername\T1/lmr/m/n/10.95 (-20) ,
- 
- []
-
-
-Overfull \hbox (57.60516pt too wide) in paragraph at lines 2232--2232
-\T1/lmtt/m/n/10.95 isValid_withExpiredToken_shouldReturnFalse 
- []
-
-
-Overfull \hbox (158.31444pt too wide) in paragraph at lines 2232--2232
-\T1/lmtt/m/n/10.95 extractUsername_withTamperedPayload_shouldThrowJwtException\
-T1/lmr/m/n/10.95 (-20) .|  
- []
-
-
-Overfull \hbox (138.08743pt too wide) in paragraph at lines 2232--2232
-\T1/lmtt/m/n/10.95 getAvailability_whenWorkerHasTimeOff_allSlotsUnavailable 
- []
-
-
-Overfull \hbox (77.83217pt too wide) in paragraph at lines 2232--2232
-\T1/lmtt/m/n/10.95 getAvailability_whenSlotBooked_markedAsBooked\T1/lmr/m/n/10.
-95 (-20) .|  
- []
-
-
-Overfull \hbox (40.35896pt too wide) in paragraph at lines 2232--2232
-[]|\T1/lmtt/m/n/10.95 pu-b02-availabilityservice-completo.png|  
- []
-
-
+ [70]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2234.
-LaTeX Info: Redefining \% on input line 2234.
- [69]
-<capturas_pruebas/pu-b01-jwtservice-completo.png, id=1661, 1262.57411pt x 746.7
+LaTeX Info: Redefining \. on input line 2394.
+LaTeX Info: Redefining \% on input line 2394.
+ [71]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [72]
+<capturas_pruebas/pu-b01-jwtservice-completo.png, id=1762, 1262.57411pt x 746.7
 9pt>
 File: capturas_pruebas/pu-b01-jwtservice-completo.png Graphic file (type png)
 <use capturas_pruebas/pu-b01-jwtservice-completo.png>
 Package pdftex.def Info: capturas_pruebas/pu-b01-jwtservice-completo.png  used 
-on input line 2235.
+on input line 2422.
 (pdftex.def)             Requested size: 405.7355pt x 239.98044pt.
-<capturas_pruebas/pu-b02-availabilityservice-completo.png, id=1662, 1260.8534pt
+<capturas_pruebas/pu-b02-availabilityservice-completo.png, id=1763, 1260.8534pt
  x 751.52196pt>
 File: capturas_pruebas/pu-b02-availabilityservice-completo.png Graphic file (ty
 pe png)
 <use capturas_pruebas/pu-b02-availabilityservice-completo.png>
 Package pdftex.def Info: capturas_pruebas/pu-b02-availabilityservice-completo.p
-ng  used on input line 2236.
+ng  used on input line 2423.
 (pdftex.def)             Requested size: 405.7355pt x 241.8336pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [70 <./capturas_pruebas/pu-b01-jwtservice-completo.png>]
-LaTeX Info: Redefining \. on input line 2240.
-LaTeX Info: Redefining \% on input line 2240.
- [71 <./capturas_pruebas/pu-b02-availabilityservice-completo.png>]
+LaTeX Info: Redefining \. on input line 2427.
+LaTeX Info: Redefining \% on input line 2427.
+ [73 <./capturas_pruebas/pu-b01-jwtservice-completo.png>] [74 <./capturas_prueb
+as/pu-b02-availabilityservice-completo.png>]
 Cap\'{\i }tulo 6.
-[72
+[75
 
-]
-LaTeX Info: Redefining \. on input line 2347.
-LaTeX Info: Redefining \% on input line 2347.
- [73] [74]
-LaTeX Info: Redefining \. on input line 2460.
-LaTeX Info: Redefining \% on input line 2460.
- [75] [76]
-LaTeX Info: Redefining \. on input line 2573.
-LaTeX Info: Redefining \% on input line 2573.
+] [76]
+LaTeX Info: Redefining \. on input line 2588.
+LaTeX Info: Redefining \% on input line 2588.
  [77] [78]
+LaTeX Info: Redefining \. on input line 2698.
+LaTeX Info: Redefining \% on input line 2698.
+ [79] [80]
+LaTeX Info: Redefining \. on input line 2807.
+LaTeX Info: Redefining \% on input line 2807.
+ [81] [82]
 Cap\'{\i }tulo 7.
-[79
+[83
 
-]
-Overfull \hbox (45.02582pt too wide) in paragraph at lines 2663--2664
-[]\T1/lmr/bx/n/12 (-20) Migración a al-ma-ce-na-mien-to S3/R2\T1/lmr/m/n/12 (-2
-0) : Sus-ti-tuir \T1/lmtt/m/n/12 LocalFileStorage \T1/lmr/m/n/12 (-20) por \T1/
-lmtt/m/n/12 S3FileStorage
- []
-
-
-Overfull \hbox (29.34483pt too wide) in paragraph at lines 2665--2666
-[]\T1/lmr/bx/n/12 (-20) Caché de que-ries fre-cuen-tes\T1/lmr/m/n/12 (-20) : En
-d-points co-mo \T1/lmtt/m/n/12 GET /categories \T1/lmr/m/n/12 (-20) o \T1/lmtt/
-m/n/12 GET /businesses
- []
-
-[80]
-LaTeX Info: Redefining \. on input line 2685.
-LaTeX Info: Redefining \% on input line 2685.
- [81]
-Underfull \hbox (badness 5771) in paragraph at lines 2713--2717
+] [84]
+LaTeX Info: Redefining \. on input line 2874.
+LaTeX Info: Redefining \% on input line 2874.
+ [85]
+Underfull \hbox (badness 5771) in paragraph at lines 2902--2906
 []\T1/lmr/m/n/12 (+20) OWASP Foun-da-tion. \T1/lmr/m/it/12 (+20) JSON Web To-ke
 n Cheat Sheet for Ja-va\T1/lmr/m/n/12 (+20) . 2024.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2713--2717
+Underfull \hbox (badness 10000) in paragraph at lines 2902--2906
 [][]$\T1/lmtt/m/n/12 https : / / cheatsheetseries . owasp . org / cheatsheets /
  JSON _ Web _ Token _ for _
  []
 
 
-Underfull \hbox (badness 1824) in paragraph at lines 2731--2735
+Underfull \hbox (badness 1824) in paragraph at lines 2920--2924
 []\T1/lmr/m/n/12 (+20) Flutter team. \T1/lmr/m/it/12 (+20) go_router pac-ka-ge 
 do-cu-men-ta-tion\T1/lmr/m/n/12 (+20) . 2024. [][]$\T1/lmtt/m/n/12 https : / / 
 pub . dev /
@@ -1864,69 +1746,69 @@ pub . dev /
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [82
+ [86
 
 ]
-LaTeX Info: Redefining \. on input line 2807.
-LaTeX Info: Redefining \% on input line 2807.
+LaTeX Info: Redefining \. on input line 2996.
+LaTeX Info: Redefining \% on input line 2996.
 
-[83]
+[87]
 Ap\'{e}ndice A.
-[84
+[88
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 2908.
-LaTeX Info: Redefining \% on input line 2908.
- [85]
-[86]
+LaTeX Info: Redefining \. on input line 3097.
+LaTeX Info: Redefining \% on input line 3097.
+ [89]
+[90]
 Ap\'{e}ndice B.
-[87
+[91
 
 ]
 Ap\'{e}ndice C.
-[88
+[92
 
 ]
 Ap\'{e}ndice D.
 
 Underfull \vbox (badness 1924) has occurred while \output is active []
 
- [89
+ [93
 
 ]
-[90]
+[94]
 Ap\'{e}ndice E.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [91
+ [95
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [92]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 3221.
-LaTeX Info: Redefining \% on input line 3221.
- [93]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [94]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Info: Redefining \. on input line 3354.
-LaTeX Info: Redefining \% on input line 3354.
- [95]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
  [96]
-LaTeX Info: Redefining \. on input line 3442.
-LaTeX Info: Redefining \% on input line 3442.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[97] (gipsi_documentacion.aux
+LaTeX Info: Redefining \. on input line 3410.
+LaTeX Info: Redefining \% on input line 3410.
+ [97]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [98]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+LaTeX Info: Redefining \. on input line 3545.
+LaTeX Info: Redefining \% on input line 3545.
+ [99]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [100]
+LaTeX Info: Redefining \. on input line 3646.
+LaTeX Info: Redefining \% on input line 3646.
+
+[101] (gipsi_documentacion.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -1935,16 +1817,16 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `gipsi_documentacion.out' has not changed.
-(rerunfilecheck)             Checksum: 7B4F9582693F0A58B9BFAAA51A675537;21304.
+(rerunfilecheck)             Checksum: 30EC5C358B92BA8DF5E673DA25588D5F;21187.
  ) 
 Here is how much of TeX's memory you used:
- 40876 strings out of 467870
- 806674 string characters out of 5417871
- 1863885 words of memory out of 5000000
- 67598 multiletter control sequences out of 15000+600000
- 714356 words of font info for 211 fonts, out of 8000000 for 9000
+ 41091 strings out of 467870
+ 810137 string characters out of 5417871
+ 2080293 words of memory out of 5000000
+ 67704 multiletter control sequences out of 15000+600000
+ 726946 words of font info for 231 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,122p,1018b,2414s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,122p,1018b,2562s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.p
 fb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.
 pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.
@@ -1960,11 +1842,12 @@ pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12
 0.pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt
 10.pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmt
 t12.pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
+tt8.pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
 tti10.pfb><C:/Users/Adrian/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/symbols/msam10.pfb>
-Output written on gipsi_documentacion.pdf (97 pages, 2259658 bytes).
+Output written on gipsi_documentacion.pdf (101 pages, 2318975 bytes).
 PDF statistics:
- 2499 PDF objects out of 2984 (max. 8388607)
- 1283 named destinations out of 1440 (max. 500000)
- 51069 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 2632 PDF objects out of 2984 (max. 8388607)
+ 1375 named destinations out of 1440 (max. 500000)
+ 57725 words of extra memory for PDF output out of 61914 (max. 10000000)
 

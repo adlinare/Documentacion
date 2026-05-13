@@ -85,10 +85,12 @@
 \usepackage{afterpage}
 \usepackage{parskip}
 \setlength{\parskip}{0.5em}
+\setlength{\emergencystretch}{3em}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 \newcommand{\TestTableSetup}{\small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.18}}
+\newcommand{\TestFile}[1]{{\scriptsize\texttt{#1}}}
 \newcommand{\TestScreenshot}[3]{%
 \begin{figure}[H]
 \centering
@@ -140,7 +142,7 @@ ID & Descripci\'on & #3 \\
   frame=single,
   rulecolor=\color{codigoborde},
   breaklines=true,
-  breakatwhitespace=true,
+  breakatwhitespace=false,
   tabsize=4,
   showstringspaces=false,
   captionpos=b,
@@ -323,8 +325,11 @@ API REST desarrollada con Spring Boot 3.4 sobre Java 21, encargada de exponer
 los servicios de negocio, gestionar la autenticación, aplicar las reglas de seguridad,
 persistir la información y coordinar la lógica principal de la aplicación. Por otro
 lado, un frontend móvil construido con Flutter 3.24 en Dart, organizado como
-monorepo mediante Melos, lo que permite dividir el proyecto en varios paquetes
-reutilizables y mantener una estructura modular, escalable y fácil de mantener.
+monorepo mediante Melos. Este frontend incluye una app orientada al cliente y
+una app profesional para negocios y trabajadores, ambas apoyadas en paquetes
+compartidos para API y sistema de diseño. Esta estructura permite dividir el
+proyecto en piezas reutilizables y mantener una arquitectura modular, escalable
+y fácil de mantener.
 
 El backend implementa autenticación mediante JSON Web Tokens, utilizando
 access tokens de corta duración y refresh tokens de larga duración con rotación
@@ -406,7 +411,7 @@ El sistema distingue tres tipos de actores: \textbf{clientes}, \textbf{negocios}
 
 \section{Alcance de la Versión Actual}
 
-La versión documentada en este proyecto, denominada internamente \textit{v2}, recoge tanto las funcionalidades ya implementadas en el repositorio como aquellas que se encuentran en fase de integración y que estarán disponibles para la presentación del proyecto. El objetivo de esta versión es mostrar una experiencia funcional completa del producto, desde el descubrimiento de negocios hasta la reserva y gestión básica de citas.
+La versión documentada en este proyecto recoge el estado funcional actual de los repositorios backend y frontend. El objetivo de esta versión es mostrar una experiencia completa del producto: el cliente puede descubrir negocios, consultar servicios, reservar citas y gestionar su perfil; por su parte, el negocio o trabajador dispone de una aplicación de gestión para agenda, equipo, horarios, servicios y ausencias.
 
 \begin{enumerate}
   \item Registro y autenticación de usuarios con gestión de sesiones mediante tokens JWT, refresh tokens y refresco automático de credenciales.
@@ -433,7 +438,7 @@ La versión documentada en este proyecto, denominada internamente \textit{v2}, r
 
   \item Rate limiting en los endpoints de autenticación, con el objetivo de proteger la API frente a abuso, ataques automatizados o intentos repetidos de acceso.
 
-  \item Panel de gestión para negocios, desde el que la empresa podrá administrar su información pública, servicios, trabajadores, horarios y citas recibidas.
+  \item Aplicación de gestión para negocios y trabajadores, desde la que la empresa puede administrar su información pública, servicios, trabajadores, horarios, ausencias y citas recibidas.
 
   \item Búsqueda avanzada con filtros adicionales, orientada a mejorar el descubrimiento de negocios según criterios como categoría, ubicación, disponibilidad o valoración.
 \end{enumerate}
@@ -548,7 +553,7 @@ RF-3.9 & Solo los servicios activos deben poder reservarse. & Alta \\
 
 \RequirementTableStart{Requisitos funcionales --- Módulo de Reservas}{tab:rf-bookings}{Prioridad}
 RF-4.1 & Un cliente autenticado debe poder crear una reserva para un servicio en un slot de tiempo disponible. & Alta \\
-RF-4.2 & El sistema debe gestionar los estados de una reserva: \texttt{PENDING}, \texttt{CONFIRMED}, \texttt{CANCELED}, \texttt{COMPLETED}. & Alta \\
+RF-4.2 & El sistema debe gestionar los estados persistidos de una reserva: \texttt{PENDING}, \texttt{CONFIRMED} y \texttt{CANCELED}. Una reserva confirmada cuya fecha de fin ya ha pasado se considera realizada a efectos de histórico y valoración, aunque no exista un estado \texttt{COMPLETED} en base de datos. & Alta \\
 RF-4.3 & El sistema debe cancelar automáticamente mediante un job programado las reservas en estado \texttt{PENDING} que superen un umbral de tiempo sin confirmación. & Media \\
 RF-4.4 & El sistema debe enviar recordatorios push el día anterior a una reserva confirmada. & Media \\
 RF-4.5 & Un cliente debe poder cancelar sus propias reservas dentro de un plazo definido. & Alta \\
@@ -561,6 +566,10 @@ RF-4.11 & El cliente propietario, el negocio o el trabajador asignado deben pode
 RF-4.12 & El estado inicial de una reserva debe ser \texttt{CONFIRMED} cuando el negocio o el trabajador tengan autoaceptación habilitada y \texttt{PENDING} en caso contrario. & Media \\
 RF-4.13 & El sistema debe enviar notificaciones push en eventos de creación, confirmación, cancelación y recordatorio de reservas. & Media \\
 \RequirementTableEnd
+
+\begin{tcolorbox}[notaStyle]
+En la implementación actual una reserva \textbf{activa} es aquella en estado \texttt{PENDING} o \texttt{CONFIRMED}. Las reservas en \texttt{CANCELED} quedan en el histórico, pero dejan de bloquear disponibilidad. El sistema no persiste un estado \texttt{COMPLETED}; para habilitar una valoración se comprueba que la reserva esté \texttt{CONFIRMED}, pertenezca al cliente y que su fecha de fin sea anterior al momento actual.
+\end{tcolorbox}
 
 \subsection{Módulo de Valoraciones (RF-5)}
 
@@ -712,7 +721,7 @@ RNF-55 & En futuras funcionalidades de facturación, pagos o CRM, el sistema deb
 \textbf{Precondición:} El cliente tiene al menos una reserva en estado \texttt{CONFIRMED} con fecha de fin pasada y sin valoración previa. \\
 \textbf{Flujo principal:}
 \begin{enumerate}
-  \item El cliente accede a «Mis citas» y selecciona una cita completada.
+  \item El cliente accede a «Mis citas» y selecciona una cita confirmada cuya fecha de fin ya ha pasado.
   \item Introduce una puntuación de 1 a 5 estrellas y un comentario opcional.
   \item El sistema valida que la reserva pertenece al cliente, está finalizada y no tiene valoración previa.
   \item La valoración se persiste y los agregados del negocio y servicio se actualizan.
@@ -1025,62 +1034,61 @@ Gipsi sigue una arquitectura cliente-servidor clásica con separación física e
 
 \subsection{Estructura de Paquetes}
 
-El proyecto Maven sigue la convención estándar de Spring Boot con el groupId \texttt{com.gipsi}:
+El proyecto Maven sigue la convención estándar de Spring Boot con el \textit{groupId} \texttt{com.gipsi}. La organización actual combina paquetes técnicos (controladores, DTOs, entidades, repositorios, seguridad y servicios) con una nomenclatura de clases orientada al dominio:
 
 \begin{lstlisting}[style=yamlStyle, caption={Estructura de paquetes del backend}, label={lst:backend-estructura}]
-src/main/java/com/gipsi/gipsibackend/
-├── GipsiBackendApplication.java     # Punto de entrada
+src/main/java/com/gipsi/
+├── GipsiApplication.java            # Punto de entrada
 ├── config/
-│   ├── SecurityConfig.java          # Filtros, CORS, reglas de acceso
-│   ├── CorsConfig.java              # Configuración CORS por entorno
+│   ├── AsyncConfig.java             # Executor para notificaciones
+│   ├── DataInitializer.java         # Datos de prueba si se habilitan
 │   └── FirebaseConfig.java          # Inicialización Firebase Admin SDK
-├── auth/
-│   ├── controller/AuthController.java
-│   ├── service/AuthService.java
-│   ├── service/JwtService.java
-│   ├── filter/JwtAuthFilter.java
-│   └── dto/  (LoginRequest, RegisterRequest, TokenResponse…)
-├── user/
-│   ├── model/ (User, Customer, Business, Worker)
-│   └── repository/UserRepository.java
-├── business/
-│   ├── controller/BusinessController.java
-│   ├── service/BusinessService.java
-│   ├── model/Business.java
-│   ├── repository/BusinessRepository.java
-│   └── dto/ (BusinessRequest, BusinessResponse…)
-├── service/                         # Paquete de servicios ofrecidos
-│   ├── controller/ServiceController.java
-│   ├── service/ServiceOfferedService.java
-│   ├── service/AvailabilityService.java
-│   ├── model/ServiceOffered.java
-│   └── dto/
-├── booking/
-│   ├── controller/BookingController.java
-│   ├── service/BookingService.java
-│   ├── model/ (Booking, BookingStatus)
-│   └── dto/
-├── review/
-│   ├── controller/ReviewController.java
-│   ├── service/ReviewService.java
-│   ├── model/Review.java
-│   └── dto/
-├── notification/
-│   └── service/NotificationService.java
+├── controller/                       # Endpoints REST
+│   ├── AuthController.java
+│   ├── BusinessController.java
+│   ├── BookingController.java
+│   ├── ReviewController.java
+│   ├── AbsenceController.java
+│   └── ...
+├── dto/                              # Contratos de entrada/salida
+│   ├── auth/AuthDtos.java
+│   ├── booking/BookingDtos.java
+│   ├── business/BusinessDtos.java
+│   └── ...
+├── entity/                           # Entidades JPA y enums
+│   ├── Actor.java
+│   ├── Customer.java
+│   ├── Business.java
+│   ├── Worker.java
+│   ├── Booking.java
+│   ├── RefreshToken.java
+│   └── enums/
+├── repository/                       # Spring Data JPA
+│   ├── ActorRepository.java
+│   ├── BookingRepository.java
+│   ├── ServiceOfferedRepository.java
+│   └── ...
+├── security/
+│   ├── SecurityConfig.java           # Filtros, CORS, reglas de acceso
+│   ├── JwtAuthenticationFilter.java
+│   ├── JwtAuthEntryPoint.java
+│   ├── JwtService.java
+│   ├── RateLimitFilter.java
+│   └── SecurityUtils.java
+├── service/                          # Lógica de negocio
+│   ├── AuthService.java
+│   ├── BookingService.java
+│   ├── AvailabilityService.java
+│   ├── RefreshTokenService.java
+│   ├── NotificationEventListener.java
+│   ├── NotificationService.java
+│   └── ScheduledJobs.java
 ├── storage/
 │   ├── FileStorage.java             # Interfaz
 │   ├── LocalFileStorage.java
 │   └── S3FileStorage.java           # Esqueleto futuro
-├── category/
-│   ├── model/Category.java
-│   └── repository/CategoryRepository.java
-├── ratelimit/
-│   └── RateLimitFilter.java         # Bucket4j
-├── common/
-│   ├── DataInitializer.java         # Datos de prueba (perfil dev)
-│   └── GlobalExceptionHandler.java
-└── scheduler/
-    └── BookingScheduler.java        # Jobs: auto-cancel + recordatorios
+└── exception/
+    └── GlobalExceptionHandler.java  # Errores JSON homogéneos
 \end{lstlisting}
 
 \subsection{Capa de Seguridad: JWT y Spring Security}
@@ -1199,6 +1207,37 @@ El cálculo de disponibilidad es la funcionalidad más compleja del backend. El 
   \item \textbf{WORKER\_UNAVAILABLE}: ningún trabajador habilitado para ese servicio está disponible (en el modo multi-worker).
 \end{enumerate}
 
+La disponibilidad no se usa únicamente para pintar el calendario en la app; también actúa como regla de validación en el momento de crear la reserva. Por eso el backend vuelve a comprobar el slot dentro de \texttt{BookingService}: aunque el cliente haya visto una hora libre segundos antes, otra reserva concurrente podría haber ocupado esa franja.
+
+\begin{figure}[H]
+\centering
+\resizebox{0.98\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.1cm,
+  flowstep/.style={rectangle, draw=gipsiVerde!75!black, fill=white, rounded corners=4pt, minimum width=2.9cm, minimum height=1.0cm, align=center, font=\small},
+  data/.style={rectangle, draw=accentblue!70!black, fill=accentblue!6, rounded corners=4pt, minimum width=2.9cm, minimum height=1.0cm, align=center, font=\small},
+  event/.style={rectangle, draw=orange!80!black, fill=orange!10, rounded corners=4pt, minimum width=2.9cm, minimum height=1.0cm, align=center, font=\small},
+  arr/.style={-Stealth, thick}
+]
+\node[flowstep] (ui) {Flutter\\flujo de reserva};
+\node[data, right=of ui] (availability) {\texttt{GET /availability}\\slots disponibles};
+\node[flowstep, right=of availability] (post) {\texttt{POST /bookings}\\crear reserva};
+\node[flowstep, below=of post] (service) {\texttt{BookingService}\\validaciones};
+\node[data, left=of service] (db) {PostgreSQL\\reserva + índices};
+\node[event, right=of service] (push) {Evento de dominio\\notificación push};
+
+\draw[arr] (ui) -- node[above, font=\footnotesize]{consulta fecha} (availability);
+\draw[arr] (availability) -- node[above, font=\footnotesize]{selecciona slot} (post);
+\draw[arr] (post) -- node[right, font=\footnotesize]{DTO validado} (service);
+\draw[arr] (service) -- node[below, font=\footnotesize]{transacción} (db);
+\draw[arr] (db) -- node[above, font=\footnotesize]{persistida} (service);
+\draw[arr] (service) -- node[below, font=\footnotesize]{si procede} (push);
+\end{tikzpicture}%
+}
+\caption{Flujo de creación de reserva y validación de disponibilidad}
+\label{fig:booking-flow}
+\end{figure}
+
 \begin{lstlisting}[style=javaStyle, caption={Fragmento conceptual del cálculo de disponibilidad}, label={lst:availability}]
 // Por cada slot del día (granularidad: 15 min)
 for (LocalTime start = openTime; start.plusMinutes(serviceDuration).compareTo(closeTime) <= 0;
@@ -1228,19 +1267,30 @@ El frontend se organiza como monorepo gestionado por \textbf{Melos}, una herrami
 \begin{lstlisting}[style=yamlStyle, caption={Estructura del monorepo Flutter}, label={lst:monorepo}]
 gipsi-frontend/
 ├── apps/
-│   └── gipsi/                  # App ejecutable (Android + iOS)
-│       ├── lib/
-│       │   ├── main.dart
-│       │   ├── router/         # Configuración go_router
-│       │   ├── features/
-│       │   │   ├── explore/    # Pantalla de exploración
-│       │   │   ├── business/   # Detalle de negocio
-│       │   │   ├── auth/       # Login, registro, perfil
-│       │   │   ├── bookings/   # Mis citas (pendiente)
-│       │   │   └── shell/      # Bottom nav + ShellRoute
-│       │   └── providers/      # Riverpod providers globales
-│       └── assets/
-│           └── logo/
+│   ├── gipsi/                  # App cliente (Android + iOS)
+│   │   ├── lib/
+│   │   │   ├── main.dart
+│   │   │   ├── router/         # Configuración go_router
+│   │   │   ├── features/
+│   │   │   │   ├── explore/    # Pantalla de exploración
+│   │   │   │   ├── business_detail/
+│   │   │   │   ├── auth/       # Login, registro, perfil
+│   │   │   │   ├── booking/    # Flujo de reserva
+│   │   │   │   ├── my_bookings/ # Mis citas y valoraciones
+│   │   │   │   └── shell/      # Bottom nav + ShellRoute
+│   │   │   └── core/           # Providers, entorno y utilidades
+│   │   └── assets/
+│   │       └── logo/
+│   └── gipsi_business/         # App de negocio / trabajador
+│       └── lib/
+│           ├── router/
+│           ├── features/
+│           │   ├── home/       # Agenda y reservas recibidas
+│           │   ├── services/   # Catálogo del negocio
+│           │   ├── team/       # Trabajadores e invitaciones
+│           │   ├── absences/   # Solicitudes y conflictos
+│           │   └── profile/    # Perfil y ajustes
+│           └── core/
 ├── packages/
 │   ├── gipsi_api/              # Cliente HTTP, modelos, repositorios
 │   │   └── lib/src/
@@ -1260,10 +1310,12 @@ gipsi-frontend/
 \paragraph{Ventajas del monorepo con Melos.} Separar el código en packages (en lugar de directorios dentro de una sola app) aporta varias ventajas concretas:
 
 \begin{itemize}
-  \item \texttt{gipsi\_api} puede testearse de forma completamente independiente de la UI, incluso en entornos sin Flutter (Dart puro).
-  \item \texttt{gipsi\_shared\_ui} puede compartirse con futuras apps del ecosistema Gipsi (app de negocio, app de trabajador) sin duplicar código.
-  \item Los cambios en un package quedan aislados: modificar el cliente HTTP no fuerza recompilación de los tests de UI.
+  \item \texttt{gipsi\_api} centraliza modelos, cliente HTTP y repositorios, de modo que \texttt{apps/gipsi} y \texttt{apps/gipsi\_business} consumen la misma API sin duplicar contratos.
+  \item \texttt{gipsi\_shared\_ui} comparte identidad visual y componentes entre la app cliente y la app profesional.
+  \item Cada app puede evolucionar con navegación y pantallas propias, mientras Melos permite ejecutar \texttt{bootstrap}, \texttt{analyze}, \texttt{format} o \texttt{test} sobre todo el workspace.
 \end{itemize}
+
+Esta separación es especialmente útil porque los clientes y los negocios no tienen las mismas tareas. El cliente necesita descubrir, reservar y revisar citas; el negocio necesita operar una agenda, confirmar o cancelar reservas, gestionar servicios, resolver ausencias y mantener su equipo. Compartir la capa de API evita inconsistencias, pero mantener dos apps permite adaptar la experiencia a cada rol.
 
 \subsection{Gestión de Estado con Riverpod}
 
@@ -1334,85 +1386,152 @@ La tipografía utilizada en toda la aplicación es \textbf{Montserrat}, servida 
 
 \subsection{Esquema Principal}
 
-\begin{lstlisting}[style=sqlStyle, caption={DDL simplificado de las tablas principales (Flyway V1)}, label={lst:ddl}]
--- Tabla base de usuarios (esquema simplificado de una versión temprana)
-CREATE TABLE users (
-    id          BIGSERIAL PRIMARY KEY,
-    dtype       VARCHAR(20) NOT NULL,   -- 'CUSTOMER', 'BUSINESS', 'WORKER'
-    username    VARCHAR(50)  UNIQUE NOT NULL,
-    email       VARCHAR(100) UNIQUE NOT NULL,
-    password    VARCHAR(255) NOT NULL,  -- bcrypt hash
-    full_name   VARCHAR(100),
-    phone       VARCHAR(20),
-    created_at  TIMESTAMP DEFAULT NOW()
+\begin{lstlisting}[style=sqlStyle, caption={DDL resumido de las migraciones principales (V1--V5)}, label={lst:ddl}]
+-- Identidad: herencia JPA JOINED
+CREATE TABLE actor (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    banned BOOLEAN NOT NULL DEFAULT FALSE,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    deleted_at TIMESTAMP WITH TIME ZONE
 );
 
--- Campos específicos de BUSINESS (nulos para otros roles)
-ALTER TABLE users ADD COLUMN description  TEXT;
-ALTER TABLE users ADD COLUMN city         VARCHAR(100);
-ALTER TABLE users ADD COLUMN address      VARCHAR(255);
-ALTER TABLE users ADD COLUMN is_solo      BOOLEAN DEFAULT FALSE;
-ALTER TABLE users ADD COLUMN profile_img  VARCHAR(255);
-ALTER TABLE users ADD COLUMN cover_img    VARCHAR(255);
-ALTER TABLE users ADD COLUMN setup_complete BOOLEAN DEFAULT FALSE;
-
--- Categorías
-CREATE TABLE categories (
-    id      BIGSERIAL PRIMARY KEY,
-    name    VARCHAR(100) UNIQUE NOT NULL,
-    active  BOOLEAN DEFAULT TRUE
+CREATE TABLE customer (
+    id BIGINT PRIMARY KEY REFERENCES actor(id) ON DELETE CASCADE,
+    profile_image_url VARCHAR(500)
 );
 
--- Servicios ofrecidos
-CREATE TABLE services_offered (
-    id           BIGSERIAL PRIMARY KEY,
-    business_id  BIGINT REFERENCES users(id),
-    category_id  BIGINT REFERENCES categories(id),
-    name         VARCHAR(100) NOT NULL,
-    duration_min INTEGER NOT NULL,
-    price        NUMERIC(8,2),
-    image_url    VARCHAR(255),
-    active       BOOLEAN DEFAULT TRUE
+CREATE TABLE business (
+    id BIGINT PRIMARY KEY REFERENCES actor(id) ON DELETE CASCADE,
+    cif VARCHAR(20) NOT NULL UNIQUE,
+    description VARCHAR(1000),
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(100),
+    autonomous BOOLEAN NOT NULL DEFAULT FALSE,
+    clock_in_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    auto_accept BOOLEAN NOT NULL DEFAULT FALSE,
+    setup_complete BOOLEAN NOT NULL DEFAULT FALSE,
+    availability_horizon_days INTEGER NOT NULL DEFAULT 60,
+    pending_auto_cancel_days INTEGER NOT NULL DEFAULT 2,
+    profile_image_url VARCHAR(500),
+    cover_image_url VARCHAR(500)
 );
 
--- Reservas
-CREATE TABLE bookings (
-    id              BIGSERIAL PRIMARY KEY,
-    customer_id     BIGINT REFERENCES users(id),
-    service_id      BIGINT REFERENCES services_offered(id),
-    worker_id       BIGINT REFERENCES users(id),
-    start_datetime  TIMESTAMP NOT NULL,
-    end_datetime    TIMESTAMP NOT NULL,
-    status          VARCHAR(20) DEFAULT 'PENDING',
-    created_at      TIMESTAMP DEFAULT NOW()
+CREATE TABLE worker (
+    id BIGINT PRIMARY KEY REFERENCES actor(id) ON DELETE CASCADE,
+    business_id BIGINT REFERENCES business(id) ON DELETE SET NULL,
+    available BOOLEAN NOT NULL DEFAULT TRUE,
+    auto_accept BOOLEAN NOT NULL DEFAULT FALSE,
+    allow_overtime BOOLEAN NOT NULL DEFAULT FALSE,
+    can_act_as_business BOOLEAN NOT NULL DEFAULT FALSE
 );
 
--- Valoraciones
-CREATE TABLE reviews (
-    id          BIGSERIAL PRIMARY KEY,
-    booking_id  BIGINT UNIQUE REFERENCES bookings(id),
-    customer_id BIGINT REFERENCES users(id),
-    business_id BIGINT REFERENCES users(id),
-    service_id  BIGINT REFERENCES services_offered(id),
-    rating      SMALLINT CHECK (rating BETWEEN 1 AND 5),
-    comment     TEXT,
-    created_at  TIMESTAMP DEFAULT NOW()
+-- Catálogo y prestación
+CREATE TABLE category (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(500),
+    active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
--- Refresh tokens con rotación
-CREATE TABLE refresh_tokens (
-    id          BIGSERIAL PRIMARY KEY,
-    user_id     BIGINT REFERENCES users(id),
-    token       VARCHAR(512) UNIQUE NOT NULL,
-    revoked     BOOLEAN DEFAULT FALSE,
-    expires_at  TIMESTAMP NOT NULL,
-    created_at  TIMESTAMP DEFAULT NOW()
+CREATE TABLE service_offered (
+    id BIGSERIAL PRIMARY KEY,
+    business_id BIGINT NOT NULL REFERENCES business(id) ON DELETE CASCADE,
+    category_id BIGINT NOT NULL REFERENCES category(id),
+    name VARCHAR(150) NOT NULL,
+    description VARCHAR(1000),
+    price NUMERIC(10,2) NOT NULL,
+    duration INTEGER NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    image_url VARCHAR(500)
+);
+
+CREATE TABLE service_worker (
+    service_id BIGINT NOT NULL REFERENCES service_offered(id) ON DELETE CASCADE,
+    worker_id BIGINT NOT NULL REFERENCES worker(id) ON DELETE CASCADE,
+    PRIMARY KEY (service_id, worker_id)
+);
+
+-- Reservas y reputación
+CREATE TABLE booking (
+    id BIGSERIAL PRIMARY KEY,
+    business_id BIGINT NOT NULL REFERENCES business(id) ON DELETE CASCADE,
+    customer_id BIGINT NOT NULL REFERENCES customer(id) ON DELETE CASCADE,
+    service_id BIGINT NOT NULL REFERENCES service_offered(id) ON DELETE RESTRICT,
+    assigned_worker_id BIGINT REFERENCES worker(id) ON DELETE SET NULL,
+    start_date_time TIMESTAMP NOT NULL,
+    end_date_time TIMESTAMP NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    notes VARCHAR(500),
+    cancel_reason VARCHAR(500),
+    canceled_by_actor_id BIGINT REFERENCES actor(id) ON DELETE SET NULL
+);
+
+CREATE TABLE review (
+    id BIGSERIAL PRIMARY KEY,
+    booking_id BIGINT NOT NULL UNIQUE REFERENCES booking(id) ON DELETE CASCADE,
+    customer_id BIGINT NOT NULL REFERENCES customer(id) ON DELETE CASCADE,
+    business_id BIGINT NOT NULL REFERENCES business(id) ON DELETE CASCADE,
+    service_id BIGINT NOT NULL REFERENCES service_offered(id) ON DELETE CASCADE,
+    rating SMALLINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment VARCHAR(1000)
+);
+
+-- Agenda, sesiones y notificaciones
+CREATE TABLE schedule (
+    id BIGSERIAL PRIMARY KEY,
+    actor_id BIGINT NOT NULL REFERENCES actor(id) ON DELETE CASCADE,
+    day_of_week VARCHAR(10) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL
+);
+
+CREATE TABLE absence (
+    id BIGSERIAL PRIMARY KEY,
+    worker_id BIGINT NOT NULL REFERENCES worker(id) ON DELETE CASCADE,
+    business_id BIGINT NOT NULL REFERENCES business(id) ON DELETE CASCADE,
+    type VARCHAR(32) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status VARCHAR(16) NOT NULL,
+    decided_by BIGINT REFERENCES actor(id),
+    CONSTRAINT chk_absence_dates CHECK (end_date >= start_date)
+);
+
+CREATE TABLE refresh_token (
+    id BIGSERIAL PRIMARY KEY,
+    actor_id BIGINT NOT NULL REFERENCES actor(id) ON DELETE CASCADE,
+    token_hash VARCHAR(255) NOT NULL UNIQUE,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE device_token (
+    id BIGSERIAL PRIMARY KEY,
+    actor_id BIGINT NOT NULL REFERENCES actor(id) ON DELETE CASCADE,
+    token VARCHAR(500) NOT NULL UNIQUE,
+    platform VARCHAR(20) NOT NULL,
+    last_used_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 \end{lstlisting}
 
 \subsection{Gestión de Migraciones con Flyway}
 
-Flyway aplica las migraciones en orden al arrancar la aplicación, lo que garantiza que el esquema de base de datos es siempre consistente con el código. El convenio de nombrado es \texttt{V\{número\}\_\_\{descripción\}.sql}. La versión 2 del proyecto (v2) aplica \texttt{V2\_\_improvements.sql} sobre bases de datos existentes sin necesidad de recrearlas.
+Flyway aplica las migraciones en orden al arrancar la aplicación, lo que garantiza que el esquema de base de datos es siempre consistente con el código. El convenio de nombrado es \texttt{V\{número\}\_\_\{descripción\}.sql}. En el repositorio actual el historial relevante es:
+
+\begin{itemize}
+  \item \texttt{V1\_\_init.sql}: crea el modelo base con \texttt{actor}, subtipos, catálogo, reservas, horarios, fichajes, invitaciones y favoritos.
+  \item \texttt{V2\_\_improvements.sql}: añade ciudad, imágenes, reviews, tokens de dispositivo y refresh tokens rotables.
+  \item \texttt{V3\_\_customer\_avatar\_and\_soft\_delete.sql}: incorpora avatar de cliente y borrado lógico a nivel de \texttt{Actor}.
+  \item \texttt{V4\_\_absences.sql}: introduce el módulo de ausencias con estado, decisión y detección de conflictos.
+  \item \texttt{V5\_\_booking\_cancel\_reason.sql}: añade motivo de cancelación y actor que ejecuta la cancelación.
+\end{itemize}
 
 \begin{tcolorbox}[notaStyle]
 Las migraciones de Flyway son \textbf{inmutables} una vez aplicadas: no se deben modificar los archivos \texttt{V1\_\_...sql} ni \texttt{V2\_\_...sql} una vez que están en producción. Las correcciones se realizan siempre mediante nuevas versiones (\texttt{V3\_\_...sql}).
@@ -1422,70 +1541,123 @@ Las migraciones de Flyway son \textbf{inmutables} una vez aplicadas: no se deben
 
 \subsection{Convenciones Generales}
 
-La API sigue las convenciones REST estándar: recursos en plural y en minúsculas (\texttt{/businesses}, \texttt{/services}), verbos HTTP semánticos (GET para consultas, POST para creación, PUT para actualización completa, PATCH para parcial, DELETE para eliminación), y códigos de respuesta HTTP estándar (200, 201, 400, 401, 403, 404, 409, 429).
+La API sigue convenciones REST: recursos en plural y en minúsculas (\texttt{/businesses}, \texttt{/services}), verbos HTTP semánticos (GET para consultas, POST para creación, PUT para actualización y DELETE para eliminación o cancelación compatible), y respuestas JSON homogéneas. Los errores de negocio se traducen a códigos estándar como 400, 401, 403, 404, 409 y 429 mediante \texttt{GlobalExceptionHandler}.
 
 \subsection{Catálogo de Endpoints}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\small
+\scriptsize
 \caption{Endpoints de la API — Autenticación y Perfil}
 \label{tab:endpoints-auth}
-\begin{tabularx}{\textwidth}{llXl}
+\begin{tabularx}{\textwidth}{@{}L{0.10\textwidth}L{0.36\textwidth}Y L{0.18\textwidth}@{}}
 \toprule
 Método & Ruta & Descripción & Rol requerido \\
 \midrule
 POST & \texttt{/auth/login} & Autenticación, devuelve par de tokens & Público \\
 POST & \texttt{/auth/register/customer} & Registro de cliente & Público \\
+POST & \texttt{/auth/register/business} & Registro de negocio & Público \\
+POST & \texttt{/auth/register/worker} & Registro de trabajador & Público \\
+POST & \texttt{/auth/accept-invitation} & Acepta invitación durante registro/login & Público \\
 POST & \texttt{/auth/refresh} & Rota refresh token & Público \\
 POST & \texttt{/auth/logout} & Revoca refresh token & Autenticado \\
+POST & \texttt{/auth/switch-to-business} & Permite a un trabajador actuar como negocio si está habilitado & WORKER \\
 GET  & \texttt{/me} & Perfil del usuario actual (polimórfico) & Autenticado \\
+POST & \texttt{/me/change-password} & Cambia contraseña del actor autenticado & Autenticado \\
+POST & \texttt{/me/revoke-all-sessions} & Revoca todos los refresh tokens del actor & Autenticado \\
 GET  & \texttt{/me/devices} & Lista de dispositivos FCM registrados & Autenticado \\
 POST & \texttt{/me/devices} & Registra token FCM & Autenticado \\
+DELETE & \texttt{/me/devices/\{token\}} & Elimina token FCM & Autenticado \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\small
+\scriptsize
 \caption{Endpoints de la API — Negocios y Servicios}
 \label{tab:endpoints-biz}
-\begin{tabularx}{\textwidth}{llXl}
+\begin{tabularx}{\textwidth}{@{}L{0.10\textwidth}L{0.36\textwidth}Y L{0.18\textwidth}@{}}
 \toprule
 Método & Ruta & Descripción & Rol requerido \\
 \midrule
 GET  & \texttt{/businesses} & Lista paginada con filtros & Público \\
 GET  & \texttt{/businesses/\{id\}} & Detalle de negocio & Público \\
+GET  & \texttt{/businesses/\{id\}/workers} & Trabajadores públicos de un negocio & Público \\
+GET  & \texttt{/businesses/\{id\}/services} & Servicios públicos de un negocio & Público \\
+GET  & \texttt{/businesses/me} & Perfil del negocio autenticado & BUSINESS \\
+PUT  & \texttt{/businesses/me} & Edita información pública del negocio & BUSINESS \\
+PUT  & \texttt{/businesses/me/settings} & Ajustes operativos del negocio & BUSINESS \\
 POST & \texttt{/businesses/me/images/profile} & Sube imagen de perfil & BUSINESS \\
 POST & \texttt{/businesses/me/images/cover} & Sube imagen de portada & BUSINESS \\
 GET  & \texttt{/categories} & Lista categorías & Público \\
 GET  & \texttt{/services} & Lista servicios con filtros & Público \\
 GET  & \texttt{/services/\{id\}} & Detalle de servicio & Público \\
 GET  & \texttt{/services/\{id\}/availability} & Disponibilidad por fecha & Público \\
+POST & \texttt{/services} & Crea servicio ofrecido & BUSINESS \\
+PUT  & \texttt{/services/\{id\}} & Edita servicio ofrecido & BUSINESS \\
+PUT  & \texttt{/services/\{id\}/activate} & Activa servicio & BUSINESS \\
+PUT  & \texttt{/services/\{id\}/deactivate} & Desactiva servicio & BUSINESS \\
+PUT  & \texttt{/services/\{sId\}/workers/\{wId\}} & Asigna trabajador a servicio & BUSINESS \\
 POST & \texttt{/services/\{id\}/image} & Sube imagen de servicio & BUSINESS \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\small
+\scriptsize
 \caption{Endpoints de la API — Reservas y Valoraciones}
 \label{tab:endpoints-bookings}
-\begin{tabularx}{\textwidth}{llXl}
+\begin{tabularx}{\textwidth}{@{}L{0.10\textwidth}L{0.36\textwidth}Y L{0.18\textwidth}@{}}
 \toprule
 Método & Ruta & Descripción & Rol requerido \\
 \midrule
 POST & \texttt{/bookings} & Crea reserva & CUSTOMER \\
-GET  & \texttt{/bookings/me} & Mis reservas & CUSTOMER \\
-PUT  & \texttt{/bookings/\{id\}/cancel} & Cancela reserva & CUSTOMER \\
+GET  & \texttt{/bookings/\{id\}} & Detalle de reserva visible por el actor autorizado & Autenticado \\
+GET  & \texttt{/bookings/me/customer} & Reservas del cliente autenticado & CUSTOMER \\
+GET  & \texttt{/bookings/me/worker} & Reservas asignadas al trabajador & WORKER \\
+GET  & \texttt{/bookings/me/worker/pending} & Reservas pendientes del trabajador & WORKER \\
+GET  & \texttt{/bookings/me/business} & Reservas recibidas por el negocio & BUSINESS \\
+PUT  & \texttt{/bookings/\{id\}/confirm} & Confirma reserva pendiente & WORKER / BUSINESS \\
+PUT  & \texttt{/bookings/\{id\}/cancel} & Cancela reserva con motivo opcional & CUSTOMER / WORKER / BUSINESS \\
 POST & \texttt{/reviews} & Crea valoración & CUSTOMER \\
 PUT  & \texttt{/reviews/\{id\}} & Edita valoración propia & CUSTOMER \\
 DELETE & \texttt{/reviews/\{id\}} & Elimina valoración propia & CUSTOMER \\
+GET  & \texttt{/reviews/me} & Valoraciones propias del cliente & CUSTOMER \\
 GET  & \texttt{/reviews/business/\{bId\}} & Reviews de un negocio & Público \\
 GET  & \texttt{/reviews/service/\{sId\}} & Reviews de un servicio & Público \\
 GET  & \texttt{/files/\{cat\}/\{filename\}} & Sirve imagen estática & Público \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Endpoints de la API — Equipo, horarios y ausencias}
+\label{tab:endpoints-team}
+\begin{tabularx}{\textwidth}{@{}L{0.10\textwidth}L{0.36\textwidth}Y L{0.18\textwidth}@{}}
+\toprule
+Método & Ruta & Descripción & Rol requerido \\
+\midrule
+POST & \texttt{/invitations} & Crea invitación de trabajador & BUSINESS \\
+GET  & \texttt{/invitations/pending} & Invitaciones pendientes del negocio & BUSINESS \\
+GET  & \texttt{/invitations/token/\{token\}} & Valida invitación por token & Público \\
+POST & \texttt{/invitations/redeem/\{token\}} & Canjea invitación & WORKER \\
+GET  & \texttt{/schedules/me} & Horario propio & BUSINESS / WORKER \\
+PUT  & \texttt{/schedules/me} & Actualiza horario propio & BUSINESS / WORKER \\
+GET  & \texttt{/workers/\{id\}/schedule} & Horario de trabajador del negocio & BUSINESS / WORKER \\
+PUT  & \texttt{/workers/\{id\}/schedule} & Actualiza horario de trabajador & BUSINESS \\
+POST & \texttt{/timeoff} & Crea bloqueo temporal propio & BUSINESS / WORKER \\
+GET  & \texttt{/absences/me} & Ausencias propias del trabajador & WORKER \\
+POST & \texttt{/absences} & Solicita ausencia & WORKER \\
+GET  & \texttt{/absences/business} & Ausencias del negocio & BUSINESS \\
+PUT  & \texttt{/absences/\{id\}/approve} & Aprueba ausencia & BUSINESS \\
+PUT  & \texttt{/absences/\{id\}/reject} & Rechaza ausencia & BUSINESS \\
+GET  & \texttt{/timeclock/me/open} & Sesión de fichaje abierta & WORKER \\
+POST & \texttt{/timeclock/check-in} & Entrada de fichaje & WORKER \\
+POST & \texttt{/timeclock/check-out} & Salida de fichaje & WORKER \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -1506,7 +1678,7 @@ Spring Security 6 (integrado en Spring Boot 3) adopta un modelo de configuració
   \item Configura CORS con los orígenes permitidos leídos de variables de entorno.
   \item Establece la política de sesión como \texttt{STATELESS} (sin sesiones HTTP del servidor).
   \item Define las reglas de autorización: endpoints públicos (exploración, imágenes, auth), endpoints por rol.
-  \item Registra el filtro \texttt{JwtAuthFilter} antes del filtro de autenticación estándar de Spring.
+  \item Registra el filtro \texttt{JwtAuthenticationFilter} antes del filtro de autenticación estándar de Spring.
 \end{enumerate}
 
 \begin{lstlisting}[style=javaStyle, caption={Configuración de Spring Security (SecurityConfig.java)}, label={lst:security}]
@@ -1515,25 +1687,41 @@ Spring Security 6 (integrado en Spring Boot 3) adopta un modelo de configuració
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,
-            JwtAuthFilter jwtFilter) throws Exception {
-        return http
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+            JwtAuthenticationFilter jwtFilter,
+            JwtAuthEntryPoint entryPoint) throws Exception {
+        http
             .csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults())
+            .cors(c -> {})
             .sessionManagement(sm ->
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/businesses/**",
-                    "/services/**", "/categories/**",
-                    "/reviews/**", "/files/**",
+                .requestMatchers("/auth/login", "/auth/refresh",
+                    "/auth/register/**", "/auth/accept-invitation").permitAll()
+                .requestMatchers(HttpMethod.GET,
+                    "/businesses", "/businesses/*",
+                    "/businesses/*/workers", "/businesses/*/services",
+                    "/services", "/services/*",
+                    "/services/*/availability",
+                    "/reviews/business/*", "/reviews/service/*",
+                    "/categories", "/categories/*").permitAll()
+                .requestMatchers("/files/**",
                     "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/bookings").hasRole("CUSTOMER")
-                .requestMatchers(HttpMethod.POST, "/reviews").hasRole("CUSTOMER")
+                .requestMatchers(HttpMethod.PUT, "/bookings/*/confirm")
+                    .hasAnyRole("WORKER", "BUSINESS")
+                .requestMatchers(HttpMethod.PUT, "/bookings/*/cancel")
+                    .hasAnyRole("WORKER", "BUSINESS", "CUSTOMER")
                 .requestMatchers("/businesses/me/**").hasRole("BUSINESS")
-                .anyRequest().authenticated())
-            .addFilterBefore(jwtFilter,
-                UsernamePasswordAuthenticationFilter.class)
-            .build();
+                .requestMatchers("/workers/me/**").hasRole("WORKER")
+                .requestMatchers("/customers/me/**").hasRole("CUSTOMER")
+                .requestMatchers("/me", "/me/**").authenticated()
+                .anyRequest().authenticated());
+
+        http.addFilterBefore(jwtFilter,
+            UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
@@ -1553,65 +1741,64 @@ El token bucket es un algoritmo de control de flujo que funciona de la siguiente
 
 \subsection{Notificaciones Push con Firebase}
 
-El servicio de notificaciones (\texttt{NotificationService}) utiliza el SDK de Firebase Admin para Java para enviar mensajes FCM. Los tokens de dispositivo se registran en la entidad \texttt{DeviceToken} vinculada al usuario. El envío se realiza de forma asíncrona mediante eventos de Spring (\texttt{@EventListener} + \texttt{@Async}), de modo que el envío de la notificación no bloquea la respuesta HTTP principal.
+El servicio de notificaciones (\texttt{NotificationService}) utiliza el SDK de Firebase Admin para Java para enviar mensajes FCM. Los tokens de dispositivo se registran en la entidad \texttt{DeviceToken} vinculada al actor autenticado. El envío se realiza de forma asíncrona mediante eventos de Spring (\texttt{@EventListener} + \texttt{@Async}), de modo que la notificación no bloquea la respuesta HTTP principal. Si Firebase no está configurado en desarrollo, el servicio funciona como \textit{no-op}: la API arranca y simplemente omite los envíos.
 
 \begin{lstlisting}[style=javaStyle, caption={Envío asíncrono de notificación push}, label={lst:fcm}]
 @Async
 @EventListener
-public void onBookingCreated(BookingCreatedEvent event) {
-    Booking booking = event.getBooking();
-    List<String> tokens = deviceTokenRepository
-        .findByUserId(booking.getBusiness().getId())
-        .stream().map(DeviceToken::getToken).toList();
+public void onBookingCreated(BookingCreatedEvent ev) {
+    bookingRepository.findById(ev.bookingId()).ifPresent(b -> {
+        String title = "Nueva reserva";
+        String body = "%s ha reservado %s".formatted(
+            b.getCustomer().getName(), b.getService().getName());
+        Map<String, String> data = Map.of(
+            "type", "BOOKING_CREATED",
+            "bookingId", String.valueOf(b.getId()));
 
-    if (tokens.isEmpty()) return;
-
-    MulticastMessage message = MulticastMessage.builder()
-        .setNotification(Notification.builder()
-            .setTitle("Nueva reserva")
-            .setBody("Reserva de " + booking.getCustomer().getFullName()
-                   + " para " + booking.getService().getName())
-            .build())
-        .addAllTokens(tokens)
-        .build();
-
-    try {
-        firebaseMessaging.sendEachForMulticast(message);
-    } catch (FirebaseMessagingException e) {
-        log.warn("Error FCM: {}", e.getMessage());
-    }
+        if (b.getAssignedWorker() != null) {
+            notificationService.sendToActor(b.getAssignedWorker(),
+                title, body, data);
+        } else {
+            notificationService.sendToActor(b.getBusiness(),
+                title, body, data);
+        }
+    });
 }
 \end{lstlisting}
 
 \subsection{Jobs Programados}
 
-El \texttt{BookingScheduler} ejecuta dos tareas programadas:
+El componente \texttt{ScheduledJobs} ejecuta dos tareas programadas:
 
 \begin{enumerate}
-  \item \textbf{Auto-cancelación de reservas PENDING}: Se ejecuta cada hora y cancela las reservas en estado \texttt{PENDING} cuya fecha de inicio ya ha pasado sin ser confirmadas por el negocio.
-  \item \textbf{Recordatorios diarios}: Se ejecuta cada mañana y envía notificaciones push a los clientes con reservas confirmadas para el día siguiente.
+  \item \textbf{Auto-cancelación de reservas PENDING}: Se ejecuta cada hora y cancela las reservas pendientes que han superado el umbral \texttt{pendingAutoCancelDays} configurado por el negocio.
+  \item \textbf{Recordatorios diarios}: Se ejecuta cada mañana a las 09:00 y publica eventos de recordatorio para los clientes con reservas confirmadas al día siguiente.
 \end{enumerate}
 
 \begin{lstlisting}[style=javaStyle, caption={Job de auto-cancelación con @Scheduled}, label={lst:scheduler}]
 @Scheduled(cron = "0 0 * * * *")  // Cada hora en punto
 @Transactional
-public void autoCancelExpiredPendingBookings() {
-    List<Booking> expired = bookingRepository
-        .findByStatusAndStartDatetimeBefore(
-            BookingStatus.PENDING, LocalDateTime.now());
-    expired.forEach(b -> {
-        b.setStatus(BookingStatus.CANCELLED);
-        log.info("Auto-cancelled booking {}", b.getId());
-    });
-    bookingRepository.saveAll(expired);
+public void autoCancelStalePending() {
+    Instant threshold = Instant.now().minus(1, ChronoUnit.DAYS);
+    List<Booking> candidates = bookingRepository.findStalePending(threshold);
+    for (Booking b : candidates) {
+        Instant limit = b.getCreatedAt()
+            .plus(b.getBusiness().getPendingAutoCancelDays(), ChronoUnit.DAYS);
+        if (Instant.now().isAfter(limit)) {
+            b.setStatus(BookingStatus.CANCELED);
+            bookingRepository.save(b);
+            events.publishEvent(new BookingCanceledEvent(b.getId(), null));
+        }
+    }
 }
 
-@Scheduled(cron = "0 0 8 * * *")  // 08:00 cada día
+@Scheduled(cron = "0 0 9 * * *")  // 09:00 cada día
 public void sendDailyReminders() {
     LocalDate tomorrow = LocalDate.now().plusDays(1);
-    List<Booking> upcoming = bookingRepository
-        .findConfirmedForDate(tomorrow);
-    upcoming.forEach(notificationService::sendReminder);
+    List<Booking> bookings = bookingRepository.findConfirmedByDay(
+        tomorrow.atStartOfDay(), tomorrow.plusDays(1).atStartOfDay());
+    bookings.forEach(b ->
+        events.publishEvent(new BookingReminderEvent(b.getId())));
 }
 \end{lstlisting}
 
@@ -1624,9 +1811,9 @@ El package \texttt{gipsi\_api} encapsula toda la comunicación con el backend. E
 \begin{enumerate}
   \item Cada petición lleva la cabecera \texttt{Authorization: Bearer \{accessToken\}}.
   \item Si la respuesta es un error 401, el interceptor captura el error antes de que llegue al código de la feature.
-  \item Llama a \texttt{POST /auth/refresh} con el refresh token almacenado en \texttt{flutter\_secure\_storage}.
+  \item Solicita la rotación en \texttt{POST /auth/refresh} usando el refresh token guardado en el almacenamiento seguro del dispositivo.
   \item Si el refresh tiene éxito, guarda los nuevos tokens y \textbf{reintenta la petición original} de forma transparente.
-  \item Si el refresh falla (token expirado o revocado), llama a \texttt{AuthController.expireSession()} que limpia el estado de auth y la UI transiciona automáticamente al estado no-autenticado.
+  \item Si el refresh falla porque el token ha expirado o ha sido revocado, limpia los tokens locales, caduca la sesión y transiciona la UI al estado no-autenticado.
 \end{enumerate}
 
 \begin{lstlisting}[style=dartStyle, caption={Interceptor de refresh token en Dio}, label={lst:interceptor}]
@@ -2192,10 +2379,10 @@ Para documentar las pruebas de disponibilidad se consulta manualmente el endpoin
 \toprule
 ID & Preparación y acción & Captura a guardar \\
 \midrule
-PF-D01 & Consultar \texttt{GET /services/\{id\}/availability} indicando \texttt{date=YYYY-MM-DD} para un día laborable con horario activo. Comprobar mezcla de slots disponibles e indisponibles. & \texttt{pf-d01-disponibilidad-laborable.png} \\
-PF-D02 & Consultar la disponibilidad para una fecha fuera de horario o festiva y comprobar que todos los slots devueltos aparecen con motivo \texttt{OUT\_OF\_SCHEDULE}. & \texttt{pf-d02-disponibilidad-fuera-horario.png} \\
-PF-D03 & Consultar una fecha con una reserva previa y comprobar que el slot afectado se devuelve con motivo \texttt{BOOKED}. & \texttt{pf-d03-disponibilidad-booked.png} \\
-PF-D04 & Repetir la consulta omitiendo \texttt{workerId} en un negocio con varios trabajadores y comprobar que la respuesta incluye \texttt{availableWorkerIds}. & \texttt{pf-d04-disponibilidad-multiworker.png} \\
+PF-D01 & Consultar \texttt{GET /services/\{id\}/availability} indicando \texttt{date=YYYY-MM-DD} para un día laborable con horario activo. Comprobar mezcla de slots disponibles e indisponibles. & \TestFile{pf-d01-disponibilidad-laborable.png} \\
+PF-D02 & Consultar la disponibilidad para una fecha fuera de horario o festiva y comprobar que todos los slots devueltos aparecen con motivo \texttt{OUT\_OF\_SCHEDULE}. & \TestFile{pf-d02-disponibilidad-fuera-horario.png} \\
+PF-D03 & Consultar una fecha con una reserva previa y comprobar que el slot afectado se devuelve con motivo \texttt{BOOKED}. & \TestFile{pf-d03-disponibilidad-booked.png} \\
+PF-D04 & Repetir la consulta omitiendo \texttt{workerId} en un negocio con varios trabajadores y comprobar que la respuesta incluye \texttt{availableWorkerIds}. & \TestFile{pf-d04-disponibilidad-multiworker.png} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -2226,8 +2413,8 @@ Las evidencias visuales del punto 5.3.1 se obtuvieron ejecutando las pruebas uni
 \toprule
 ID & Clase y evidencia & Captura guardada \\
 \midrule
-PU-B01 & Se ejecutó la clase completa \texttt{JwtServiceTest}. En la captura aparecieron en verde los métodos \texttt{generateToken\_shouldContainUsername}, \texttt{isValid\_withExpiredToken\_shouldReturnFalse} y \texttt{extractUsername\_withTamperedPayload\_shouldThrowJwtException}. & \texttt{pu-b01-jwtservice-completo.png} \\
-PU-B02 & Se ejecutó la clase completa \texttt{AvailabilityServiceTest}. En la captura aparecieron en verde los métodos \texttt{getAvailability\_whenWorkerHasTimeOff\_allSlotsUnavailable} y \texttt{getAvailability\_whenSlotBooked\_markedAsBooked}. & \texttt{pu-b02-availabilityservice-completo.png} \\
+PU-B01 & Se ejecutó la clase completa \texttt{JwtServiceTest}. La evidencia cubre generación de token, rechazo de tokens expirados y detección de payload manipulado. & \TestFile{pu-b01-jwtservice-completo.png} \\
+PU-B02 & Se ejecutó la clase completa \texttt{AvailabilityServiceTest}. La evidencia cubre ausencias del trabajador y slots bloqueados por reservas existentes. & \TestFile{pu-b02-availabilityservice-completo.png} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -2431,13 +2618,12 @@ dart pub global activate melos
 # 2. Instalar dependencias de todos los packages
 melos bootstrap
 
-# 3. Generar carpetas de plataforma (solo primera vez)
+# 3. Lanzar la app cliente (emulador Android apunta a 10.0.2.2:8080)
 cd apps/gipsi
-flutter create --project-name gipsi \
-               --org com.gipsi \
-               --platforms=android,ios .
+flutter run
 
-# 4. Lanzar la app (emulador Android apunta a 10.0.2.2:8080)
+# 4. Lanzar la app de negocio / trabajador
+cd ../gipsi_business
 flutter run
 
 # Para iOS Simulator
@@ -2468,6 +2654,7 @@ cliente puedan resolver el dominio de la API.
 
 \begin{lstlisting}[style=yamlStyle, caption={Compilación para Android e iOS}, label={lst:build}]
 # Android — APK de debug
+cd apps/gipsi
 flutter build apk --debug
 
 # Android — APK de release (requiere keystore configurado)
@@ -2481,6 +2668,8 @@ flutter build appbundle --release \
 # iOS — Archivo para App Store (requiere cuenta Apple Developer)
 flutter build ios --release \
     --dart-define=API_URL=https://api.gipsi.com
+
+# App profesional: repetir los mismos comandos desde apps/gipsi_business
 \end{lstlisting}
 
 Los builds de depuración son adecuados para validar la integración durante el
@@ -2629,7 +2818,7 @@ El desarrollo de Gipsi ha permitido construir una plataforma funcional de gesti�
 
 \paragraph{Arquitectura de seguridad robusta.} La implementación del sistema de autenticación JWT con rotación de refresh tokens sigue las recomendaciones OWASP y proporciona protección real ante el robo de tokens. La revocación en cadena cuando se detecta uso de un token ya rotado es una característica de nivel profesional.
 
-\paragraph{Monorepo Flutter con Melos.} La organización del frontend en tres packages interdependientes (\texttt{gipsi}, \texttt{gipsi\_api}, \texttt{gipsi\_shared\_ui}) establece una base sólida para la escalabilidad del proyecto. La separación entre lógica de red, sistema de diseño y app ejecutable facilita el testing independiente y la reutilización futura.
+\paragraph{Monorepo Flutter con Melos.} La organización del frontend en dos aplicaciones (\texttt{apps/gipsi} y \texttt{apps/gipsi\_business}) y dos paquetes compartidos (\texttt{gipsi\_api}, \texttt{gipsi\_shared\_ui}) establece una base sólida para la escalabilidad del proyecto. La separación entre lógica de red, sistema de diseño y apps ejecutables permite reutilizar contratos sin mezclar experiencias de cliente y profesional.
 
 \paragraph{Cálculo de disponibilidad.} El motor de disponibilidad horaria considera múltiples variables simultáneas (horario del negocio, reservas existentes, días libres del trabajador, política de horas extra) con una respuesta bien tipada que indica la causa específica de cada indisponibilidad, lo que permite una UX informativa para el cliente.
 
@@ -2645,16 +2834,16 @@ El desarrollo de Gipsi ha permitido construir una plataforma funcional de gesti�
 
 \section{Posibles Mejoras}
 
-\subsection{Mejoras a Corto Plazo (Bloques Pendientes)}
+\subsection{Mejoras a Corto Plazo}
 
 \begin{enumerate}
-  \item \textbf{Flujo de reserva completo (Bloque 3)}: Implementar los cuatro pasos de reserva en el frontend: selección de servicio, selección de trabajador o «cualquier disponible», selección de fecha y hora desde el calendario de disponibilidad, y pantalla de confirmación.
-
-  \item \textbf{Gestión de citas propias (Bloque 5)}: La pestaña «Mis citas» necesita listar las reservas del cliente, permitir su cancelación dentro del plazo permitido y habilitar el flujo de valoración post-servicio.
-
   \item \textbf{Tests automatizados con Testcontainers}: El backend carece de pruebas de integración contra una base de datos real. Testcontainers permite levantar un contenedor PostgreSQL en tiempo de prueba, eliminando la necesidad de un servidor externo y haciendo las pruebas reproducibles en cualquier entorno CI.
 
-  \item \textbf{Búsqueda con filtros y favoritos}: La pestaña «Buscar» está preparada en navegación pero sin implementación. Los favoritos requieren el endpoint \texttt{PUT /customers/me/favorites/businesses/\{id\}} en el backend.
+  \item \textbf{Cobertura de widgets y navegación}: Añadir pruebas de widget en Flutter para el flujo de reserva, la pantalla de «Mis citas», el detalle de negocio y las pantallas críticas de la app profesional.
+
+  \item \textbf{Observabilidad básica}: Incorporar métricas de latencia por endpoint, conteo de errores, tiempo de cálculo de disponibilidad y estado de los jobs programados.
+
+  \item \textbf{Validación avanzada de imágenes}: Comprobar tamaño real, tipo MIME y dimensiones antes de aceptar subidas, además de generar variantes optimizadas para móvil.
 \end{enumerate}
 
 \subsection{Mejoras Arquitectónicas}
@@ -2666,7 +2855,7 @@ El desarrollo de Gipsi ha permitido construir una plataforma funcional de gesti�
 
   \item \textbf{Paginación por cursor}: La paginación actual usa \texttt{page}/\texttt{size} (offset-based), que tiene problemas de consistencia cuando se insertan o eliminan registros entre páginas. Una paginación por cursor (keyset pagination) es más eficiente y estable para feeds en tiempo real.
 
-  \item \textbf{App de negocio independiente}: La arquitectura del monorepo facilita crear \texttt{apps/gipsi\_business} que comparta \texttt{gipsi\_api} y \texttt{gipsi\_shared\_ui} pero ofrezca una experiencia específica para propietarios (gestión de agenda, perfil de negocio, estadísticas).
+  \item \textbf{Evolución de la app profesional}: La app \texttt{apps/gipsi\_business} ya separa la experiencia de propietarios y trabajadores. Las siguientes mejoras naturales son agenda semanal avanzada, estadísticas de ocupación, exportación de datos y configuración visual del perfil público.
 
   \item \textbf{Pipeline CI/CD}: Configurar GitHub Actions con: ejecución de tests del backend con Testcontainers, análisis estático con \texttt{flutter analyze} y \texttt{dart analyze}, build del APK de Android en cada push a \texttt{main}, y despliegue automático al servidor de producción.
 \end{enumerate}
@@ -2956,7 +3145,7 @@ scripts:
 
 \chapter{Usuarios de Prueba (DataInitializer)}
 
-La clase \texttt{DataInitializer} se activa con el perfil \texttt{dev} y crea los siguientes usuarios de prueba para facilitar el desarrollo y las demos:
+La clase \texttt{DataInitializer} se activa solo cuando se habilita la carga inicial de datos, por ejemplo con la variable de entorno \texttt{DATA\_INITIALIZE=true}. Su comportamiento es idempotente: si ya existen actores en la base de datos no vuelve a cargar datos. Cuando está habilitada, crea los siguientes usuarios de prueba para facilitar el desarrollo y las demos:
 
 \begin{table}[H]
 \centering
@@ -2982,7 +3171,7 @@ Nombre de usuario & Rol & Contraseña \\
 \end{table}
 
 \begin{tcolorbox}[advertenciaStyle]
-Los usuarios de prueba \textbf{nunca} deben estar presentes en entornos de producción. El perfil \texttt{dev} (y por tanto el \texttt{DataInitializer}) debe estar desactivado mediante la variable \texttt{SPRING\_PROFILES\_ACTIVE=prod}.
+Los usuarios de prueba \textbf{nunca} deben estar presentes en entornos de producción. En producción debe usarse \texttt{SPRING\_PROFILES\_ACTIVE=prod} y mantener \texttt{DATA\_INITIALIZE=false} o sin definir.
 \end{tcolorbox}
 
 \chapter{Formato de Respuesta de Disponibilidad}
@@ -3050,10 +3239,20 @@ El endpoint \texttt{GET /services/\{id\}/availability?date=YYYY-MM-DD\&workerId=
   que realiza la petición y comprobar sus permisos sin consultar la sesión en cada
   solicitud.
 
+  \item[Autoaceptación]
+  Política configurable por negocio autónomo o trabajador. Si está activa, una reserva
+  entra directamente en estado \texttt{CONFIRMED}; si está desactivada, la reserva queda
+  en \texttt{PENDING} hasta que el negocio o trabajador la confirme manualmente.
+
   \item[API REST]
   Interfaz de comunicación entre el frontend móvil y el backend. Utiliza HTTP como
   protocolo de transporte y organiza las operaciones mediante recursos, métodos y
   respuestas estructuradas, normalmente en formato JSON.
+
+  \item[Ausencia]
+  Periodo solicitado o registrado para un trabajador durante el cual no debe recibir
+  reservas. En Gipsi puede estar pendiente, aprobada o rechazada, y antes de aprobarla
+  el negocio puede consultar qué citas entran en conflicto.
 
   \item[Backend]
   Parte del sistema ejecutada en el servidor. En Gipsi se encarga de gestionar la lógica
@@ -3157,6 +3356,11 @@ El endpoint \texttt{GET /services/\{id\}/availability?date=YYYY-MM-DD\&workerId=
   Token opaco de larga duración, de 30 días en Gipsi, almacenado en base de datos y usado
   exclusivamente para obtener un nuevo par de tokens. Se rota en cada uso para reducir
   el riesgo de reutilización indebida si el token anterior queda comprometido.
+
+  \item[Reserva activa]
+  Reserva en estado \texttt{PENDING} o \texttt{CONFIRMED}. Estas reservas bloquean
+  disponibilidad y se tienen en cuenta al calcular conflictos de agenda. Las reservas
+  \texttt{CANCELED} se conservan para histórico, pero ya no ocupan huecos.
 
   \item[Repository]
   Patrón de arquitectura que encapsula el acceso a datos. En el frontend permite que la
