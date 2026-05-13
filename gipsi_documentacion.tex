@@ -295,7 +295,6 @@ ID & Descripci\'on & #3 \\
     \vfill
 
     {\color{gipsiVerde}\rule{\linewidth}{1pt}}\\[0.3cm]
-    {\footnotesize Documento generado para entorno LaTeX / Overleaf}
   \end{titlepage}
 }
 
@@ -2242,6 +2241,21 @@ PU-B02 & Se ejecutó la clase completa \texttt{AvailabilityServiceTest}. En la c
 
 \section{Requisitos de Entorno}
 
+El despliegue de Gipsi se divide en dos piezas principales: una API REST
+Spring Boot que mantiene el estado del sistema y una aplicación Flutter que
+consume dicha API. Esta separación permite publicar el backend en un servidor
+o contenedor propio, mientras que el frontend se distribuye como aplicación
+móvil compilada para Android o iOS. Por ello, antes de poner el sistema en
+producción es importante fijar tres aspectos: el entorno donde se ejecutará la
+API, la base de datos PostgreSQL persistente y la URL pública que utilizarán
+las aplicaciones cliente.
+
+En desarrollo se admiten valores por defecto cómodos, como CORS abierto o una
+base de datos local. En producción, sin embargo, el despliegue debe realizarse
+con el perfil \texttt{prod}, secretos externos al repositorio, HTTPS y una
+lista cerrada de orígenes permitidos. Esta diferencia evita que una
+configuración pensada para pruebas acabe expuesta en un entorno real.
+
 \subsection{Backend}
 
 \begin{table}[H]
@@ -2261,6 +2275,14 @@ RAM mínima & 512 MB (JVM + Spring Boot) \\
 \end{tabular}
 \end{table}
 
+Además de las versiones indicadas, el backend necesita acceso de red estable a
+PostgreSQL y permisos de escritura en el directorio configurado para imágenes.
+La carpeta de almacenamiento no debe residir dentro del artefacto de la
+aplicación, ya que las subidas de usuarios tienen que sobrevivir a reinicios,
+actualizaciones del JAR o recreaciones de contenedores. Si se habilitan las
+notificaciones push, el JSON de Firebase debe montarse como archivo externo y
+con permisos restrictivos.
+
 \subsection{Frontend}
 
 \begin{table}[H]
@@ -2278,6 +2300,35 @@ Melos & 6.2.0+ (\texttt{dart pub global activate melos}) \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Servicios Externos y Red}
+
+El entorno de producción también depende de varios elementos externos al código
+fuente. La siguiente tabla resume los más relevantes:
+
+\begin{table}[H]
+\centering
+\caption{Servicios externos necesarios para producción}
+\label{tab:req-servicios-produccion}
+\begin{tabularx}{\textwidth}{l>{\raggedright\arraybackslash}X}
+\toprule
+Elemento & Consideración de despliegue \\
+\midrule
+Dominio de la API & Debe resolver a la instancia backend, por ejemplo \texttt{api.gipsi.com} \\
+HTTPS & Recomendado mediante proxy inverso como Nginx, Traefik o Caddy \\
+CORS & Debe limitarse al dominio real de la aplicación cliente \\
+PostgreSQL & Debe contar con volumen persistente y copias de seguridad periódicas \\
+Almacenamiento & Directorio o volumen persistente para imágenes subidas por usuarios \\
+Firebase & Opcional; si no se configura, la API arranca sin notificaciones push \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+La API puede escuchar internamente en el puerto \texttt{8080}, pero en un
+despliegue público lo recomendable es situarla detrás de un proxy HTTPS. De
+esta forma el certificado TLS, la redirección de HTTP a HTTPS y posibles
+límites de tamaño de subida se gestionan en una capa específica, mientras que
+Spring Boot conserva una configuración sencilla y portable.
 
 \section{Configuración del Backend}
 
@@ -2313,6 +2364,22 @@ FIREBASE_CREDENTIALS_PATH=/etc/gipsi/firebase-credentials.json
 SPRING_PROFILES_ACTIVE=prod
 \end{lstlisting}
 
+Estas variables cubren las decisiones sensibles del despliegue. La URL de base
+de datos cambia entre desarrollo y producción; el secreto JWT debe generarse
+con suficiente entropía y no reutilizar el valor de desarrollo; y
+\texttt{GIPSI\_BASE\_URL} tiene que coincidir con la URL pública de la API,
+porque se utiliza para construir rutas absolutas de imágenes en las respuestas.
+También es importante que \texttt{CORS\_ALLOWED\_ORIGINS} contenga únicamente
+los dominios previstos. Usar \texttt{*} facilita las pruebas locales, pero no
+debería mantenerse en producción.
+
+El valor \texttt{DATA\_INITIALIZE} no aparece activado en la configuración de
+producción. Esta decisión es intencionada: los datos de prueba son útiles para
+desarrollo, pero en un servidor real podrían mezclar usuarios ficticios con
+datos legítimos. Si se necesita cargar información inicial en producción,
+debería hacerse mediante migraciones controladas o scripts administrativos
+separados.
+
 \subsection{Proceso de Arranque}
 
 \begin{lstlisting}[style=yamlStyle, caption={Comandos de arranque del backend}, label={lst:arranque-backend}]
@@ -2332,6 +2399,26 @@ java -jar target/gipsi-backend-0.0.1-SNAPSHOT.jar
 
 # Verificar: Swagger disponible en http://localhost:8080/swagger-ui.html
 \end{lstlisting}
+
+Para un entorno productivo conviene crear un usuario de base de datos propio en
+lugar de usar el superusuario \texttt{postgres}. El backend solo necesita
+permisos sobre la base de datos de la aplicación, por lo que aislar el usuario
+reduce el impacto de una credencial comprometida.
+
+\begin{lstlisting}[style=yamlStyle, caption={Preparación recomendada de PostgreSQL}, label={lst:postgres-produccion}]
+# Crear usuario y base de datos de aplicación
+psql -U postgres -c "CREATE USER gipsi_user WITH PASSWORD 'change_me';"
+psql -U postgres -c "CREATE DATABASE gipsi OWNER gipsi_user;"
+
+# Comprobar conectividad antes de arrancar la API
+psql "postgresql://gipsi_user:change_me@localhost:5432/gipsi" -c "SELECT 1;"
+\end{lstlisting}
+
+Al arrancar, Flyway valida y aplica automáticamente las migraciones pendientes.
+Esto significa que la estructura de la base de datos queda sincronizada con la
+versión desplegada de la API. Si una migración falla, la aplicación no debe
+considerarse lista para recibir tráfico hasta revisar el error y recuperar la
+base de datos desde una copia consistente si fuera necesario.
 
 \section{Configuración del Frontend}
 
@@ -2363,6 +2450,20 @@ flutter run --dart-define=API_URL=http://192.168.1.10:8080
 flutter run --dart-define=API_URL=https://api.gipsi.com
 \end{lstlisting}
 
+La variable \texttt{API\_URL} se inyecta en tiempo de compilación mediante
+\texttt{--dart-define}. Esto implica que cada build queda ligado al entorno
+para el que se generó: un APK compilado contra \texttt{http://10.0.2.2:8080}
+servirá para emulador Android, pero no para un dispositivo físico ni para
+producción. En iOS Simulator puede usarse \texttt{localhost}, mientras que en
+un móvil real se necesita una IP accesible desde la misma red o una URL pública
+con HTTPS.
+
+Esta separación también facilita tener builds distintos para desarrollo,
+preproducción y producción. Lo importante es que la URL configurada en
+\texttt{API\_URL} coincida con los orígenes permitidos en
+\texttt{CORS\_ALLOWED\_ORIGINS} cuando corresponda, y que los dispositivos
+cliente puedan resolver el dominio de la API.
+
 \subsection{Compilación para Distribución}
 
 \begin{lstlisting}[style=yamlStyle, caption={Compilación para Android e iOS}, label={lst:build}]
@@ -2382,9 +2483,25 @@ flutter build ios --release \
     --dart-define=API_URL=https://api.gipsi.com
 \end{lstlisting}
 
+Los builds de depuración son adecuados para validar la integración durante el
+desarrollo, pero no para distribuir la aplicación. En Android, la versión
+\texttt{release} debe firmarse con un keystore propio y, si se publica en
+Google Play, normalmente se genera un \texttt{appbundle}. En iOS, la generación
+del archivo de distribución requiere certificados, perfiles de provisión y una
+cuenta Apple Developer. En ambos casos, la URL de la API debe quedar fijada en
+el comando de compilación para evitar publicar una app apuntando a un backend
+local.
+
 \section{Despliegue con Docker (Recomendado para Producción)}
 
 Aunque no existe un \texttt{Dockerfile} en el repositorio actual, la configuración recomendada para producción es la siguiente:
+
+La composición propuesta agrupa dos responsabilidades: PostgreSQL como servicio
+persistente y la API como servicio de aplicación. La base de datos conserva sus
+datos en el volumen \texttt{pgdata}, mientras que las imágenes gestionadas por
+la API se guardan en el volumen \texttt{storage}. Esta separación permite
+actualizar la imagen de la API sin perder información de negocio ni ficheros
+subidos por los usuarios.
 
 \begin{lstlisting}[style=yamlStyle, caption={docker-compose.yml para producción}, label={lst:docker}]
 version: '3.9'
@@ -2411,8 +2528,12 @@ services:
       DB_USER: gipsi_user
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
+      REFRESH_EXPIRATION_DAYS: 30
       CORS_ALLOWED_ORIGINS: https://app.gipsi.com
       GIPSI_BASE_URL: https://api.gipsi.com
+      STORAGE_TYPE: local
+      STORAGE_PATH: /var/gipsi/storage
+      FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH:-}
       SPRING_PROFILES_ACTIVE: prod
     ports:
       - "8080:8080"
@@ -2423,6 +2544,77 @@ volumes:
   pgdata:
   storage:
 \end{lstlisting}
+
+\subsection{Archivo de Variables para Docker}
+
+En un despliegue real, las variables no deberían escribirse directamente en el
+fichero de composición de Docker. Es preferible mantener un fichero
+\texttt{.env} fuera del control de versiones o utilizar el gestor de secretos
+de la plataforma donde se ejecute el servicio.
+
+\begin{lstlisting}[style=yamlStyle, caption={Ejemplo de fichero .env de producción}, label={lst:env-docker}]
+DB_PASSWORD=replace_with_a_long_random_password
+JWT_SECRET=replace_with_output_of_openssl_rand_base64_64
+FIREBASE_CREDENTIALS_PATH=
+\end{lstlisting}
+
+El secreto JWT puede generarse con \texttt{openssl rand -base64 64}. Este valor
+debe conservarse entre reinicios, porque cambiarlo invalida los tokens firmados
+previamente y obliga a los usuarios a autenticarse de nuevo. La contraseña de
+PostgreSQL debe rotarse con cuidado, actualizando primero el servidor de base de
+datos y después las variables de la API.
+
+\subsection{Secuencia de Puesta en Producción}
+
+Una vez preparado el fichero de entorno y publicada la imagen
+\texttt{gipsi-api:latest}, la puesta en marcha puede realizarse con la siguiente
+secuencia:
+
+\begin{lstlisting}[style=yamlStyle, caption={Secuencia básica de despliegue Docker}, label={lst:secuencia-docker}]
+# 1. Validar que existen las variables requeridas
+docker compose --env-file .env config
+
+# 2. Arrancar servicios en segundo plano
+docker compose --env-file .env up -d
+
+# 3. Revisar logs de la API y migraciones Flyway
+docker compose logs -f api
+
+# 4. Comprobar que la documentación OpenAPI responde
+curl -f http://localhost:8080/swagger-ui.html
+\end{lstlisting}
+
+En un servidor público, la última comprobación debería hacerse contra la URL
+HTTPS expuesta por el proxy inverso. Si la API responde localmente pero no desde
+el dominio público, el problema suele estar en la configuración del proxy, del
+certificado TLS, del firewall o de los registros DNS, no necesariamente en la
+aplicación Spring Boot.
+
+\subsection{Verificaciones Posteriores y Mantenimiento}
+
+Después del despliegue no basta con que el contenedor aparezca como levantado.
+La aplicación debe validarse con operaciones representativas del sistema:
+
+\begin{itemize}
+  \item Acceder a \texttt{/swagger-ui.html} o \texttt{/v3/api-docs} para confirmar que la API está disponible.
+  \item Registrar o autenticar un usuario de prueba y comprobar la emisión de access token y refresh token.
+  \item Crear una entidad que suba imagen, verificando que el volumen \texttt{storage} persiste el fichero.
+  \item Reiniciar la API y confirmar que los datos siguen presentes en PostgreSQL y en el almacenamiento.
+  \item Si Firebase está configurado, registrar un token de dispositivo y probar el envío de una notificación.
+\end{itemize}
+
+También deben planificarse copias de seguridad periódicas de PostgreSQL y del
+volumen de imágenes. Una copia de la base de datos puede generarse con:
+
+\begin{lstlisting}[style=yamlStyle, caption={Copia de seguridad básica de PostgreSQL}, label={lst:backup-postgres}]
+docker compose exec postgres pg_dump -U gipsi_user gipsi > backup_gipsi.sql
+\end{lstlisting}
+
+Para actualizar la API, el procedimiento recomendado es publicar una nueva
+imagen, arrancarla con la misma configuración externa y revisar los logs de
+Flyway. Si la actualización incluye migraciones de base de datos, conviene
+realizar previamente una copia de seguridad y probar el proceso en un entorno
+de preproducción con datos equivalentes.
 
 %=============================================================
 %  CAPÍTULO 7 — CONCLUSIONES Y POSIBLES MEJORAS
