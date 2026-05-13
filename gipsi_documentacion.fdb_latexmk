@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1778686074.55938 "c:/Users/34622/Desktop/latex/gipsi_documentacion.tex" "gipsi_documentacion.pdf" "gipsi_documentacion" 1778686084.50791 0
+["pdflatex"] 1778686509.67862 "c:/Users/34622/Desktop/latex/gipsi_documentacion.tex" "gipsi_documentacion.pdf" "gipsi_documentacion" 1778686519.34276 0
   "C:/Users/34622/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1778600267 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/34622/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1778600105 13333528 20c6aeef784d5daa8672addca1fbe84d ""
   "C:/Users/34622/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc" 1256929440 2375 baa924870cfb487815765f9094cf3728 ""
@@ -265,7 +265,7 @@
   "C:/Users/34622/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/34622/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/34622/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "c:/Users/34622/Desktop/latex/gipsi_documentacion.tex" 1778686061 198476 274536eebcc79328853500dc04fc2e97 ""
+  "c:/Users/34622/Desktop/latex/gipsi_documentacion.tex" 1778686508 198476 950ba1546c851b8e38f333223e73c4de ""
   "capturas_pruebas/Gipsi-API.png" 1778683055 77530 f1050c90ab6efc9d2c0f28b17eb9096e ""
   "capturas_pruebas/pf-a01-login-correcto.png" 1778610783 101247 3d14a3f15400f80a3c3971954c937c6c ""
   "capturas_pruebas/pf-a02-login-error.png" 1778610963 90863 2a0b472746fc11f8d072a63e6d05d1a5 ""
@@ -287,13 +287,13 @@
   "capturas_pruebas/pf-e06-explorar-vacio.png" 1778684740 193480 5a4faa7982e7224a0f8747fa55cb4df0 ""
   "capturas_pruebas/pu-b01-jwtservice-completo.png" 1778683105 483762 10f316b401f11784f606e8a255bd41ce ""
   "capturas_pruebas/pu-b02-availabilityservice-completo.png" 1778683105 502928 d118dc08c18553414bd16d732aad967f ""
-  "gipsi_documentacion.aux" 1778686083 39680 04682bb4fa846c906fbb9bc432d855a1 "pdflatex"
-  "gipsi_documentacion.lof" 1778686083 3669 f32d394b9811f3236456d5a95c4fcc56 "pdflatex"
-  "gipsi_documentacion.lol" 1778686083 2931 3ec3c8e8f836474334abb0f8caffd0a8 "pdflatex"
-  "gipsi_documentacion.lot" 1778686083 3550 e9377c297b5aefed232390b80a3ec5a5 "pdflatex"
-  "gipsi_documentacion.out" 1778686083 21187 027e501c43049e66ea0eaa0c76dba702 "pdflatex"
-  "gipsi_documentacion.tex" 1778686061 198476 274536eebcc79328853500dc04fc2e97 ""
-  "gipsi_documentacion.toc" 1778686083 11203 a771fdb6c2a0445b324cb52264f2c011 "pdflatex"
+  "gipsi_documentacion.aux" 1778686518 39680 04682bb4fa846c906fbb9bc432d855a1 "pdflatex"
+  "gipsi_documentacion.lof" 1778686518 3669 f32d394b9811f3236456d5a95c4fcc56 "pdflatex"
+  "gipsi_documentacion.lol" 1778686518 2931 3ec3c8e8f836474334abb0f8caffd0a8 "pdflatex"
+  "gipsi_documentacion.lot" 1778686518 3550 e9377c297b5aefed232390b80a3ec5a5 "pdflatex"
+  "gipsi_documentacion.out" 1778686518 21187 027e501c43049e66ea0eaa0c76dba702 "pdflatex"
+  "gipsi_documentacion.tex" 1778686508 198476 950ba1546c851b8e38f333223e73c4de ""
+  "gipsi_documentacion.toc" 1778686518 11203 a771fdb6c2a0445b324cb52264f2c011 "pdflatex"
   (generated)
   "gipsi_documentacion.aux"
   "gipsi_documentacion.lof"

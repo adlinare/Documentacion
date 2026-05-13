@@ -1149,7 +1149,7 @@ devuelve ambos tokens. La app guarda el par en almacenamiento seguro y usa el
 porque el \textit{access token} ha caducado, el interceptor HTTP llama a
 \texttt{POST /auth/refresh} con el \textit{refresh token}. Si este sigue siendo
 válido, el backend emite un nuevo \textit{access token} y un nuevo
-\textit{refresh token}; la app los guarda y reintenta la petición original sin
+\textit{refresh token}, la app los guarda y reintenta la petición original sin
 obligar al usuario a volver a escribir sus credenciales. Si el \textit{refresh
 token} ha expirado, ha sido revocado o ya fue utilizado anteriormente, la sesión
 se considera inválida y el usuario debe autenticarse de nuevo.
@@ -1317,7 +1317,7 @@ gipsi-frontend/
   \item Cada app puede evolucionar con navegación y pantallas propias, mientras Melos permite ejecutar \texttt{bootstrap}, \texttt{analyze}, \texttt{format} o \texttt{test} sobre todo el workspace.
 \end{itemize}
 
-Esta separación es especialmente útil porque los clientes y los negocios no tienen las mismas tareas. El cliente necesita descubrir, reservar y revisar citas; el negocio necesita operar una agenda, confirmar o cancelar reservas, gestionar servicios, resolver ausencias y mantener su equipo. Compartir la capa de API evita inconsistencias, pero mantener dos apps permite adaptar la experiencia a cada rol.
+Esta separación es especialmente útil porque los clientes y los negocios no tienen las mismas tareas. El cliente necesita descubrir, reservar y revisar citas, el negocio necesita operar una agenda, confirmar o cancelar reservas, gestionar servicios, resolver ausencias y mantener su equipo. Compartir la capa de API evita inconsistencias, pero mantener dos apps permite adaptar la experiencia a cada rol.
 
 \subsection{Gestión de Estado con Riverpod}
 
